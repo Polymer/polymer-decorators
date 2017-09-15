@@ -38,8 +38,10 @@ export function property(options?: PropertyOptions) {
   return (proto: any, propName: string) : any => {
     const notify: boolean = options && options.notify || false;
     const type = Reflect.getMetadata("design:type", proto, propName);
-    const properties = _ensureProperties(proto);
-    properties[propName] = {
+    if (!proto.constructor.hasOwnProperty('properties')) {
+      proto.constructor.properties = {};
+    }
+    proto.constructor.properties[propName] = {
       type,
       notify,
     };
@@ -56,11 +58,12 @@ export function property(options?: PropertyOptions) {
 export function observe(targets: string|string[]) {
   return (proto: any, propName: string) : any => {
     const targetString = typeof targets === 'string' ? targets : targets.join(',');
-    const observers = _ensureObservers(proto);
-    observers.push(`${propName}(${targetString})`);
+    if (!proto.constructor.hasOwnProperty('observers')) {
+      proto.constructor.observers = [];
+    }
+    proto.constructor.observers.push(`${propName}(${targetString})`);
   }
 }
-
 
 /**
  * A TypeScript property decorator factory that converts a class property into
@@ -103,55 +106,6 @@ function _query(queryFn: (target: NodeSelector, selector: string) => Element|Nod
       configurable: true,
     });
   };
-}
-
-interface Properties {
-  [name: string]: {
-    notify?: boolean;
-    type: Function;
-  };
-}
-
-/**
- * Ensures that the constructor has a static property that stores the property
- * definitions created by @property decorators, and that a static `property`
- * getter is defined that returns the definitions.
- * 
- * @param proto The prototype property of a Polymer class constructor.
- */
-function _ensureProperties(proto: any): Properties {
-  const ctor = proto.constructor;
-
-  if (ctor.hasOwnProperty('__polymer_ts_properties')) {
-    return ctor.__polymer_ts_properties;
-  }
-
-  Object.defineProperty(ctor, 'properties', {
-    get() { return ctor.__polymer_ts_properties; }
-  });
-
-  return ctor.__polymer_ts_properties = {};
-}
-
-/**
- * Ensures that the constructor has a static property that stores the property
- * definitions created by @property decorators, and that a static `property`
- * getter is defined that returns the definitions.
- * 
- * @param proto The prototype property of a Polymer class constructor.
- */
-function _ensureObservers(proto: any): string[] {
-  const ctor = proto.constructor;
-
-  if (ctor.hasOwnProperty('__polymer_ts_observers')) {
-    return ctor.__polymer_ts_observers;
-  }
-
-  Object.defineProperty(ctor, 'observers', {
-    get() { return ctor.__polymer_ts_observers; }
-  });
-
-  return ctor.__polymer_ts_observers = [];
 }
 
 // Export member to the Polymer.decorators.typescript namespace so that
