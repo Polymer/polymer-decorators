@@ -1,10 +1,12 @@
+⚠ **Experimental!** This repository is a work in progress and may not work as expected. ⚠
+
 # polymer-decorators
 
 ----
 
 TypeScript decorators for Polymer 2.0
 
-##Example
+## Example
 
 ```typescript
 import {customElement, property, query, queryAll, observe} from '../polymer-decorators/typescript/decorators.js';
