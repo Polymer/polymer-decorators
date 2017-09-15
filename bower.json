@@ -1,0 +1,20 @@
+{
+  "name": "polymer-decorators",
+  "homepage": "https://github.com/Polymer/polymer-decorators",
+  "authors": [
+    "Justin Fagnani <justinfagnani@google.com>"
+  ],
+  "description": "TypeScript decorators for Polymer 2.0",
+  "main": "",
+  "license": "BSD-3-Clause",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"
+  }
+}
