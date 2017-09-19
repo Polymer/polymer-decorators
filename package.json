@@ -1,0 +1,26 @@
+{
+  "name": "polymer-decorators",
+  "version": "0.1.0",
+  "description": "TypeScript decorators for Polymer 2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "npm run clean && tsc",
+    "test": "npm run build && wct"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Polymer/polymer-decorators.git"
+  },
+  "author": "The Polymer Project Authors",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/Polymer/polymer-decorators/issues"
+  },
+  "homepage": "https://github.com/Polymer/polymer-decorators#readme",
+  "devDependencies": {
+    "typescript": "^2.5.2",
+    "web-component-tester": "^6.1.5"
+  }
+}
