@@ -6,6 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "clean": "rm -rf lib",
+    "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc",
     "test": "npm run build && wct"
   },
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/Polymer/polymer-decorators#readme",
   "devDependencies": {
+    "clang-format": "^1.0.55",
     "typescript": "^2.5.2",
     "web-component-tester": "^6.1.5"
   }

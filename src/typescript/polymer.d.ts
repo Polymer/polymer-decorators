@@ -1,15 +1,16 @@
 /**
  * @license
  * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
- * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
- * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
- * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
- * Code distributed by Google as part of the polymer project is also
- * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+ * This code may only be used under the BSD style license found at
+ * http://polymer.github.io/LICENSE.txt The complete set of authors may be found
+ * at http://polymer.github.io/AUTHORS.txt The complete set of contributors may
+ * be found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by
+ * Google as part of the polymer project is also subject to an additional IP
+ * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
 interface Constructor<T> {
-  new (...args: any[]): T;
+  new(...args: any[]): T;
 }
 
 /**
@@ -21,8 +22,8 @@ interface Base {}
  * A subclass-factory style mixin that extends `superclass` with a new subclass
  * that implements the interface `M`.
  */
-type Mixin<M> =
-    <C extends Base>(superclass: Constructor<C>) => Constructor<M & C>;
+type Mixin<M> = <C extends Base>(superclass: Constructor<C>) =>
+    Constructor<M&C>;
 
 /**
  * The Polymer function and namespace.
@@ -41,16 +42,14 @@ declare var Polymer: {
    */
   Element: PolymerElementConstructor;
 
-  ElementMixin:  Mixin<PolymerElement>;
+  ElementMixin: Mixin<PolymerElement>;
 
   PropertyEffects: Mixin<PolymerPropertyEffects>;
 
   BatchedEffects: Mixin<PolymerBatchedEffects>;
 };
 
-declare interface PolymerElementConstructor {
-  new(): PolymerElement;
-}
+declare interface PolymerElementConstructor { new(): PolymerElement; }
 
 declare class PolymerElement extends PolymerMetaEffects {
   static finalized: boolean;
