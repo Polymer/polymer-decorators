@@ -10,7 +10,7 @@
  */
 
 // This file requires the reflect-metadata package to be loaded.
-/// <reference path="../../bower_components/reflect-metadata/Reflect.d.ts" />
+/// <reference types="reflect-metadata" />
 
 /**
  * A TypeScript class decorator factory that defines a custom element with name
