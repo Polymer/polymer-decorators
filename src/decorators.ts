@@ -25,7 +25,10 @@ export function customElement(tagname?: string) {
   }
 }
 
-export interface PropertyOptions { notify?: boolean; }
+export interface PropertyOptions {
+  // TODO Add remaining options.
+  notify?: boolean;
+}
 
 /**
  * A TypeScript property decorator factory that defines this as a Polymer
