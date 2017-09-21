@@ -3,6 +3,6 @@ export default {
   output: {
     file: 'global.js',
     format: 'iife',
-    name: 'PolymerDecorators',
+    name: 'Polymer.decorators',
   }
 };

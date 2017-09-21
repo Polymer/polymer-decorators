@@ -9,20 +9,22 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-declare namespace PolymerDecorators {
-  function customElement(tagname?: string): (clazz: any) => void;
+declare namespace Polymer {
+  namespace decorators {
+    function customElement(tagname?: string): (clazz: any) => void;
 
-  interface PropertyOptions {
-    notify?: boolean;
+    interface PropertyOptions {
+      notify?: boolean;
+    }
+
+    function property(options?: PropertyOptions):
+        (proto: any, propName: string) => void;
+
+    function observe(targets: string|
+                     string[]): (proto: any, propName: string) => void;
+
+    function query(selector: string): (proto: any, propName: string) => void;
+
+    function queryAll(selector: string): (proto: any, propName: string) => void;
   }
-
-  function property(options?: PropertyOptions): (
-      proto: any, propName: string) => void;
-
-  function observe(targets: string|string[]): (proto: any, propName: string) =>
-      void;
-
-  function query(selector: string): (proto: any, propName: string) => void;
-
-  function queryAll(selector: string): (proto: any, propName: string) => void;
 }
