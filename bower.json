@@ -1,6 +1,7 @@
 {
   "name": "polymer-decorators",
   "homepage": "https://github.com/Polymer/polymer-decorators",
+  "version": "0.1.0",
   "authors": [
     "Justin Fagnani <justinfagnani@google.com>"
   ],
@@ -12,7 +13,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "polymer-decorators*.tgz"
   ],
   "dependencies": {
     "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"

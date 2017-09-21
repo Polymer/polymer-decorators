@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "umd",
     "target": "es6",
     "lib": [
       "es2016",

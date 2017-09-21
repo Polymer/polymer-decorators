@@ -1,0 +1,8 @@
+{
+  "resolvers": [
+    "filesystem-bower-resolver"
+  ],
+  "storage": {
+    "packages": "./bower_cache"
+  }
+}

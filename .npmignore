@@ -1,0 +1,8 @@
+src/
+test/
+
+.clang-format
+tsconfig.json
+rollup.config.js
+polymer-decorators*.tgz
+bower.json
