@@ -1,6 +1,7 @@
 {
   "name": "polymer-decorators",
   "homepage": "https://github.com/Polymer/polymer-decorators",
+  "version": "0.1.0",
   "authors": [
     "Justin Fagnani <justinfagnani@google.com>"
   ],

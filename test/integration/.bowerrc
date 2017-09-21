@@ -1,0 +1,5 @@
+{
+  "resolvers": [
+    "filesystem-bower-resolver"
+  ]
+}

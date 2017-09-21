@@ -2,7 +2,8 @@
   "name": "polymer-decorators-integration-test",
   "dependencies": {
     "polymer": "^2.1.0",
-    "webcomponentsjs": "^1.0.12"
+    "webcomponentsjs": "^1.0.12",
+    "polymer-decorators": "../../"
   },
   "devDependencies": {
     "web-component-tester": "^6.2.0"
