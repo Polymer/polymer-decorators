@@ -8,9 +8,6 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-import {assert} from 'chai';
-import {TestElement} from './test-element.js';
-
 declare function fixture(id: string): HTMLElement;
 
 suite('TypeScript Decorators', function() {
@@ -19,7 +16,7 @@ suite('TypeScript Decorators', function() {
 
     test('defines an element', function() {
       var testElement = fixture('test-element');
-      assert.instanceOf(testElement, TestElement);
+      (assert as any).instanceOf(testElement, TestElement);
     });
 
   });

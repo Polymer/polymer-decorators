@@ -2,3 +2,4 @@ bower_components/
 lib/
 node_modules/
 global.js
+polymer-decorators*.tgz

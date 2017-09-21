@@ -5,10 +5,11 @@
   "main": "lib/decorators.js",
   "types": "lib/decorators.d.ts",
   "scripts": {
-    "clean": "rm -rf lib global.js",
+    "clean": "rm -rf lib global.js polymer-decorators*.tgz test/integration/node_modules",
     "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc && rollup -c",
-    "test": "npm run build && wct"
+    "prepack": "npm run build",
+    "test": "npm pack && mv polymer-decorators-*.tgz polymer-decorators.tgz && cd test/integration && npm install --no-package-lock && npm test"
   },
   "repository": {
     "type": "git",

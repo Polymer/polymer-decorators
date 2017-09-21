@@ -8,10 +8,12 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-import {customElement, property, query, queryAll, observe} from '../../../src/typescript/decorators.js';
+/// <reference types="polymer-decorators/global" />
+
+const {customElement, property, query, queryAll, observe} = PolymerDecorators;
 
 @customElement('test-element')
-export class TestElement extends Polymer.Element {
+class TestElement extends Polymer.Element {
 
   @property({notify: true})
   aNum: number = 42;
