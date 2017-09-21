@@ -110,25 +110,3 @@ function _query(
     });
   };
 }
-
-// Export member to the Polymer.decorators.typescript namespace so that
-// they can be used in non-module code.
-const Polymer = (window as any).Polymer = (window as any).Polymer || {};
-
-/**
- * @namespace
- * @memberof Polymer
- */
-const decorators = Polymer.decorators = Polymer.decorators || {};
-
-/**
- * @namespace
- * @memberof Polymer.decorators
- */
-decorators.typescript = {
-  customElement,
-  property,
-  observe,
-  query,
-  queryAll,
-};
