@@ -1,5 +1,5 @@
 export default {
-  input: 'lib/typescript/decorators.js',
+  input: 'lib/decorators.js',
   output: {
     file: 'global.js',
     format: 'iife',

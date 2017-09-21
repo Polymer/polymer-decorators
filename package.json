@@ -2,8 +2,8 @@
   "name": "polymer-decorators",
   "version": "0.1.0",
   "description": "TypeScript decorators for Polymer 2.0",
-  "main": "lib/index.js",
-  "types": "lib/typescript/decorators.d.ts",
+  "main": "lib/decorators.js",
+  "types": "lib/decorators.d.ts",
   "scripts": {
     "clean": "rm -rf lib global.js",
     "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
