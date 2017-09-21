@@ -16,7 +16,7 @@ suite('TypeScript Decorators', function() {
 
     test('defines an element', function() {
       var testElement = fixture('test-element');
-      (assert as any).instanceOf(testElement, TestElement);
+      chai.assert.instanceOf(testElement, TestElement);
     });
 
   });
@@ -28,7 +28,7 @@ suite('TypeScript Decorators', function() {
       testElement.aNum = 999;
       var numDiv = testElement.shadowRoot.querySelector('#num');
       var numText = numDiv.textContent;
-      assert.equal(numText, '999');
+      chai.assert.equal(numText, '999');
     });
 
   });
@@ -38,15 +38,15 @@ suite('TypeScript Decorators', function() {
     test('calls a method when a single observed property changes', function() {
       var testElement = fixture('test-element') as TestElement;
       testElement.aNum = 999;
-      assert.equal(testElement.lastNumChange, 999);
+      chai.assert.equal(testElement.lastNumChange, 999);
     });
 
     test('calls a method when multiple observed properties change', function() {
       var testElement = fixture('test-element') as TestElement;
       testElement.aNum = 999;
-      assert.equal(testElement.lastMultiChange[0], 999);
+      chai.assert.equal(testElement.lastMultiChange[0], 999);
       testElement.aString = 'yahoo';
-      assert.equal(testElement.lastMultiChange[1], 'yahoo');
+      chai.assert.equal(testElement.lastMultiChange[1], 'yahoo');
     });
 
 
@@ -57,7 +57,7 @@ suite('TypeScript Decorators', function() {
     test('queries the shadow root', function() {
       var testElement = fixture('test-element') as TestElement;
       var numDiv = testElement.numDiv;
-      assert.equal(numDiv.id, 'num');
+      chai.assert.equal(numDiv.id, 'num');
     });
 
   });
@@ -67,7 +67,7 @@ suite('TypeScript Decorators', function() {
     test('queries the shadow root', function() {
       var testElement = fixture('test-element') as TestElement;
       var divs = testElement.divs;
-      assert.equal(divs.length, 2);
+      chai.assert.equal(divs.length, 2);
     });
 
   });
