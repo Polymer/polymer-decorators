@@ -9,24 +9,20 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-declare namespace Polymer {
-  export namespace decorators {
-    export namespace typescript {
-      export function customElement(tagname?: string): (clazz: any) => void;
+declare namespace PolymerDecorators {
+  function customElement(tagname?: string): (clazz: any) => void;
 
-      export interface PropertyOptions { notify?: boolean; }
-
-      export function property(options?: PropertyOptions):
-          (proto: any, propName: string) => void;
-
-      export function observe(targets: string|
-                              string[]): (proto: any, propName: string) => void;
-
-      export function query(selector: string):
-          (proto: any, propName: string) => void;
-
-      export function queryAll(selector: string):
-          (proto: any, propName: string) => void;
-    }
+  interface PropertyOptions {
+    notify?: boolean;
   }
+
+  function property(options?: PropertyOptions): (
+      proto: any, propName: string) => void;
+
+  function observe(targets: string|string[]): (proto: any, propName: string) =>
+      void;
+
+  function query(selector: string): (proto: any, propName: string) => void;
+
+  function queryAll(selector: string): (proto: any, propName: string) => void;
 }
