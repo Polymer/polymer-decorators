@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "node"
+addons:
+  chrome: stable
+  firefox: latest
+script:
+- npm run test:setup
+- cd test/integration && xvfb-run $(npm bin)/wct

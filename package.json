@@ -9,7 +9,8 @@
     "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc && rollup -c",
     "prepack": "npm run build",
-    "test": "npm pack && mv polymer-decorators-*.tgz polymer-decorators.tgz && cd test/integration && npm install --no-package-lock && npm test"
+    "test:setup": "npm pack && mv polymer-decorators-*.tgz polymer-decorators.tgz && cd test/integration && npm install --no-package-lock && npm run build",
+    "test": "cd test/integration && npm test"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,6 @@
   "devDependencies": {
     "clang-format": "^1.0.55",
     "rollup": "^0.50.0",
-    "typescript": "^2.5.2",
-    "web-component-tester": "^6.1.5"
+    "typescript": "^2.5.2"
   }
 }
