@@ -28,7 +28,6 @@
   "devDependencies": {
     "clang-format": "^1.0.55",
     "rollup": "^0.50.0",
-    "typescript": "^2.5.2",
-    "web-component-tester": "^6.1.5"
+    "typescript": "^2.5.2"
   }
 }
