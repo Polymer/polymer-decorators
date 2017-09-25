@@ -2,5 +2,6 @@
 
 declare namespace Polymer {
   class Element extends HTMLElement {
+    ready():void;
   }
 }

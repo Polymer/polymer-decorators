@@ -23,6 +23,19 @@ class TestElement extends Polymer.Element {
   @property({notify: true})
   foo: number = 42;
 
+  // @property replaces the static `property` getter.
+  // The type is read from the type annotation, `reflectToAttribute` is the same as in
+  // plain Polymer
+  @property({reflectToAttribute: true})
+  reflectFoo: string = 'opened';
+
+  // @property replaces the static `property` getter.
+  // The type is read from the type annotation, `readOnly` is the same as in
+  // plain Polymer.  Read only properties must use a private generated
+  // setter of the convention _setProperty(value). ex. _setReadOnlyBar(42)
+  @property({readOnly: true})
+  readOnlyBar: number;
+
   // This property doesn't fire bar-changed events
   @property()
   bar: string = 'yes';
