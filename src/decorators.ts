@@ -30,8 +30,9 @@ export function customElement(tagname?: string) {
 }
 
 export interface PropertyOptions {
-  // TODO Add remaining options.
   notify?: boolean;
+  reflectToAttribute?: boolean;
+  readOnly?: boolean;
 }
 
 /**
@@ -43,6 +44,8 @@ export interface PropertyOptions {
 export function property(options?: PropertyOptions) {
   return (proto: any, propName: string): any => {
     const notify: boolean = options && options.notify || false;
+    const reflectToAttribute: boolean = options && options.reflectToAttribute || false;
+    const readOnly: boolean = options && options.readOnly || false;
     const type = Reflect.getMetadata('design:type', proto, propName);
     if (!proto.constructor.hasOwnProperty('properties')) {
       proto.constructor.properties = {};
@@ -50,6 +53,8 @@ export function property(options?: PropertyOptions) {
     proto.constructor.properties[propName] = {
       type,
       notify,
+      reflectToAttribute,
+      readOnly
     };
   }
 }
