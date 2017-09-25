@@ -34,6 +34,19 @@ suite('TypeScript Decorators', function() {
       chai.assert.equal(numText, '999');
     });
 
+    test('reflectToAttribute property should be reflected as an attribute', function() {
+      testElement.reflectedString = "nice";
+      const attributeText = testElement.getAttribute('reflected-string');
+      chai.assert.equal(attributeText, 'nice');
+    });
+
+
+    test('readonly property should not be changeable', function() {
+      testElement.readOnlyString = "new value";
+      const propValue = testElement.readOnlyString;
+      chai.assert.equal(propValue, 'initial value');
+    });
+
   });
 
   suite('@observe', function() {

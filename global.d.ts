@@ -24,6 +24,8 @@ declare namespace Polymer {
 
     interface PropertyOptions {
       notify?: boolean;
+      reflectToAttribute?: boolean;
+      readOnly?: boolean;
     }
 
     /**
