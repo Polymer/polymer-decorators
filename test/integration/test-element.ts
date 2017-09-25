@@ -24,6 +24,15 @@ class TestElement extends Polymer.Element {
   @property()
   aBool: boolean = true;
 
+  @property({reflectToAttribute:true})
+  reflectedString: string = 'yahoo';
+
+  @property({readOnly:true})
+  readOnlyString: string;
+
+  // stand-in for set function dynamically created by Polymer on read only properties
+  _setReadOnlyString: (value: string) => void;
+
   lastNumChange: number;
 
   lastMultiChange: any[];
@@ -37,6 +46,11 @@ class TestElement extends Polymer.Element {
   @observe('aNum')
   private _aNumChanged(newNum: number) {
     this.lastNumChange = newNum;
+  }
+
+  ready(){
+    super.ready();
+    this._setReadOnlyString('initial value')
   }
 
   @observe(['aNum', 'aString'])
