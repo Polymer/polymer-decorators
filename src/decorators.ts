@@ -9,9 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-// Any API or documentation changes made to this file must be copied to the
-// hand-maintained global typings equivalent at ../global.d.ts.
-
 // This file requires the reflect-metadata package to be loaded.
 /// <reference types="reflect-metadata" />
 

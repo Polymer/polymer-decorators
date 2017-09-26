@@ -5,9 +5,9 @@
   "main": "lib/decorators.js",
   "types": "lib/decorators.d.ts",
   "scripts": {
-    "clean": "rm -rf lib global.js polymer-decorators*.tgz test/integration/{node_modules,bower_components,bower_cache}",
+    "clean": "rm -rf lib global.{js,d.ts} polymer-decorators*.tgz test/integration/{node_modules,bower_components,bower_cache}",
     "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
-    "build": "npm run clean && tsc && rollup -c",
+    "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js",
     "prepack": "npm run build",
     "test:setup": "npm pack && mv polymer-decorators-*.tgz polymer-decorators.tgz && cd test/integration && npm install --no-package-lock && npm run build",
     "test": "cd test/integration && npm test"
