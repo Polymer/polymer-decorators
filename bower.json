@@ -3,7 +3,7 @@
   "homepage": "https://github.com/Polymer/polymer-decorators",
   "version": "0.1.0",
   "authors": [
-    "Justin Fagnani <justinfagnani@google.com>"
+    "The Polymer Project Authors"
   ],
   "description": "TypeScript decorators for Polymer 2.0",
   "main": "",

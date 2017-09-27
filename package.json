@@ -1,5 +1,5 @@
 {
-  "name": "polymer-decorators",
+  "name": "@polymer/decorators",
   "version": "0.1.0",
   "description": "TypeScript decorators for Polymer 2.0",
   "main": "lib/decorators.js",
