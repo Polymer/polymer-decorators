@@ -9,7 +9,7 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference types="polymer-decorators/global" />
+/// <reference path="bower_components/polymer-decorators/global.d.ts" />
 
 const {customElement, property, query, queryAll, observe} = Polymer.decorators;
 

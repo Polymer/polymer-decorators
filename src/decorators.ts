@@ -9,9 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-// Any API or documentation changes made to this file must be copied to the
-// hand-maintained global typings equivalent at ../global.d.ts.
-
 // This file requires the reflect-metadata package to be loaded.
 /// <reference types="reflect-metadata" />
 
@@ -44,7 +41,8 @@ export interface PropertyOptions {
 export function property(options?: PropertyOptions) {
   return (proto: any, propName: string): any => {
     const notify: boolean = options && options.notify || false;
-    const reflectToAttribute: boolean = options && options.reflectToAttribute || false;
+    const reflectToAttribute: boolean =
+        options && options.reflectToAttribute || false;
     const readOnly: boolean = options && options.readOnly || false;
     const type = Reflect.getMetadata('design:type', proto, propName);
     if (!proto.constructor.hasOwnProperty('properties')) {
@@ -54,7 +52,7 @@ export function property(options?: PropertyOptions) {
       type,
       notify,
       reflectToAttribute,
-      readOnly
+      readOnly,
     };
   }
 }
