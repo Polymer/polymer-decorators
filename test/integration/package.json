@@ -6,9 +6,6 @@
     "build": "tsc",
     "test": "npm run build && wct"
   },
-  "dependencies": {
-    "polymer-decorators": "file:../../polymer-decorators.tgz"
-  },
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
