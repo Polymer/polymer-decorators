@@ -12,6 +12,11 @@
 // This file requires the reflect-metadata package to be loaded.
 /// <reference types="reflect-metadata" />
 
+/**TODO: Remove Polymer: any when Polymer typings are complete.
+ *    https://github.com/Polymer/polymer-decorators/issues/9
+ */
+declare var Polymer: any;
+
 /**
  * A TypeScript class decorator factory that defines a custom element with name
  * `tagname` and the decorated class. If `tagname` is not provided, the static
@@ -119,4 +124,143 @@ function _query(
       configurable: true,
     });
   };
+}
+
+
+/**
+ * A TypeScript property decorator factory that causes the decorated method to
+ * be called when a imperative event is fired on the targeted element. `target`
+ * can be either a single element by id, window, or document.
+ *
+ * https://www.polymer-project.org/2.0/docs/devguide/events#imperative-listeners
+ *
+ * @param type A string representing the event type to listen for
+ * @param target A single element by id, window, or document to add the listener
+ * to.
+ *
+ */
+export function listen(type: string, target?: string|Window|Document) {
+  return (proto: any, funcName: any) => {
+    _ensureReadyHandler(proto);
+
+    if (!proto.__registeredListeners) {
+      proto.__registeredListeners = [];
+    }
+
+    let registration: EventListenerRegistration = {
+      type: EventListenerRegistrationType.imperative,
+      target,
+      funcName,
+      eventName: type
+    };
+
+    proto.__registeredListeners.push(registration);
+  };
+}
+
+/**
+ * A TypeScript property decorator factory that causes the decorated method to
+ * be called when a gesture event is fired on the targeted element. `target` can
+ * be either a single element by id, window, or document. You must explicitly
+ * add gesture support by importing and using the Polymer.GestureEventListeners
+ * mixin.
+ *
+ * https://www.polymer-project.org/2.0/docs/devguide/gesture-events
+ *
+ * @param eventType Supported gesture event types down, up, tap or track
+ * @param target A single element by id, window, or document to add the listener
+ * to.
+ *
+ */
+export function gestureEventListener(
+    eventType: GestureEventType, target: string|Window|Document) {
+  return (proto: any, funcName: string) => {
+    _ensureReadyHandler(proto);
+
+    if (!proto.__registeredListeners) {
+      proto.__registeredListeners = [];
+    }
+
+    let eventName = GestureEventType[eventType];
+
+    let registration: EventListenerRegistration = {
+      type: EventListenerRegistrationType.gesture,
+      target,
+      funcName,
+      eventName
+    };
+
+    proto.__registeredListeners.push(registration);
+  };
+}
+
+export interface EventListenerRegistration {
+  type: EventListenerRegistrationType;
+  target?: string|Window|Document;
+  funcName: string;
+  eventName: string;
+}
+
+export enum EventListenerRegistrationType {
+  imperative,
+  gesture
+}
+
+/**
+ * Ensures that the register gesture listeners function will be called
+ * when the web components ready callback is called.
+ *
+ * @param proto Prototype of the
+ */
+function _ensureReadyHandler(proto: any) {
+  if (proto.__onReadyHandlerAdded)
+    return;
+
+  const ready = proto.ready;
+  proto.ready = function registerOnReady(...args: any[]) {
+    ready.apply(this, args);
+
+    if (!proto.__registeredListeners) {
+      return;
+    }
+
+    proto.__registeredListeners.forEach(
+        (registration: EventListenerRegistration) => {
+
+          let node = typeof registration.target === 'string' ?
+              this.$[registration.target as string] :
+              registration.target;
+
+          if (typeof node === 'undefined') {
+            console.error(`Failed to register listener on element ${
+                registration.target}. Element not found.`);
+          } else {
+            switch (registration.type) {
+              case EventListenerRegistrationType.imperative:
+                node.addEventListener(
+                    registration.eventName, (...args: any[]) => {
+                      this[registration.funcName](args);
+                    });
+                break;
+              case EventListenerRegistrationType.gesture:
+
+                Polymer.Gestures.addListener(
+                    node, registration.eventName, (e: any) => {
+                      this[registration.funcName](e);
+                    });
+                break;
+              default:
+                break;
+            }
+          }
+        })
+  };
+  proto.__onReadyHandlerAdded = true;
+}
+
+export enum GestureEventType {
+  down,
+  up,
+  tap,
+  track
 }
