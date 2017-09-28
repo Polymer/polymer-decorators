@@ -15,8 +15,5 @@
     "test",
     "tests",
     "polymer-decorators*.tgz"
-  ],
-  "dependencies": {
-    "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"
-  }
+  ]
 }

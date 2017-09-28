@@ -3,7 +3,8 @@
   "dependencies": {
     "polymer": "^2.1.0",
     "webcomponentsjs": "^1.0.12",
-    "polymer-decorators": "../../"
+    "polymer-decorators": "../../",
+    "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"
   },
   "devDependencies": {
     "web-component-tester": "^6.2.0"
