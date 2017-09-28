@@ -8,5 +8,5 @@ declare namespace Polymer {
   /**TODO: Remove :any when Polymer typings are complete.
    *    https://github.com/Polymer/polymer-decorators/issues/9
    */
-  function GestureEventListeners(params: any): any;
+  function GestureEventListeners<T>(element: T): T;
 }

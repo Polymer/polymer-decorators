@@ -18,7 +18,7 @@ suite('TypeScript Decorators', function() {
   setup(function() {
     testElement = fixture('test-element-fixture') as TestElement;
     listenerTestElement =
-        fixture('listener-test-element-fixture') as any;  // TODO FIX THIS
+        fixture('listener-test-element-fixture') as ListenerTestElement;
   });
 
   suite('@customElement', function() {
