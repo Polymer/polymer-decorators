@@ -9,7 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-// This file requires the reflect-metadata package to be loaded.
 /// <reference types="reflect-metadata" />
 
 /**
@@ -26,7 +25,16 @@ export function customElement(tagname?: string) {
   }
 }
 
+/**
+ * Options for the @property decorator.
+ * See https://www.polymer-project.org/2.0/docs/devguide/properties.
+ */
 export interface PropertyOptions {
+  /**
+   * This field can be omitted if the Metadata Reflection API is configured.
+   */
+  type?: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
+      ArrayConstructor|ObjectConstructor;
   notify?: boolean;
   reflectToAttribute?: boolean;
   readOnly?: boolean;
@@ -44,7 +52,20 @@ export function property(options?: PropertyOptions) {
     const reflectToAttribute: boolean =
         options && options.reflectToAttribute || false;
     const readOnly: boolean = options && options.readOnly || false;
-    const type = Reflect.getMetadata('design:type', proto, propName);
+
+    let type;
+    if (options && options.hasOwnProperty('type')) {
+      type = options.type;
+    } else if (
+        (window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
+        Reflect.hasMetadata('design:type', proto, propName)) {
+      type = Reflect.getMetadata('design:type', proto, propName);
+    } else {
+      console.error(
+          'A type could not be found for ${propName}. ' +
+          'Set a type or configure Metadata Reflection API support.');
+    }
+
     if (!proto.constructor.hasOwnProperty('properties')) {
       proto.constructor.properties = {};
     }
