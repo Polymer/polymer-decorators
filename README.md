@@ -1,5 +1,3 @@
-⚠ **Experimental!** This repository is a work in progress and may not work as expected. ⚠
-
 [![Travis Build Status](https://travis-ci.org/Polymer/polymer-decorators.svg?branch=master)](https://travis-ci.org/Polymer/polymer-decorators)
 
 # polymer-decorators
