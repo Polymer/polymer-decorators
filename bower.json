@@ -1,7 +1,7 @@
 {
   "name": "polymer-decorators",
   "homepage": "https://github.com/Polymer/polymer-decorators",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     "The Polymer Project Authors"
   ],
@@ -15,8 +15,5 @@
     "test",
     "tests",
     "polymer-decorators*.tgz"
-  ],
-  "dependencies": {
-    "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"
-  }
+  ]
 }
