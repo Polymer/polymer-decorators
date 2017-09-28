@@ -11,7 +11,7 @@
 
 /// <reference path="bower_components/polymer-decorators/global.d.ts" />
 
-const {customElement, property, query, queryAll, observe} = Polymer.decorators;
+const {customElement, property, query, queryAll, observe, listen, gestureEventListener} = Polymer.decorators;
 
 @customElement('test-element')
 class TestElement extends Polymer.Element {
