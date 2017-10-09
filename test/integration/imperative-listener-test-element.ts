@@ -11,8 +11,8 @@
 
 /// <reference path="bower_components/polymer-decorators/global.d.ts" />
 
-@customElement('listener-test-element')
-class ListenerTestElement extends Polymer.GestureEventListeners
+@customElement('imperative-listener-test-element')
+class ImperativeListenerTestElement extends Polymer.DeclarativeEventListeners
 (Polymer.Element) {
   @property()
   elementClickCounter: number = 0;
@@ -23,46 +23,18 @@ class ListenerTestElement extends Polymer.GestureEventListeners
   @property()
   windowClickCounter: number = 0;
 
-  @property()
-  invalidElementClickCounter: number = 0;
-
-  @property()
-  elementGestureClickCounter: number = 0;
-
-  @property()
-  documentGestureClickCounter: number = 0;
-
-  @property()
-  windowGestureClickCounter: number = 0;
-
   @listen('element-event', 'tapRegion')
-  private _elementTapped() {
+  private elementEventHandler(e: Event) {
     this.elementClickCounter++;
   }
 
   @listen('document-event', document)
-  private _documentTapped() {
+  private documentEventHandler(e: Event) {
     this.documentClickCounter++;
   }
 
   @listen('window-event', window)
-  private _windowTapped() {
+  private windowEventHandler(e: Event) {
     this.windowClickCounter++;
-  }
-
-  @gestureEventListener(
-      Polymer.decorators.GestureEventType.tap, 'gestureRegion')
-  private _elementGestureEventTapped() {
-    this.elementGestureClickCounter++;
-  }
-
-  @gestureEventListener(Polymer.decorators.GestureEventType.tap, document)
-  private _documentGestureEventTapped() {
-    this.documentGestureClickCounter++;
-  }
-
-  @gestureEventListener(Polymer.decorators.GestureEventType.tap, window)
-  private _windowGestureEventTapped() {
-    this.windowGestureClickCounter++;
   }
 }

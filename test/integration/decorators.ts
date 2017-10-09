@@ -13,12 +13,17 @@ declare function fixture(id: string): HTMLElement;
 
 suite('TypeScript Decorators', function() {
   let testElement: TestElement;
-  let listenerTestElement: ListenerTestElement;
+  let imperativeListenerTestElement: ImperativeListenerTestElement;
+  let gestureListenerTestElement: GestureListenerTestElement;
 
   setup(function() {
     testElement = fixture('test-element-fixture') as TestElement;
-    listenerTestElement =
-        fixture('listener-test-element-fixture') as ListenerTestElement;
+    gestureListenerTestElement =
+        fixture('gesture-listener-test-element-fixture') as
+        GestureListenerTestElement;
+    imperativeListenerTestElement =
+        fixture('imperative-listener-test-element-fixture') as
+        ImperativeListenerTestElement;
   });
 
   suite('@customElement', function() {
@@ -89,83 +94,102 @@ suite('TypeScript Decorators', function() {
   });
 
 
-  suite('@listen', function() {
+  suite('@listen - imperative listeners', function() {
 
     test('triggers imperative listener on a element', function() {
       // Arrange
       const tapRegion =
-          listenerTestElement.shadowRoot.querySelector('#tapRegion');
-      chai.assert.equal(listenerTestElement.elementClickCounter, 0);
+          imperativeListenerTestElement.shadowRoot.querySelector('#tapRegion');
+      chai.assert.equal(imperativeListenerTestElement.elementClickCounter, 0);
 
       // Act
       tapRegion.dispatchEvent(
           new CustomEvent('element-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.elementClickCounter, 1);
+      chai.assert.equal(imperativeListenerTestElement.elementClickCounter, 1);
     });
 
     test('triggers imperative listener on a document', function() {
       // Arrange
-      chai.assert.equal(listenerTestElement.documentClickCounter, 0);
+      chai.assert.equal(imperativeListenerTestElement.documentClickCounter, 0);
 
       // Act
       document.dispatchEvent(
           new CustomEvent('document-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.documentClickCounter, 1);
+      chai.assert.equal(imperativeListenerTestElement.documentClickCounter, 1);
     });
 
     test('triggers imperative listener on a window', function() {
       // Arrange
-      chai.assert.equal(listenerTestElement.windowClickCounter, 0);
+      chai.assert.equal(imperativeListenerTestElement.windowClickCounter, 0);
 
       // Act
       window.dispatchEvent(new CustomEvent('window-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.windowClickCounter, 1);
+      chai.assert.equal(imperativeListenerTestElement.windowClickCounter, 1);
     });
 
   });
 
-  suite('@gestureEventListener', function() {
+  suite('@listen - gesture listeners', function() {
 
     test('triggers gesture listener on a element', function() {
       // Arrange
-      const gestureRegion =
-          listenerTestElement.shadowRoot.querySelector('#gestureRegion');
-      chai.assert.equal(listenerTestElement.elementGestureClickCounter, 0);
+      const tapRegion =
+          gestureListenerTestElement.shadowRoot.querySelector('#tapRegion');
+      chai.assert.equal(gestureListenerTestElement.elementClickCounter, 0);
 
       // Act
-      gestureRegion.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+      tapRegion.dispatchEvent(new CustomEvent('click', {bubbles: true}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.elementGestureClickCounter, 1);
+      chai.assert.equal(gestureListenerTestElement.elementClickCounter, 1);
     });
 
     test('triggers gesture listener on a document', function() {
       // Arrange
-      chai.assert.equal(listenerTestElement.documentGestureClickCounter, 0);
+      chai.assert.equal(gestureListenerTestElement.documentClickCounter, 0);
 
       // Act
       document.dispatchEvent(new CustomEvent('click', {bubbles: true}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.documentGestureClickCounter, 1);
+      chai.assert.equal(gestureListenerTestElement.documentClickCounter, 1);
     });
 
     test('triggers gesture listener on a window', function() {
       // Arrange
-      chai.assert.equal(listenerTestElement.windowGestureClickCounter, 0);
+      chai.assert.equal(gestureListenerTestElement.windowClickCounter, 0);
 
       // Act
       window.dispatchEvent(new CustomEvent('click', {bubbles: true}));
 
       // Assert
-      chai.assert.equal(listenerTestElement.windowGestureClickCounter, 1);
+      chai.assert.equal(gestureListenerTestElement.windowClickCounter, 1);
     });
 
+    test(
+        'triggers non-gesture event on a class extending gesture listeners',
+        function() {
+          // Arrange
+          const tapRegion =
+              gestureListenerTestElement.shadowRoot.querySelector('#tapRegion');
+          chai.assert.equal(
+              gestureListenerTestElement.nonGestureElementClickCounter, 0);
+
+          // Act
+          tapRegion.dispatchEvent(
+              new CustomEvent('element-event', {bubbles: false}));
+
+          // Assert
+          chai.assert.equal(
+              gestureListenerTestElement.nonGestureElementClickCounter, 1);
+        });
+
   });
+
 });

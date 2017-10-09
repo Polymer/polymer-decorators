@@ -1,8 +1,9 @@
 <link rel="import" href="bower_components/polymer/polymer-element.html">
 <link rel="import" href="bower_components/polymer-decorators/polymer-decorators.html">
+<link rel="import" href="bower_components/polymer-decorators/mixins/declarative-event-listeners.html">
 <link rel="import" href="bower_components/polymer/lib/mixins/gesture-event-listeners.html">
 
-<dom-module id="listener-test-element">
+<dom-module id="gesture-listener-test-element">
   <template>
     <style>
       .event-area {
@@ -13,7 +14,6 @@
       }
     </style>
     <div class="event-area" id="tapRegion"></div>
-    <div class="event-area" id="gestureRegion"></div>
   </template>
-  <script src="./listener-test-element.js"></script>
+  <script src="./gesture-listener-test-element.js"></script>
 </dom-module>
