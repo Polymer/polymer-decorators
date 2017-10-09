@@ -9,4 +9,5 @@ declare namespace Polymer {
    *    https://github.com/Polymer/polymer-decorators/issues/9
    */
   function GestureEventListeners<T>(element: T): T;
+  function DeclarativeEventListeners<T>(element: T): T;
 }
