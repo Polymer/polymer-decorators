@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             let node = typeof listener.node === 'string' ? this.$[listener.node] : listener.node;
 
             if (typeof method !== 'function') {
-              console.warn('Failed to register ' + listener.eventName + ' listener on ' + method +
+              console.warn('Failed to register ' + listener.eventName + ' listener on ' + listener.handler +
                 ' handler.');
             } else {
               this._addEventListenerToNode(node, listener.eventName, (...args) => {
