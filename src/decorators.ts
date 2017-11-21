@@ -38,6 +38,7 @@ export interface PropertyOptions {
   notify?: boolean;
   reflectToAttribute?: boolean;
   readOnly?: boolean;
+  computed: string;
 }
 
 /**
@@ -52,7 +53,8 @@ export function property(options?: PropertyOptions) {
     const reflectToAttribute: boolean =
         options && options.reflectToAttribute || false;
     const readOnly: boolean = options && options.readOnly || false;
-
+    const computed: string = options && options.computed || "";
+  
     let type;
     if (options && options.hasOwnProperty('type')) {
       type = options.type;
@@ -74,6 +76,7 @@ export function property(options?: PropertyOptions) {
       notify,
       reflectToAttribute,
       readOnly,
+      computed
     };
   }
 }
