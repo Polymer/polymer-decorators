@@ -15,13 +15,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="bower_components/reflect-metadata/Reflect.js"></script>
     <script src="bower_components/web-component-tester/browser.js"></script>
-    <link rel="import" href="./test-element.html">
+    <link rel="import" href="./elements/test-element.html">
+    <link rel="import" href="./elements/element-with-is.html">
   </head>
   <body>
 
     <test-fixture id="test-element-fixture">
       <template>
         <test-element></test-element>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="element-with-is">
+      <template>
+        <element-with-is></element-with-is>
       </template>
     </test-fixture>
 

@@ -23,6 +23,10 @@ suite('TypeScript Decorators', function() {
       chai.assert.instanceOf(testElement, TestElement);
     });
 
+    test('defines an element with an "is" getter', function() {
+      const el = fixture('element-with-is') as ElementWithIs;
+      chai.assert.instanceOf(el, ElementWithIs);
+    });
   });
 
   suite('@property', function() {
@@ -32,6 +36,30 @@ suite('TypeScript Decorators', function() {
       const numDiv = testElement.shadowRoot.querySelector('#num');
       const numText = numDiv.textContent;
       chai.assert.equal(numText, '999');
+    });
+
+    test('notify property should fire events', function() {
+      let fired = false;
+      const fn = function() {
+        fired = true;
+      };
+
+      testElement.addEventListener('a-num-changed', fn);
+      testElement.aNum = 999;
+      chai.assert.equal(fired, true);
+      testElement.removeEventListener('a-num-changed', fn);
+    });
+
+    test('notify should default to false', function() {
+      let fired = false;
+      const fn = function() {
+        fired = true;
+      };
+
+      testElement.addEventListener('doesnt-notify-changed', fn);
+      testElement.doesntNotify = false;
+      chai.assert.equal(fired, false);
+      testElement.removeEventListener('doesnt-notify-changed', fn);
     });
 
     test('reflectToAttribute property should be reflected as an attribute', function() {
