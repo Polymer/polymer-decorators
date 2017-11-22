@@ -46,6 +46,35 @@ export interface PropertyOptions {
   observer?: string|((val: any, old: any) => void);
 }
 
+function createProperty(proto: any, name: string, options?: PropertyOptions): void {
+  const notify = options && options.notify || false;
+  const reflectToAttribute = options && options.reflectToAttribute || false;
+  const readOnly = options && options.readOnly || false;
+  const computed = options && options.computed || '';
+  const observer = options && options.observer || '';
+
+  let type;
+  if (options && options.hasOwnProperty('type')) {
+    type = options.type;
+  } else if (
+      (window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
+      Reflect.hasMetadata('design:type', proto, name)) {
+    type = Reflect.getMetadata('design:type', proto, name);
+  } else {
+    console.error(
+        'A type could not be found for ${propName}. ' +
+        'Set a type or configure Metadata Reflection API support.');
+  }
+
+  if (!proto.constructor.hasOwnProperty('properties')) {
+    proto.constructor.properties = {};
+  }
+
+  const finalOpts: PropertyOptions =
+      {type, notify, reflectToAttribute, readOnly, computed, observer};
+  proto.constructor.properties[name] = finalOpts;
+}
+
 /**
  * A TypeScript property decorator factory that defines this as a Polymer
  * property.
@@ -54,31 +83,7 @@ export interface PropertyOptions {
  */
 export function property(options?: PropertyOptions) {
   return (proto: any, propName: string): any => {
-    const notify = options && options.notify || false;
-    const reflectToAttribute = options && options.reflectToAttribute || false;
-    const readOnly = options && options.readOnly || false;
-    const computed = options && options.computed || '';
-    const observer = options && options.observer || '';
-
-    let type;
-    if (options && options.hasOwnProperty('type')) {
-      type = options.type;
-    } else if (
-        (window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-        Reflect.hasMetadata('design:type', proto, propName)) {
-      type = Reflect.getMetadata('design:type', proto, propName);
-    } else {
-      console.error(
-          'A type could not be found for ${propName}. ' +
-          'Set a type or configure Metadata Reflection API support.');
-    }
-
-    if (!proto.constructor.hasOwnProperty('properties')) {
-      proto.constructor.properties = {};
-    }
-    const finalOpts: PropertyOptions =
-        {type, notify, reflectToAttribute, readOnly, computed, observer};
-    proto.constructor.properties[propName] = finalOpts;
+    createProperty(proto, propName, options);
   }
 }
 
@@ -98,6 +103,29 @@ export function observe(targets: string|string[]) {
     }
     proto.constructor.observers.push(`${propName}(${targetString})`);
   }
+}
+
+/**
+ * A TypeScript accessor decorator factory that causes the decorated accessor to
+ * be called when a property changes. `targets` is either a single property
+ * name, or a list of property names.
+ *
+ * This function must be invoked to return a decorator.
+ */
+export function computed<T = any>(...targets: (keyof T)[]) {
+  return (proto: any, propName: string, descriptor: PropertyDescriptor): void => {
+    const targetString = targets.join(',');
+    const propNameCased = propName[0].toUpperCase() + propName.slice(1);
+    const fnName = `__compute${propNameCased}`;
+
+    proto.constructor.prototype[fnName] = descriptor.get;
+
+    descriptor.get = undefined;
+
+    createProperty(proto, propName, {
+      computed: `${fnName}(${targetString})`
+    });
+  };
 }
 
 /**
