@@ -38,7 +38,7 @@ export interface PropertyOptions {
   notify?: boolean;
   reflectToAttribute?: boolean;
   readOnly?: boolean;
-  computed: string;
+  computed?: string;
 }
 
 /**
