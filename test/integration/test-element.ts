@@ -29,6 +29,9 @@ class TestElement extends Polymer.Element {
 
   @property({readOnly:true})
   readOnlyString: string;
+  
+  @property({computed:'computeString(reflectedString)'})
+  computedString: string;
 
   // stand-in for set function dynamically created by Polymer on read only properties
   _setReadOnlyString: (value: string) => void;
@@ -56,5 +59,9 @@ class TestElement extends Polymer.Element {
   @observe(['aNum', 'aString'])
   private _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
+  }
+  
+  private computeString(s:string) {
+      return "computed " + s;
   }
 }
