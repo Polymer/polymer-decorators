@@ -9,7 +9,7 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="bower_components/polymer-decorators/global.d.ts" />
+/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
 const {customElement, property, query, queryAll, observe, listen} =
     Polymer.decorators;
@@ -18,6 +18,9 @@ const {customElement, property, query, queryAll, observe, listen} =
 class TestElement extends Polymer.Element {
   @property({notify: true})
   aNum: number = 42;
+
+  @property()
+  doesntNotify: boolean = true;
 
   @property({notify: true})
   aString: string = 'yes';

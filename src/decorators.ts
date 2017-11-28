@@ -20,7 +20,11 @@ export function customElement(tagname?: string) {
   // TODO Investigate narrowing down the type of clazz.
   return (clazz: any) => {
     // TODO(justinfagnani): we could also use the kebab-cased class name
-    tagname = clazz.is = clazz.is || tagname;
+    if (clazz.is) {
+      tagname = clazz.is;
+    } else {
+      clazz.is = tagname;
+    }
     window.customElements.define(tagname!, clazz);
   }
 }
