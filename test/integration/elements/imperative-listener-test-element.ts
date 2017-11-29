@@ -9,16 +9,13 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="bower_components/polymer-decorators/global.d.ts" />
+/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
-@customElement('gesture-listener-test-element')
-class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
-(Polymer.GestureEventListeners(Polymer.Element)) {
+@customElement('imperative-listener-test-element')
+class ImperativeListenerTestElement extends Polymer.DeclarativeEventListeners
+(Polymer.Element) {
   @property()
   elementClickCounter: number = 0;
-
-  @property()
-  nonGestureElementClickCounter: number = 0;
 
   @property()
   documentClickCounter: number = 0;
@@ -26,23 +23,18 @@ class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
   @property()
   windowClickCounter: number = 0;
 
-  @listen('tap', 'tapRegion')
-  private elementTapEventHandler(e: Event) {
+  @listen('element-event', 'tapRegion')
+  private elementEventHandler(e: Event) {
     this.elementClickCounter++;
   }
 
-  @listen('tap', document)
-  private documentTapEventHandler(e: Event) {
+  @listen('document-event', document)
+  private documentEventHandler(e: Event) {
     this.documentClickCounter++;
   }
 
-  @listen('tap', window)
-  private windowTapEventHandler(e: Event) {
+  @listen('window-event', window)
+  private windowEventHandler(e: Event) {
     this.windowClickCounter++;
-  }
-
-  @listen('element-event', 'tapRegion')
-  private elementEventHandler(e: Event) {
-    this.nonGestureElementClickCounter++;
   }
 }

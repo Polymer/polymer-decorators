@@ -9,7 +9,7 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="bower_components/polymer-decorators/global.d.ts" />
+/// <reference path="../../bower_components/polymer-decorators/global.d.ts" />
 
 @customElement('declarative-events-mixin-invalid-test-element')
 class DeclarativeEventsMixinInvalidTestElement extends
