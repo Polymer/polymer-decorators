@@ -166,10 +166,19 @@ class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
     console.log(`foo is now: ${newFoo}, bar is now ${newBar}`);
   }
   
-  // @listen can register both gesture and non-gesture listeners declaratively.  To accomplish this, 
+  // @listen registers event listeners declaratively. 
+  //
+  // To use this decorator, your element class must extend from the supplied Polymer.DeclarativeEventListeners mixin.
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element)
+  //
+  // The @listen decorator can also declaratively register gesture events. To accomplish this, 
   // you must extend from both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
   //
-  // ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  //
+  // listen(eventName: string, target: string|EventTarget)
+  // @param eventName A string representing the event type to listen for
+  // @param target A single element by id or EventTarget to target
   //
   @listen('tap', 'submitButton')
   private onSubmit(e: Event) {
