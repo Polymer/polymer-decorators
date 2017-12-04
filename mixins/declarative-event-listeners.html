@@ -47,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
 
           this.constructor.listeners.forEach(listener => {
-            let method = this[listener.handler];
-            let node = typeof listener.node === 'string' ? this.$[listener.node] : listener.node;
+            const method = this[listener.handler];
+            const node = typeof listener.node === 'string' ? this.$[listener.node] : listener.node;
 
             if (typeof method !== 'function') {
               console.warn('Failed to register ' + listener.eventName + ' listener on ' + listener.handler +
