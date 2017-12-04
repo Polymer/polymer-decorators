@@ -42,8 +42,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready() {
           super.ready();
 
-          if (!this.constructor.listeners)
+          if (!this.constructor.listeners) {
             return;
+          }
 
           this.constructor.listeners.forEach(listener => {
             let method = this[listener.handler];
