@@ -166,9 +166,8 @@ class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
     console.log(`foo is now: ${newFoo}, bar is now ${newBar}`);
   }
   
-  // @listen can register both imperative or gesture listeners.  Your class must extend the
-  // supplied Polymer.DeclarativeEventListeners to use the @listen decorator.  To use gesture 
-  // listeners simply extend both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
+  // @listen can register both gesture and non-gesture listeners declaratively.  To accomplish this, 
+  // you must extend from both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
   //
   // ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
   //
