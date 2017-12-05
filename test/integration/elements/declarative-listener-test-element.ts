@@ -11,8 +11,8 @@
 
 /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
-@customElement('imperative-listener-test-element')
-class ImperativeListenerTestElement extends Polymer.DeclarativeEventListeners
+@customElement('declarative-listener-test-element')
+class DeclarativeListenerTestElement extends Polymer.DeclarativeEventListeners
 (Polymer.Element) {
   @property()
   elementClickCounter: number = 0;
