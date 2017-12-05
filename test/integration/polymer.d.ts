@@ -3,6 +3,10 @@
 declare namespace Polymer {
   class Element extends HTMLElement {
     ready(): void;
+    _addDeclarativeEventListener(
+        target: EventTarget|string,
+        eventName: string,
+        handler: any): void
   }
 
   /**TODO: Remove :any when Polymer typings are complete.

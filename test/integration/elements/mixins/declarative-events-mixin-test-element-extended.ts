@@ -16,22 +16,14 @@ class BaseElement extends Polymer.DeclarativeEventListeners
   @property()
   tapWindowCounter: number = 0;
 
-  @property()
-  tapElementByIdCounter: number = 0;
+  constructor() {
+    super();
 
-  static get listeners() {
-    return [
-      {handler: 'tapWindowHandler', node: window, eventName: 'tap'},
-      {handler: 'tapElementByIdHandler', node: 'tapRegion', eventName: 'tap'}
-    ]
+    this._addDeclarativeEventListener(window, 'tap', this.tapWindowHandler);
   }
 
   private tapWindowHandler(e: Event) {
     this.tapWindowCounter++;
-  }
-
-  private tapElementByIdHandler(e: Event) {
-    this.tapElementByIdCounter++;
   }
 }
 
@@ -40,12 +32,11 @@ class DeclarativeEventsMixinTestElementExtended extends BaseElement {
   @property()
   extendedRegionTapCounter: number = 0;
 
-  static get listeners() {
-    return super.listeners.concat([{
-      handler: 'extendedRegionTapHandler',
-      node: 'tapRegionExtended',
-      eventName: 'tap'
-    }]);
+  constructor() {
+    super();
+
+    this._addDeclarativeEventListener(
+        window, 'tap', this.extendedRegionTapHandler);
   }
 
   private extendedRegionTapHandler(e: Event) {
