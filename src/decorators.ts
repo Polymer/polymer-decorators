@@ -42,6 +42,7 @@ export interface PropertyOptions {
   notify?: boolean;
   reflectToAttribute?: boolean;
   readOnly?: boolean;
+  observer?: string|((val: any, old: any) => void);
 }
 
 /**
