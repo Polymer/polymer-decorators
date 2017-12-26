@@ -13,7 +13,7 @@ declare function fixture(id: string): HTMLElement;
 
 suite('TypeScript Decorators', function() {
   let testElement: TestElement;
-  let imperativeListenerTestElement: ImperativeListenerTestElement;
+  let declarativeListenerTestElement: DeclarativeListenerTestElement;
   let gestureListenerTestElement: GestureListenerTestElement;
 
   setup(function() {
@@ -21,9 +21,9 @@ suite('TypeScript Decorators', function() {
     gestureListenerTestElement =
         fixture('gesture-listener-test-element-fixture') as
         GestureListenerTestElement;
-    imperativeListenerTestElement =
-        fixture('imperative-listener-test-element-fixture') as
-        ImperativeListenerTestElement;
+    declarativeListenerTestElement =
+        fixture('declarative-listener-test-element-fixture') as
+        DeclarativeListenerTestElement;
   });
 
   suite('@customElement', function() {
@@ -38,7 +38,6 @@ suite('TypeScript Decorators', function() {
   });
 
   suite('@property', function() {
-
     test('defines a property', function() {
       testElement.aNum = 999;
       const numDiv = testElement.shadowRoot.querySelector('#num');
@@ -70,22 +69,22 @@ suite('TypeScript Decorators', function() {
       testElement.removeEventListener('doesnt-notify-changed', fn);
     });
 
-    test('reflectToAttribute property should be reflected as an attribute', function() {
-      testElement.reflectedString = "nice";
-      const attributeText = testElement.getAttribute('reflected-string');
-      chai.assert.equal(attributeText, 'nice');
-    });
+    test(
+        'reflectToAttribute property should be reflected as an attribute',
+        function() {
+          testElement.reflectedString = 'nice';
+          const attributeText = testElement.getAttribute('reflected-string');
+          chai.assert.equal(attributeText, 'nice');
+        });
 
     test('readonly property should not be changeable', function() {
       testElement.readOnlyString = 'new value';
       const propValue = testElement.readOnlyString;
       chai.assert.equal(propValue, 'initial value');
     });
-
   });
 
   suite('@observe', function() {
-
     test('calls a method when a single observed property changes', function() {
       testElement.aNum = 999;
       chai.assert.equal(testElement.lastNumChange, 999);
@@ -97,72 +96,63 @@ suite('TypeScript Decorators', function() {
       testElement.aString = 'yahoo';
       chai.assert.equal(testElement.lastMultiChange[1], 'yahoo');
     });
-
-
   });
 
   suite('@query', function() {
-
     test('queries the shadow root', function() {
       const numDiv = testElement.numDiv;
       chai.assert.equal(numDiv.id, 'num');
     });
-
   });
 
   suite('@queryAll', function() {
-
     test('queries the shadow root', function() {
       const divs = testElement.divs;
       chai.assert.equal(divs.length, 2);
     });
-
   });
 
 
-  suite('@listen - imperative listeners', function() {
-
-    test('triggers imperative listener on a element', function() {
+  suite('@listen - declarative listeners', function() {
+    test('triggers declarative listener on a element', function() {
       // Arrange
       const tapRegion =
-          imperativeListenerTestElement.shadowRoot.querySelector('#tapRegion');
-      chai.assert.equal(imperativeListenerTestElement.elementClickCounter, 0);
+          declarativeListenerTestElement.shadowRoot.querySelector('#tapRegion');
+      chai.assert.equal(declarativeListenerTestElement.elementClickCounter, 0);
 
       // Act
       tapRegion.dispatchEvent(
           new CustomEvent('element-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(imperativeListenerTestElement.elementClickCounter, 1);
+      chai.assert.equal(declarativeListenerTestElement.elementClickCounter, 1);
     });
 
-    test('triggers imperative listener on a document', function() {
+    test('triggers declarative listener on a document', function() {
       // Arrange
-      chai.assert.equal(imperativeListenerTestElement.documentClickCounter, 0);
+      chai.assert.equal(declarativeListenerTestElement.documentClickCounter, 0);
 
       // Act
       document.dispatchEvent(
           new CustomEvent('document-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(imperativeListenerTestElement.documentClickCounter, 1);
+      chai.assert.equal(declarativeListenerTestElement.documentClickCounter, 1);
     });
 
-    test('triggers imperative listener on a window', function() {
+    test('triggers declarative listener on a window', function() {
       // Arrange
-      chai.assert.equal(imperativeListenerTestElement.windowClickCounter, 0);
+      chai.assert.equal(declarativeListenerTestElement.windowClickCounter, 0);
 
       // Act
       window.dispatchEvent(new CustomEvent('window-event', {bubbles: false}));
 
       // Assert
-      chai.assert.equal(imperativeListenerTestElement.windowClickCounter, 1);
+      chai.assert.equal(declarativeListenerTestElement.windowClickCounter, 1);
     });
-
   });
 
   suite('@listen - gesture listeners', function() {
-
     test('triggers gesture listener on a element', function() {
       // Arrange
       const tapRegion =
@@ -215,7 +205,5 @@ suite('TypeScript Decorators', function() {
           chai.assert.equal(
               gestureListenerTestElement.nonGestureElementClickCounter, 1);
         });
-
   });
-
 });

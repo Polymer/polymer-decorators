@@ -154,17 +154,11 @@ function _query(
  * https://www.polymer-project.org/2.0/docs/devguide/events#imperative-listeners
  *
  * @param eventName A string representing the event type to listen for
- * @param target A single element by id, window, or document to add the listener
- * to.
+ * @param target A single element by id or EventTarget to target
  *
  */
-export function listen(eventName: string, target: string|Window|Document) {
-  return (proto: any, methodName: string): any => {
-    if (!proto.constructor.hasOwnProperty('listeners')) {
-      proto.constructor.listeners = [];
-    }
-
-    proto.constructor.listeners.push(
-        {node: target, handler: methodName, eventName});
-  }
-}
+export const listen = (eventName: string, target: string|EventTarget) =>
+    (proto: any, methodName: string) => {
+      proto.constructor._addDeclarativeEventListener(
+          target, eventName, proto[methodName]);
+    };

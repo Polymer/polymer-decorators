@@ -94,7 +94,7 @@ To enable Metadata Reflection:
   <script src="/bower_components/reflect-metadata/Reflect.js"></script>
   ```
   
-To enable the @listen decorator:
+To enable the `@listen` decorator:
 - Load the supplied DeclarativeEventListeners mixin in your element:
   ```html
   <link rel="import" href="bower_components/polymer-decorators/mixins/declarative-event-listeners.html">
@@ -166,11 +166,19 @@ class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
     console.log(`foo is now: ${newFoo}, bar is now ${newBar}`);
   }
   
-  // @listen can register both imperative or gesture listeners.  Your class must extend the
-  // supplied Polymer.DeclarativeEventListeners to use the @listen decorator.  To use gesture 
-  // listeners simply extend both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
+  // @listen registers event listeners declaratively. 
   //
-  // ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  // To use this decorator, your element class must extend from the supplied Polymer.DeclarativeEventListeners mixin.
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element)
+  //
+  // The @listen decorator can also declaratively register gesture events. To accomplish this, 
+  // you must extend from both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
+  //
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  //
+  // listen(eventName: string, target: string|EventTarget)
+  // @param eventName A string representing the event type to listen for
+  // @param target A single element by id or EventTarget to target
   //
   @listen('tap', 'submitButton')
   private onSubmit(e: Event) {

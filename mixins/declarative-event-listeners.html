@@ -33,34 +33,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * listeners nodes
      */
     Polymer.DeclarativeEventListeners = Polymer.dedupingMixin(superClass => {
+
       /**
-       * @polymer
-       * @mixinClass
-       * @implements {Polymer_DeclarativeEventListeners}
-       */
+     * @polymer
+     * @mixinClass
+     * @implements {Polymer_DeclarativeEventListeners}
+     * @property listeners {object} Stores the declared event listeners to be subscribed to 
+     * durning ready().
+     */
       class DeclarativeEventListeners extends superClass {
+
         ready() {
           super.ready();
-
-          if (!this.constructor.listeners)
-            return;
+          if (!this.constructor.hasOwnProperty('listeners')) {
+            this.constructor.listeners = [];
+          }
 
           this.constructor.listeners.forEach(listener => {
-            let method = this[listener.handler];
-            let node = typeof listener.node === 'string' ? this.$[listener.node] : listener.node;
-
-            if (typeof method !== 'function') {
-              console.warn('Failed to register ' + listener.eventName + ' listener on ' + listener.handler +
-                ' handler.');
-            } else {
-              this._addEventListenerToNode(node, listener.eventName, (...args) => {
-                method.apply(this, args);
-              });
-            }
-
+            const targetElement = typeof listener.target === 'string' ? this.$[listener.target] : listener.target;
+            this._addEventListenerToNode(targetElement, listener.eventName, listener.handler.bind(this));
           });
         }
+
+        /**
+        * Adds to stored listeners to subscribe to on ready() 
+        *
+        * @param {string|Object} target Element/node for listener to target.
+        * @param {string} eventName Name of event to listen for.
+        * @param {fucntion} handler Function which receives the notification.
+        * @return {void}
+        * @private
+        */
+        static _addDeclarativeEventListener(target, eventName, handler) {
+          if (!this.hasOwnProperty('listeners')) {
+            this.listeners = [];
+          }
+
+          this.listeners.push({ target, eventName, handler });
+        }
       }
+
       return DeclarativeEventListeners;
     });
   })();
