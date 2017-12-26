@@ -157,9 +157,8 @@ function _query(
  * @param target A single element by id or EventTarget to target
  *
  */
-export function listen(eventName: string, target: string|EventTarget) {
-  return (proto: any, methodName: string): any => {
-    proto.constructor._addDeclarativeEventListener(
-        target, eventName, proto[methodName]);
-  }
-}
+export const listen = (eventName: string, target: string|EventTarget) =>
+    (proto: any, methodName: string) => {
+      proto.constructor._addDeclarativeEventListener(
+          target, eventName, proto[methodName]);
+    };
