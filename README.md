@@ -93,6 +93,8 @@ To enable Metadata Reflection:
   ```html
   <script src="/bower_components/reflect-metadata/Reflect.js"></script>
   ```
+
+  ## Event Listeners
   
 To enable the `@listen` decorator:
 - Load the supplied DeclarativeEventListeners mixin in your element:
