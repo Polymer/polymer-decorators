@@ -45,11 +45,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ready() {
           super.ready();
-          if (!this.hasOwnProperty('listeners')) {
-            this.listeners = [];
+          if (!this.constructor.hasOwnProperty('listeners')) {
+            this.constructor.listeners = [];
           }
 
-          this.listeners.forEach(listener => {
+          this.constructor.listeners.forEach(listener => {
             const targetElement = typeof listener.target === 'string' ? this.$[listener.target] : listener.target;
             this._addEventListenerToNode(targetElement, listener.eventName, listener.handler.bind(this));
           });
@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         * @return {void}
         * @private
         */
-        _addDeclarativeEventListener(target, eventName, handler) {
+        static _addDeclarativeEventListener(target, eventName, handler) {
           if (!this.hasOwnProperty('listeners')) {
             this.listeners = [];
           }
