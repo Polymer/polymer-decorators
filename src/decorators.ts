@@ -159,11 +159,7 @@ function _query(
  */
 export function listen(eventName: string, target: string|EventTarget) {
   return (proto: any, methodName: string): any => {
-    if (!proto.constructor.hasOwnProperty('listeners')) {
-      proto.constructor.listeners = [];
-    }
-
-    proto.constructor.listeners.push(
-        {node: target, handler: methodName, eventName});
+    proto.constructor._addDeclarativeEventListener(
+        target, eventName, proto[methodName]);
   }
 }
