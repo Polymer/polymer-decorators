@@ -18,22 +18,14 @@ class DeclarativeEventsMixinTestElement extends
   @property()
   tapWindowCounter: number = 0;
 
-  @property()
-  tapElementByIdCounter: number = 0;
-
   constructor() {
     super();
 
-    this._addDeclarativeEventListener(window, 'tap', this.tapWindowHandler);
-    this._addDeclarativeEventListener(
-        'tapRegion', 'tap', this.tapElementByIdHandler);
+    (this.constructor as any)
+        ._addDeclarativeEventListener(window, 'tap', this.tapWindowHandler);
   }
 
   private tapWindowHandler(e: Event) {
     this.tapWindowCounter++;
-  }
-
-  private tapElementByIdHandler(e: Event) {
-    this.tapElementByIdCounter++;
   }
 }
