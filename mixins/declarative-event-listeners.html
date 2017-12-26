@@ -14,33 +14,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   (function () {
     'use strict';
     /**
-     * @const {Polymer.DeclarativeEventListeners}
-     */
+    * @const {Polymer.DeclarativeEventListeners}
+    */
     const declarativeListeners = Polymer.DeclarativeEventListeners;
     /**
-     * Element class mixin that provides API for adding declarative event
-     * listeners nodes.
-     *
-     * The API is designed to be compatible with override points implemented
-     * in `Polymer.TemplateStamp` such that declarative event listeners in
-     * templates will support gesture events when this mixin is applied along with
-     * `Polymer.TemplateStamp`.
-     *
-     * @mixinFunction
-     * @polymer
-     * @memberof Polymer
-     * @summary Element class mixin that provides API for adding declarative event
-     * listeners nodes
-     */
+    * Element class mixin that provides API for adding declarative event
+    * listeners nodes.
+    *
+    * The API is designed to be compatible with override points implemented
+    * in `Polymer.TemplateStamp` such that declarative event listeners in
+    * templates will support gesture events when this mixin is applied along with
+    * `Polymer.TemplateStamp`.
+    *
+    * @mixinFunction
+    * @polymer
+    * @memberof Polymer
+    * @summary Element class mixin that provides API for adding declarative event
+    * listeners nodes
+    */
     Polymer.DeclarativeEventListeners = Polymer.dedupingMixin(superClass => {
 
       /**
-     * @polymer
-     * @mixinClass
-     * @implements {Polymer_DeclarativeEventListeners}
-     * @property listeners {object} Stores the declared event listeners to be subscribed to 
-     * durning ready().
-     */
+      * @polymer
+      * @mixinClass
+      * @implements {Polymer_DeclarativeEventListeners}
+      * @property listeners {object} Stores the declared event listeners to be subscribed to 
+      * durning ready().
+      */
       class DeclarativeEventListeners extends superClass {
 
         ready() {
