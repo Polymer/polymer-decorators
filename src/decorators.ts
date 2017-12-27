@@ -54,12 +54,11 @@ export interface PropertyOptions {
  */
 export function property(options?: PropertyOptions) {
   return (proto: any, propName: string): any => {
-    const notify: boolean = options && options.notify || false;
-    const reflectToAttribute: boolean =
-        options && options.reflectToAttribute || false;
-    const readOnly: boolean = options && options.readOnly || false;
-    const computed: string = options && options.computed || '';
-    const observer: string = options && options.observer || '';
+    const notify = options && options.notify || false;
+    const reflectToAttribute = options && options.reflectToAttribute || false;
+    const readOnly = options && options.readOnly || false;
+    const computed = options && options.computed || '';
+    const observer = options && options.observer || '';
 
     let type;
     if (options && options.hasOwnProperty('type')) {
@@ -77,8 +76,9 @@ export function property(options?: PropertyOptions) {
     if (!proto.constructor.hasOwnProperty('properties')) {
       proto.constructor.properties = {};
     }
-    proto.constructor.properties[propName] =
+    const finalOpts: PropertyOptions =
         {type, notify, reflectToAttribute, readOnly, computed, observer};
+    proto.constructor.properties[propName] = finalOpts;
   }
 }
 
