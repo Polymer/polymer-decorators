@@ -74,6 +74,18 @@ suite('TypeScript Decorators', function() {
       const propValue = testElement.readOnlyString;
       chai.assert.equal(propValue, 'initial value');
     });
+    
+    test('computed property should return computed value', function() {
+      testElement.computedString = "new value";
+      const propValue = testElement.computedString;
+      chai.assert.equal(propValue, 'computed yahoo');
+    });
+    
+    test('observer property function should be invoked', function() {
+      testElement.observedString = "new value";
+      const propValue = testElement.lastChange;
+      chai.assert.equal(propValue, 'new value');
+    });
 
   });
 
