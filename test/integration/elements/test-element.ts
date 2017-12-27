@@ -9,7 +9,7 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
+/// <reference path="bower_components/polymer-decorators/global.d.ts" />
 
 const {customElement, property, query, queryAll, observe} = Polymer.decorators;
 
@@ -17,9 +17,6 @@ const {customElement, property, query, queryAll, observe} = Polymer.decorators;
 class TestElement extends Polymer.Element {
   @property({notify: true})
   aNum: number = 42;
-
-  @property()
-  doesntNotify: boolean = true;
 
   @property({notify: true})
   aString: string = 'yes';
@@ -32,12 +29,20 @@ class TestElement extends Polymer.Element {
 
   @property({readOnly:true})
   readOnlyString: string;
+  
+  @property({computed:'computeString(reflectedString)'})
+  computedString: string;
 
+  @property({observer:'observeString'})
+  observedString: string;
+  
   // stand-in for set function dynamically created by Polymer on read only properties
   _setReadOnlyString: (value: string) => void;
 
   lastNumChange: number;
 
+  lastChange: string;
+  
   lastMultiChange: any[];
 
   @query('#num')
@@ -59,5 +64,13 @@ class TestElement extends Polymer.Element {
   @observe(['aNum', 'aString'])
   private _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
+  }
+  
+  private computeString(s:string) {
+      return "computed " + s;
+  }
+  
+  private observeString(s:string) {
+      this.lastChange = s;
   }
 }
