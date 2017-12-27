@@ -43,7 +43,7 @@ export interface PropertyOptions {
   reflectToAttribute?: boolean;
   readOnly?: boolean;
   computed?: string;
-  observer?: string;
+  observer?: string|((val: any, old: any) => void);
 }
 
 /**

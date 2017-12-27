@@ -126,6 +126,14 @@ class TestElement extends Polymer.Element {
   @property()
   bar: string = 'yes';
 
+  // @observe does not support simple observers,
+  // you can already do that via a normal property
+  @property({ observer: TestElement.prototype.onBazChanged })
+  baz: string = 'test';
+
+  private onBazChanged(newValue: string, oldValue: string) {
+  }
+
   // @query replaces the property with a getter that querySelectors() in
   // the shadow root. Use this for type-safe access to internal nodes.
   @query('h1')
