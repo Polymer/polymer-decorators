@@ -75,7 +75,7 @@ suite('TypeScript Decorators', function() {
       chai.assert.equal(propValue, 'initial value');
     });
     
-    test('computed property should should return computed value', function() {
+    test('computed property should return computed value', function() {
       testElement.computedString = "new value";
       const propValue = testElement.computedString;
       chai.assert.equal(propValue, 'computed yahoo');
