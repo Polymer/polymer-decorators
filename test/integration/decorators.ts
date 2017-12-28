@@ -106,6 +106,32 @@ suite('TypeScript Decorators', function() {
 
   });
 
+  suite('@computed', function() {
+
+    test('defines a computed property', function() {
+      testElement.dependencyOne = 'foo';
+
+      const compDiv = testElement.shadowRoot.querySelector('#computed');
+      chai.assert.equal(compDiv.textContent, 'foo');
+      chai.assert.equal(testElement.computedOne, 'foo');
+    });
+
+    test('defines a computed property with multiple arguments', function() {
+      testElement.dependencyOne = 'foo';
+
+      const compDiv = testElement.shadowRoot.querySelector('#computedTwo');
+
+      chai.assert.equal(compDiv.textContent, 'foo');
+      chai.assert.equal(testElement.computedTwo, 'foo');
+
+      testElement.dependencyTwo = 'bar';
+
+      chai.assert.equal(compDiv.textContent, 'foobar');
+      chai.assert.equal(testElement.computedTwo, 'foobar');
+    });
+
+  });
+
   suite('@query', function() {
 
     test('queries the shadow root', function() {
@@ -119,7 +145,7 @@ suite('TypeScript Decorators', function() {
 
     test('queries the shadow root', function() {
       const divs = testElement.divs;
-      chai.assert.equal(divs.length, 2);
+      chai.assert.equal(divs.length, 4);
     });
 
   });

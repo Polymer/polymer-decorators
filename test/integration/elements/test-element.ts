@@ -11,7 +11,7 @@
 
 /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
-const {customElement, property, query, queryAll, observe} = Polymer.decorators;
+const {customElement, property, query, queryAll, observe, computed} = Polymer.decorators;
 
 @customElement('test-element')
 class TestElement extends Polymer.Element {
@@ -39,6 +39,18 @@ class TestElement extends Polymer.Element {
   @property({observer:'observeString'})
   observedString: string;
   
+  @property()
+  dependencyOne: string = '';
+
+  @property()
+  dependencyTwo: string = '';
+
+  @computed('dependencyOne')
+  get computedOne() { return this.dependencyOne; }
+
+  @computed('dependencyOne', 'dependencyTwo')
+  get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
+
   // stand-in for set function dynamically created by Polymer on read only properties
   _setReadOnlyString: (value: string) => void;
 
