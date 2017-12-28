@@ -106,24 +106,26 @@ export function observe(targets: string|string[]) {
 }
 
 /**
- * A TypeScript accessor decorator factory that causes the decorated accessor to
- * be called when a property changes. `targets` is either a single property
- * name, or a list of property names.
+ * A TypeScript accessor decorator factory that causes the decorated getter to
+ * be called when a set of dependencies change. The arguments of this decorator
+ * should be paths of the data dependencies as described
+ * [here](https://www.polymer-project.org/2.0/docs/devguide/observers#define-a-computed-property)
+ * The decorated getter should not have an associated setter.
  *
  * This function must be invoked to return a decorator.
  */
 export function computed<T = any>(...targets: (keyof T)[]) {
   return (proto: any, propName: string, descriptor: PropertyDescriptor): void => {
-    const targetString = targets.join(',');
-    const propNameCased = propName[0].toUpperCase() + propName.slice(1);
-    const fnName = `__compute${propNameCased}`;
+    const fnName = `__compute${propName}`;
 
-    proto.constructor.prototype[fnName] = descriptor.get;
+    Object.defineProperty(proto, fnName, {
+      value: descriptor.get
+    });
 
     descriptor.get = undefined;
 
     createProperty(proto, propName, {
-      computed: `${fnName}(${targetString})`
+      computed: `${fnName}(${targets.join(',')})`
     });
   };
 }
