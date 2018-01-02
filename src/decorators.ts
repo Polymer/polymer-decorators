@@ -175,3 +175,22 @@ function _query(
     });
   };
 }
+
+/**
+ * A TypeScript property decorator factory that causes the decorated method to
+ * be called when a imperative event is fired on the targeted element. `target`
+ * can be either a single element by id or element.
+ *
+ * You must apply the supplied DeclarativeEventListeners mixin to your element
+ * class for this decorator to function.
+ *
+ * https://www.polymer-project.org/2.0/docs/devguide/events#imperative-listeners
+ *
+ * @param eventName A string representing the event type to listen for
+ * @param target A single element by id or EventTarget to target
+ */
+export const listen = (eventName: string, target: string|EventTarget) =>
+    (proto: any, methodName: string) => {
+      proto.constructor._addDeclarativeEventListener(
+          target, eventName, proto[methodName]);
+    };

@@ -11,7 +11,8 @@
 
 /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
-const {customElement, property, query, queryAll, observe, computed} = Polymer.decorators;
+const {customElement, property, query, queryAll, observe, computed, listen} =
+    Polymer.decorators;
 
 @customElement('test-element')
 class TestElement extends Polymer.Element {
@@ -27,10 +28,10 @@ class TestElement extends Polymer.Element {
   @property()
   aBool: boolean = true;
 
-  @property({reflectToAttribute:true})
+  @property({reflectToAttribute: true})
   reflectedString: string = 'yahoo';
 
-  @property({readOnly:true})
+  @property({readOnly: true})
   readOnlyString: string;
   
   @property({computed:'computeString(reflectedString)'})
@@ -51,7 +52,8 @@ class TestElement extends Polymer.Element {
   @computed('dependencyOne', 'dependencyTwo')
   get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
 
-  // stand-in for set function dynamically created by Polymer on read only properties
+  // stand-in for set function dynamically created by Polymer on read only
+  // properties
   _setReadOnlyString: (value: string) => void;
 
   lastNumChange: number;
@@ -71,7 +73,7 @@ class TestElement extends Polymer.Element {
     this.lastNumChange = newNum;
   }
 
-  ready(){
+  ready() {
     super.ready();
     this._setReadOnlyString('initial value')
   }

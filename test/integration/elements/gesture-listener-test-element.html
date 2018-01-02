@@ -1,0 +1,19 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer-decorators/polymer-decorators.html">
+<link rel="import" href="../bower_components/polymer-decorators/mixins/declarative-event-listeners.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="gesture-listener-test-element">
+  <template>
+    <style>
+      .event-area {
+        height: 100px;
+        width: 100px;
+        border: 1px solid #000000;
+        margin: 32px;
+      }
+    </style>
+    <div class="event-area" id="tapRegion"></div>
+  </template>
+  <script src="./gesture-listener-test-element.js"></script>
+</dom-module>

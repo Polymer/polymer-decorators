@@ -1,5 +1,6 @@
 {
   "suites": [
-    "decorators.html"
+    "decorators.html",
+    "mixins.html"
   ]
 }
