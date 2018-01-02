@@ -148,6 +148,26 @@ class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
   @property()
   bar: string = 'yes';
 
+  // @observe does not support simple observers,
+  // you can already do that via a normal property
+  @property({ observer: TestElement.prototype.onBazChanged })
+  baz: string = 'test';
+
+  private onBazChanged(newValue: string, oldValue: string) {
+  }
+
+  // @computed replaces the getter with a computed property
+  @computed('foo')
+  get computedExample() {
+    return this.foo * 2;
+  }
+
+  // @computed also takes multiple parameters
+  @computed('foo', 'bar')
+  get computedExampleTwo() {
+    return `${this.bar}: ${this.foo}`;
+  }
+
   // @query replaces the property with a getter that querySelectors() in
   // the shadow root. Use this for type-safe access to internal nodes.
   @query('h1')

@@ -82,6 +82,18 @@ suite('TypeScript Decorators', function() {
       const propValue = testElement.readOnlyString;
       chai.assert.equal(propValue, 'initial value');
     });
+    
+    test('computed property should return computed value', function() {
+      testElement.computedString = "new value";
+      const propValue = testElement.computedString;
+      chai.assert.equal(propValue, 'computed yahoo');
+    });
+    
+    test('observer property function should be invoked', function() {
+      testElement.observedString = "new value";
+      const propValue = testElement.lastChange;
+      chai.assert.equal(propValue, 'new value');
+    });
   });
 
   suite('@observe', function() {
@@ -98,6 +110,32 @@ suite('TypeScript Decorators', function() {
     });
   });
 
+  suite('@computed', function() {
+
+    test('defines a computed property', function() {
+      testElement.dependencyOne = 'foo';
+
+      const compDiv = testElement.shadowRoot.querySelector('#computed');
+      chai.assert.equal(compDiv.textContent, 'foo');
+      chai.assert.equal(testElement.computedOne, 'foo');
+    });
+
+    test('defines a computed property with multiple arguments', function() {
+      testElement.dependencyOne = 'foo';
+
+      const compDiv = testElement.shadowRoot.querySelector('#computedTwo');
+
+      chai.assert.equal(compDiv.textContent, 'foo');
+      chai.assert.equal(testElement.computedTwo, 'foo');
+
+      testElement.dependencyTwo = 'bar';
+
+      chai.assert.equal(compDiv.textContent, 'foobar');
+      chai.assert.equal(testElement.computedTwo, 'foobar');
+    });
+
+  });
+
   suite('@query', function() {
     test('queries the shadow root', function() {
       const numDiv = testElement.numDiv;
@@ -108,7 +146,7 @@ suite('TypeScript Decorators', function() {
   suite('@queryAll', function() {
     test('queries the shadow root', function() {
       const divs = testElement.divs;
-      chai.assert.equal(divs.length, 2);
+      chai.assert.equal(divs.length, 4);
     });
   });
 
