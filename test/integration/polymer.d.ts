@@ -1,4 +1,6 @@
-// TODO Complete this and distribute with Polymer itself.
+/**
+ * TODO Remove this file when official typings are released with Polymer 2.4.
+ */
 
 declare namespace Polymer {
   class Element extends HTMLElement {
@@ -9,9 +11,9 @@ declare namespace Polymer {
         handler: any): void
   }
 
-  /**TODO: Remove :any when Polymer typings are complete.
-   *    https://github.com/Polymer/polymer-decorators/issues/9
-   */
   function GestureEventListeners<T>(element: T): T;
   function DeclarativeEventListeners<T>(element: T): T;
+
+  function mixinBehaviors<T>(
+      behaviors: object | object[], klass: {new (): T}): {new (): T};
 }
