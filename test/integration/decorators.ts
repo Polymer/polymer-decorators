@@ -35,6 +35,13 @@ suite('TypeScript Decorators', function() {
       const el = fixture('element-with-is') as ElementWithIs;
       chai.assert.instanceOf(el, ElementWithIs);
     });
+
+    test('defines an element with a mixin behavior', function() {
+      const el = fixture('mixin-behaviors-test-element-fixture') as MixinBehaviorsTestElement;
+      chai.assert.instanceOf(el, MixinBehaviorsTestElement);
+      chai.assert.equal(el.elementProperty, 'elementPropertyValue');
+      chai.assert.equal((el as any).behaviorProperty, 'behaviorPropertyValue');
+    });
   });
 
   suite('@property', function() {

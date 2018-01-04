@@ -46,7 +46,8 @@ export interface PropertyOptions {
   observer?: string|((val: any, old: any) => void);
 }
 
-function createProperty(proto: any, name: string, options?: PropertyOptions): void {
+function createProperty(
+    proto: any, name: string, options?: PropertyOptions): void {
   const notify = options && options.notify || false;
   const reflectToAttribute = options && options.reflectToAttribute || false;
   const readOnly = options && options.readOnly || false;
@@ -67,7 +68,7 @@ function createProperty(proto: any, name: string, options?: PropertyOptions): vo
   }
 
   if (!proto.constructor.hasOwnProperty('properties')) {
-    proto.constructor.properties = {};
+    Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
   const finalOpts: PropertyOptions =
@@ -115,18 +116,17 @@ export function observe(targets: string|string[]) {
  * This function must be invoked to return a decorator.
  */
 export function computed<T = any>(...targets: (keyof T)[]) {
-  return (proto: any, propName: string, descriptor: PropertyDescriptor): void => {
+  return (proto: any,
+          propName: string,
+          descriptor: PropertyDescriptor): void => {
     const fnName = `__compute${propName}`;
 
-    Object.defineProperty(proto, fnName, {
-      value: descriptor.get
-    });
+    Object.defineProperty(proto, fnName, {value: descriptor.get});
 
     descriptor.get = undefined;
 
-    createProperty(proto, propName, {
-      computed: `${fnName}(${targets.join(',')})`
-    });
+    createProperty(
+        proto, propName, {computed: `${fnName}(${targets.join(',')})`});
   };
 }
 
