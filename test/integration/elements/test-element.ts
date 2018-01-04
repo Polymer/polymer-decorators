@@ -9,14 +9,18 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="bower_components/polymer-decorators/global.d.ts" />
+/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
 
-const {customElement, property, query, queryAll, observe} = Polymer.decorators;
+const {customElement, property, query, queryAll, observe, computed, listen} =
+    Polymer.decorators;
 
 @customElement('test-element')
 class TestElement extends Polymer.Element {
   @property({notify: true})
   aNum: number = 42;
+
+  @property()
+  doesntNotify: boolean = true;
 
   @property({notify: true})
   aString: string = 'yes';
@@ -24,17 +28,38 @@ class TestElement extends Polymer.Element {
   @property()
   aBool: boolean = true;
 
-  @property({reflectToAttribute:true})
+  @property({reflectToAttribute: true})
   reflectedString: string = 'yahoo';
 
-  @property({readOnly:true})
+  @property({readOnly: true})
   readOnlyString: string;
+  
+  @property({computed:'computeString(reflectedString)'})
+  computedString: string;
 
-  // stand-in for set function dynamically created by Polymer on read only properties
+  @property({observer:'observeString'})
+  observedString: string;
+  
+  @property()
+  dependencyOne: string = '';
+
+  @property()
+  dependencyTwo: string = '';
+
+  @computed('dependencyOne')
+  get computedOne() { return this.dependencyOne; }
+
+  @computed('dependencyOne', 'dependencyTwo')
+  get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
+
+  // stand-in for set function dynamically created by Polymer on read only
+  // properties
   _setReadOnlyString: (value: string) => void;
 
   lastNumChange: number;
 
+  lastChange: string;
+  
   lastMultiChange: any[];
 
   @query('#num')
@@ -48,7 +73,7 @@ class TestElement extends Polymer.Element {
     this.lastNumChange = newNum;
   }
 
-  ready(){
+  ready() {
     super.ready();
     this._setReadOnlyString('initial value')
   }
@@ -56,5 +81,13 @@ class TestElement extends Polymer.Element {
   @observe(['aNum', 'aString'])
   private _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
+  }
+  
+  private computeString(s:string) {
+      return "computed " + s;
+  }
+  
+  private observeString(s:string) {
+      this.lastChange = s;
   }
 }

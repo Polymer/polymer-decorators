@@ -31,6 +31,8 @@ declare namespace Polymer {
         notify?: boolean;
         reflectToAttribute?: boolean;
         readOnly?: boolean;
+        computed?: string;
+        observer?: string | ((val: any, old: any) => void);
     }
     /**
      * A TypeScript property decorator factory that defines this as a Polymer
@@ -47,6 +49,16 @@ declare namespace Polymer {
      * This function must be invoked to return a decorator.
      */
     function observe(targets: string | string[]): (proto: any, propName: string) => any;
+    /**
+     * A TypeScript accessor decorator factory that causes the decorated getter to
+     * be called when a set of dependencies change. The arguments of this decorator
+     * should be paths of the data dependencies as described
+     * [here](https://www.polymer-project.org/2.0/docs/devguide/observers#define-a-computed-property)
+     * The decorated getter should not have an associated setter.
+     *
+     * This function must be invoked to return a decorator.
+     */
+    function computed<T = any>(...targets: (keyof T)[]): (proto: any, propName: string, descriptor: PropertyDescriptor) => void;
     /**
      * A TypeScript property decorator factory that converts a class property into
      * a getter that executes a querySelector on the element's shadow root.
@@ -68,6 +80,20 @@ declare namespace Polymer {
      * This function must be invoked to return a decorator.
      */
     const queryAll: (selector: string) => (proto: any, propName: string) => any;
+    /**
+     * A TypeScript property decorator factory that causes the decorated method to
+     * be called when a imperative event is fired on the targeted element. `target`
+     * can be either a single element by id or element.
+     *
+     * You must apply the supplied DeclarativeEventListeners mixin to your element
+     * class for this decorator to function.
+     *
+     * https://www.polymer-project.org/2.0/docs/devguide/events#imperative-listeners
+     *
+     * @param eventName A string representing the event type to listen for
+     * @param target A single element by id or EventTarget to target
+     */
+    const listen: (eventName: string, target: string | EventTarget) => (proto: any, methodName: string) => void;
     
   }
 }

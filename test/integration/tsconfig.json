@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true
   },
   "include": [
-    "*.ts"
+    "*.ts",
+    "elements/**/*.ts"
   ]
 }

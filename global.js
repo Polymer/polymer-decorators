@@ -22,9 +22,38 @@ function customElement(tagname) {
     // TODO Investigate narrowing down the type of clazz.
     return (clazz) => {
         // TODO(justinfagnani): we could also use the kebab-cased class name
-        tagname = clazz.is = clazz.is || tagname;
+        if (clazz.is) {
+            tagname = clazz.is;
+        }
+        else {
+            clazz.is = tagname;
+        }
         window.customElements.define(tagname, clazz);
     };
+}
+function createProperty(proto, name, options) {
+    const notify = options && options.notify || false;
+    const reflectToAttribute = options && options.reflectToAttribute || false;
+    const readOnly = options && options.readOnly || false;
+    const computed = options && options.computed || '';
+    const observer = options && options.observer || '';
+    let type;
+    if (options && options.hasOwnProperty('type')) {
+        type = options.type;
+    }
+    else if (window.Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
+        Reflect.hasMetadata('design:type', proto, name)) {
+        type = Reflect.getMetadata('design:type', proto, name);
+    }
+    else {
+        console.error('A type could not be found for ${propName}. ' +
+            'Set a type or configure Metadata Reflection API support.');
+    }
+    if (!proto.constructor.hasOwnProperty('properties')) {
+        Object.defineProperty(proto.constructor, 'properties', { value: {} });
+    }
+    const finalOpts = { type, notify, reflectToAttribute, readOnly, computed, observer };
+    proto.constructor.properties[name] = finalOpts;
 }
 /**
  * A TypeScript property decorator factory that defines this as a Polymer
@@ -34,30 +63,7 @@ function customElement(tagname) {
  */
 function property(options) {
     return (proto, propName) => {
-        const notify = options && options.notify || false;
-        const reflectToAttribute = options && options.reflectToAttribute || false;
-        const readOnly = options && options.readOnly || false;
-        let type;
-        if (options && options.hasOwnProperty('type')) {
-            type = options.type;
-        }
-        else if (window.Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-            Reflect.hasMetadata('design:type', proto, propName)) {
-            type = Reflect.getMetadata('design:type', proto, propName);
-        }
-        else {
-            console.error('A type could not be found for ${propName}. ' +
-                'Set a type or configure Metadata Reflection API support.');
-        }
-        if (!proto.constructor.hasOwnProperty('properties')) {
-            proto.constructor.properties = {};
-        }
-        proto.constructor.properties[propName] = {
-            type,
-            notify,
-            reflectToAttribute,
-            readOnly,
-        };
+        createProperty(proto, propName, options);
     };
 }
 /**
@@ -74,6 +80,23 @@ function observe(targets) {
             proto.constructor.observers = [];
         }
         proto.constructor.observers.push(`${propName}(${targetString})`);
+    };
+}
+/**
+ * A TypeScript accessor decorator factory that causes the decorated getter to
+ * be called when a set of dependencies change. The arguments of this decorator
+ * should be paths of the data dependencies as described
+ * [here](https://www.polymer-project.org/2.0/docs/devguide/observers#define-a-computed-property)
+ * The decorated getter should not have an associated setter.
+ *
+ * This function must be invoked to return a decorator.
+ */
+function computed(...targets) {
+    return (proto, propName, descriptor) => {
+        const fnName = `__compute${propName}`;
+        Object.defineProperty(proto, fnName, { value: descriptor.get });
+        descriptor.get = undefined;
+        createProperty(proto, propName, { computed: `${fnName}(${targets.join(',')})` });
     };
 }
 /**
@@ -114,12 +137,30 @@ function _query(queryFn) {
         });
     };
 }
+/**
+ * A TypeScript property decorator factory that causes the decorated method to
+ * be called when a imperative event is fired on the targeted element. `target`
+ * can be either a single element by id or element.
+ *
+ * You must apply the supplied DeclarativeEventListeners mixin to your element
+ * class for this decorator to function.
+ *
+ * https://www.polymer-project.org/2.0/docs/devguide/events#imperative-listeners
+ *
+ * @param eventName A string representing the event type to listen for
+ * @param target A single element by id or EventTarget to target
+ */
+const listen = (eventName, target) => (proto, methodName) => {
+    proto.constructor._addDeclarativeEventListener(target, eventName, proto[methodName]);
+};
 
 exports.customElement = customElement;
 exports.property = property;
 exports.observe = observe;
+exports.computed = computed;
 exports.query = query;
 exports.queryAll = queryAll;
+exports.listen = listen;
 
 return exports;
 

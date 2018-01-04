@@ -94,14 +94,36 @@ To enable Metadata Reflection:
   <script src="/bower_components/reflect-metadata/Reflect.js"></script>
   ```
 
+  ## Event Listeners
+  
+To enable the `@listen` decorator:
+- Load the supplied DeclarativeEventListeners mixin in your element:
+  ```html
+  <link rel="import" href="bower_components/polymer-decorators/mixins/declarative-event-listeners.html">
+  ```
+  
+ - Apply the DeclarativeEventListeners mixin to your element class:
+  ```js
+  class YourElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
+  ```
+  
+ - (Optional) To use [Polymer gesture listeners](https://www.polymer-project.org/2.0/docs/devguide/gesture-events) apply the GestureEventListeners mixin to your element class and import the mixin:
+  ```html
+  <link rel="import" href="bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+  ```
+  ```js
+  class YourElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  ```
+
+
 ## Example
 
 ```typescript
-import {customElement, property, query, queryAll, observe} from '../polymer-decorators/typescript/decorators.js';
+import {customElement, property, query, queryAll, observe, listen} from '../polymer-decorators/typescript/decorators.js';
 
 // This sets the static `is` property and registers the element
 @customElement('test-element')
-class TestElement extends Polymer.Element {
+class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   // @property replaces the static `property` getter.
   // The type is read from the type annotation, `notify` is the same as in
@@ -126,6 +148,26 @@ class TestElement extends Polymer.Element {
   @property()
   bar: string = 'yes';
 
+  // @observe does not support simple observers,
+  // you can already do that via a normal property
+  @property({ observer: TestElement.prototype.onBazChanged })
+  baz: string = 'test';
+
+  private onBazChanged(newValue: string, oldValue: string) {
+  }
+
+  // @computed replaces the getter with a computed property
+  @computed('foo')
+  get computedExample() {
+    return this.foo * 2;
+  }
+
+  // @computed also takes multiple parameters
+  @computed('foo', 'bar')
+  get computedExampleTwo() {
+    return `${this.bar}: ${this.foo}`;
+  }
+
   // @query replaces the property with a getter that querySelectors() in
   // the shadow root. Use this for type-safe access to internal nodes.
   @query('h1')
@@ -144,6 +186,25 @@ class TestElement extends Polymer.Element {
   @observe(['foo', 'bar'])
   private _fooBarChanged(newFoo: number, newBar: string) {
     console.log(`foo is now: ${newFoo}, bar is now ${newBar}`);
+  }
+  
+  // @listen registers event listeners declaratively. 
+  //
+  // To use this decorator, your element class must extend from the supplied Polymer.DeclarativeEventListeners mixin.
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element)
+  //
+  // The @listen decorator can also declaratively register gesture events. To accomplish this, 
+  // you must extend from both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
+  //
+  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
+  //
+  // listen(eventName: string, target: string|EventTarget)
+  // @param eventName A string representing the event type to listen for
+  // @param target A single element by id or EventTarget to target
+  //
+  @listen('tap', 'submitButton')
+  private onSubmit(e: Event) {
+    console.log('Button clicked!');
   }
 
 }
