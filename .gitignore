@@ -4,3 +4,4 @@ node_modules/
 global.js
 global.d.ts
 polymer-decorators*.tgz
+mixins/*.d.ts

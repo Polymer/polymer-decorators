@@ -9,8 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
-
 @customElement('gesture-listener-test-element')
 class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
 (Polymer.GestureEventListeners(Polymer.Element)) {

@@ -1,6 +1,7 @@
 # Change Log
 
 ## [Unreleased]
+- Generated typings for the `DeclarativeEventListeners` mixin are now available at `mixins/declarative-event-listeners.d.ts`.
 
 ## [0.1.2] - 2018-01-01
 - Added `observer` and `computed` properties to the `@property` decorator options.
