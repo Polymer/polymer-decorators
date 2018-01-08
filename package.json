@@ -5,9 +5,9 @@
   "main": "lib/decorators.js",
   "types": "lib/decorators.d.ts",
   "scripts": {
-    "clean": "rm -rf lib global.{js,d.ts} test/integration/{node_modules,bower_components,bower_cache}",
+    "clean": "rm -rf lib global.{js,d.ts} mixins/*.d.ts test/integration/{node_modules,bower_components,bower_cache}",
     "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
-    "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js",
+    "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js && gen-typescript-declarations --outDir=.",
     "prepack": "npm run build",
     "test:setup": "npm run build && cd test/integration && npm install --no-package-lock && npm run build",
     "test": "npm run test:setup && cd test/integration && npm test"
@@ -26,6 +26,7 @@
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
+    "@polymer/gen-typescript-declarations": "^0.3.5",
     "clang-format": "^1.0.55",
     "rollup": "^0.50.0",
     "typescript": "^2.5.2"

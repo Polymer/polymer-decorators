@@ -9,8 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="../bower_components/polymer-decorators/global.d.ts" />
-
 @Polymer.decorators.customElement()
 class ElementWithIs extends Polymer.Element {
   public static get is() { return 'element-with-is'; }
