@@ -155,6 +155,15 @@ class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   private onBazChanged(newValue: string, oldValue: string) {
   }
+  
+  // This is a computed property that uses a named function. The function 
+  // can also take multiple parameters.
+  @property({computed: `_computedExample(foo)`})
+  readonly computed: number;
+
+  _computedExample(foo: number): number {
+    return foo * 2;
+  }
 
   // @computed replaces the getter with a computed property
   @computed('foo')
