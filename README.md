@@ -2,7 +2,21 @@
 
 # polymer-decorators
 
-TypeScript decorators for Polymer 2.0.
+A library of [decorators](https://github.com/tc39/proposal-decorators) to help
+you write [web
+components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) with
+[Polymer](https://www.polymer-project.org/) in
+[TypeScript](https://www.typescriptlang.org/) in a type safe and convenient
+way, like this:
+
+```ts
+@customElement('my-element')
+class MyElement extends Polymer.Element {
+
+  @property()
+  myProperty: string = 'foo';
+}
+```
 
 ## Contents
 
@@ -16,7 +30,11 @@ TypeScript decorators for Polymer 2.0.
    - [@queryAll](#queryallselector-string)
    - [@listen](#listeneventname-string-target-stringeventtarget)
 - [Metadata Reflection API](#metadata-reflection-api)
-- [Polymer 1.0](#polymer-10)
+- [FAQ](#faq)
+   - [Do I need this library to use Polymer and Typescript?](#do-i-need-this-library-to-use-polymer-and-typescript)
+   - [What are the performance costs?](#what-are-the-performance-costs)
+   - [Does it work with Polymer 3.0?](#does-it-work-with-polymer-30)
+   - [Does it work with Polymer 1.0 or 0.5?](#does-it-work-with-polymer-10-or-05)
 
 
 ## Installation
@@ -55,14 +73,14 @@ TypeScript decorators for Polymer 2.0.
    }
    ```
 
-5. Optionally [configure Metadata Reflection](#metadata-reflection-api) to define
-   properties more concisely.
+5. Optionally [configure Metadata Reflection](#metadata-reflection-api) to
+   define property types more concisely.
 
 
 ## Decorator reference
 
-The decorator functions are defined on the `Polymer.decorators` global
-namespace object. You can refer to them directly (e.g.
+These decorator factory functions are defined on the `Polymer.decorators`
+global namespace object. You can refer to them directly (e.g.
 `@Polymer.decorators.customElement()`), or you may prefer to assign them to
 shorter variables:
 
@@ -91,9 +109,12 @@ Define a Polymer property.
 `options` is a [Polymer property
 options](https://www.polymer-project.org/2.0/docs/devguide/properties) object.
 All standard options are supported, except for `value`; use a property
-initializer instead. If the [Metadata Reflection API](#metadata-reflection-api)
-is configured, the `type` option will be inferred from the TypeScript type and
-can be omitted.
+initializer instead.
+
+If the [Metadata Reflection API](#metadata-reflection-api) is configured, the
+`type` option (which determines how Polymer de-serializes Element attributes
+for this property) will be inferred from the TypeScript type and can be
+omitted.
 
 ```ts
 @property({type: String, notify: true})
@@ -264,6 +285,10 @@ yet a formal ECMAScript
 proposal](https://github.com/rbuckton/reflect-metadata/issues/9), but a
 polyfill is available, and TypeScript has experimental support.
 
+Also note that the Metadata Reflection polyfill is **47 KB** (7 KB gzipped), so
+be sure to consider strongly whether the cost of shipping this polyfill is
+worth the convenience for your project.
+
 Without Metadata Reflection, the Polymer property type must be passed
 explicitly to the decorator factory, because type information is not otherwise
 available at runtime:
@@ -311,10 +336,50 @@ To enable Metadata Reflection:
    ```
 
 
-## Polymer 1.0
+## FAQ
 
-This library is not compatible with Polymer 1.0 or earlier, because it depends
-on the ES6 class-based component definition style introduced in Polymer 2.0.
-Community-maintained TypeScript decorator options for Polymer 1.0 include
+### Do I need this library to use Polymer and TypeScript?
+No, you can also use Polymer and TypeScript without additional client
+libraries. As of Polymer 2.4, TypeScript type declarations are available in the
+[`types/`](https://github.com/Polymer/polymer/tree/master/types) directory.The
+advantage of using these decorators are additional type safety and convenience.
+For simple elements and applications, it may be preferable to use the vanilla
+Polymer API, like this:
+
+```ts
+/// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
+
+class MyElement extends Polymer.Element {
+  static is = 'my-element'
+
+  static get properties() {
+    return {
+      myProperty: {
+        type: String
+      }
+    };
+  }
+
+  myProperty: string = 'foo';
+}
+
+customElements.define(MyElement.is, MyElement);
+```
+
+### What are the performance costs?
+The additional JavaScript served for this library is aproximately 8KB (4KB
+gzipped). Benchmarks are not currently available, but we expect minor
+performance costs. The library generally works by building standard Polymer
+property definitions at element definition time, so performance costs should be
+seen at application startup.
+
+### Does it work with Polymer 3.0?
+Not yet, but support is planned. See issue
+[#10](https://github.com/Polymer/polymer-decorators/issues/10).
+
+### Does it work with Polymer 1.0 or 0.5?
+No, this library is not compatible with Polymer 1.0 or earlier, because it
+depends on the ES6 class-based component definition style introduced in Polymer
+2.0.  Community-maintained TypeScript decorator options for Polymer 1.0 include
 [nippur72/PolymerTS](https://github.com/nippur72/PolymerTS) and
 [Cu3PO42/polymer-decorators](https://github.com/Cu3PO42/polymer-decorators).
