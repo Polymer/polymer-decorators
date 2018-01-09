@@ -38,8 +38,8 @@ TypeScript decorators for Polymer 2.0.
    them as sources in your `tsconfig.json` with `include` or `files`.
 
    ```ts
-   /// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
-   /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
+   /// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
+   /// <reference path="./bower_components/polymer-decorators/global.d.ts" />
    ```
 
 4. Enable the
@@ -218,6 +218,8 @@ To use `@listen`, your element must apply the
 mixin, which is supplied with this package.
 
 ```ts
+/// <reference path="./bower_components/polymer-decorators/mixins/declarative-event-listeners.d.ts" />
+
 class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   @listen('scroll', document)
