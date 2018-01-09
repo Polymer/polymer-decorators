@@ -4,49 +4,238 @@
 
 TypeScript decorators for Polymer 2.0.
 
-### Installation
+## Contents
 
-- Install the decorators:
-  ```sh
-  bower install --save Polymer/polymer-decorators
-  ```
+- [Installation](#installation)
+- [Decorator reference](#decorator-reference)
+   - [@customElement](#customelement)
+   - [@property](#property)
+   - [@computed](#computed)
+   - [@observe](#observe)
+   - [@query](#query)
+   - [@queryAll](#queryall)
+   - [@listen](#listen)
+- [Metadata Reflection API](#metadata-reflection-api)
+- [Polymer 1.0](#polymer-10)
 
-- Import the decorator library in your component definitions:
-  ```html
-  <link rel="import" href="/bower_components/polymer-decorators/polymer-decorators.html">
-  ```
 
-- Include the decorator type declarations in one of the source files in your
-  TypeScript project (be sure to update the reference below with the correct
-  relative path):
-  ```ts
-  /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
-  ```
+## Installation
 
-- Enable the
-  [`experimentalDecorators`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
-  TypeScript compiler setting. Use the `--experimentalDecorators` flag, or
-  update your `tsconfig.json` to include:
-  ```js
-  {
-    "compilerOptions": {
-      "experimentalDecorators": true
-    }
+1. Install the decorators with Bower (NPM support coming with Polymer 3.0):
+
+   ```sh
+   bower install --save Polymer/polymer-decorators
+   ```
+
+2. Import the decorator library in your component definitions:
+
+   ```html
+   <link rel="import" href="/bower_components/polymer-decorators/polymer-decorators.html">
+   ```
+
+3. Include the decorator type declarations in one of the source files in your
+   TypeScript project (be sure to update the with the correct path). You can
+   also add it as a source in your `tsconfig.json`.
+
+   ```ts
+   /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
+   ```
+
+4. Enable the
+   [`experimentalDecorators`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
+   TypeScript compiler setting. Use the `--experimentalDecorators` flag, or
+   update your `tsconfig.json` to include:
+
+   ```js
+   {
+     "compilerOptions": {
+       "experimentalDecorators": true
+     }
+   }
+   ```
+
+5. Optionally [configure Metadata Reflection](#metadata-reflection-api) to define
+   properties more concisely.
+
+
+## Decorator reference
+
+### `@customElement`
+
+Define a custom element.
+
+`tagname` is the name to register this element with. If omitted, the static
+`is` class property is used. Also sets the `is` property on the class if not
+already set.
+
+```ts
+@customElement('my-element')
+class MyElement extends Polymer.Element {
+  ...
+}
+```
+
+### `@property`
+Define a Polymer property.
+
+`options` is a [Polymer property
+options](https://www.polymer-project.org/2.0/docs/devguide/properties) object.
+All standard options are supported, except for `value`; use a property
+initializer instead. If the [Metadata Reflection API](#metadata-reflection-api)
+is configured, the `type` option will be inferred from the TypeScript type and
+can be omitted.
+
+```ts
+@property({type: String, notify: true})
+foo: string = 'hello';
+```
+
+### `@computed`
+
+Define a [computed
+property](https://www.polymer-project.org/2.0/docs/devguide/observers#computed-properties).
+
+This decorator must be applied to a
+[getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get),
+and it must not have an associated setter.
+
+```ts
+@computed('foo', 'bar')
+get fooBar() {
+  return this.foo + this.bar;
+}
+```
+
+For optional additional type saftey, pass your custom element class as a
+generic parameter. This allows TypeScript to check that all of your
+dependencies are valid properties.
+
+```ts
+@computed<MyElement>('foo', 'bar')
+get fooBar() {
+  return this.foo + this.bar;
+}
+```
+
+To define a computed property with more complex dependency expressions for
+which you may want to receive change values as arguments (e.g. sub-properties,
+splices, wildcards, etc.), define a standard property and set its `computed`
+option.
+
+```ts
+@property({computed: 'computeBaz(foo.*)'})
+baz: string;
+
+private computeBaz(fooChangeRecord: object) {
+  ...
+}
+```
+
+### `@observe`
+
+Define a [complex property
+observer](https://www.polymer-project.org/2.0/docs/devguide/observers#complex-observers).
+
+`targets` can be a single dependency expression, or an array of them. All
+observer dependency syntaxes are supported (property names, sub-properties,
+splices, wildcards, etc.).
+
+```ts
+@observe('foo')
+private fooChanged(newFoo: string) {
+  console.log(`foo is now: ${newFoo}`);
+}
+
+@observe(['foo', 'bar'])
+private fooBarChanged(newFoo: string, newBar: string) {
+  console.log(`foo is now: ${newFoo}, bar is now: ${newBar}`);
+}
+
+@observe('baz.*')
+private bazChanged(changeRecord: object) {
+  console.log('baz changed deeply');
+}
+```
+
+To define a [simple property
+observer](https://www.polymer-project.org/2.0/docs/devguide/observers#simple-observers),
+which receives both the old and new values, set the `observer` option on the
+property you want to observe to the observer name or (preferably) function
+reference.
+
+```ts
+@property({observer: MyElement.prototype.bazChanged})
+baz: string;
+
+private bazChanged(oldValue: string, newValue: string) {
+  console.log(`baz was: ${oldValue}, and is now: ${newValue}`);
+}
+```
+
+### `@query`
+
+Define a getter that calls
+[`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector)
+on the shadow root with the given `selector`.
+
+```ts
+@query('my-widget')
+widget: MyWidgetElement;
+```
+
+### `@queryAll`
+
+Define a getter that calls
+[`querySelectorAll`](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll)
+on the shadow root with the given `selector`.
+
+```ts
+@queryAll('my-widget')
+widgets: NodeListOf<MyWidgetElement>
+```
+
+### `@listen`
+
+Add an event listener for `eventName` on `target`. `target` can be an object
+reference, or the string id of an element in the shadow root.
+
+Note that a `target` referenced by id must be defined statically in the
+top-level element template (e.g. not in a `<dom-if>`), because the `$` id map
+is used to find the target upon `ready()`.
+
+To use `@listen`, your element must apply the
+[`DeclarativeEventListeners`](https://github.com/Polymer/polymer-decorators/blob/master/mixins/declarative-event-listeners.html)
+mixin, which is supplied with this package.
+
+```ts
+class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element)) {
+
+  @listen('scroll', document)
+  private onDocumentScroll(ev: Event) {
+    this.scratchChalkboard();
   }
-  ```
+}
+```
 
-- Define a custom element:
-  ```ts
-  @Polymer.decorators.customElement('my-element')
-  class MyElement extends Polymer.Element {
+Note that to listen for Polymer [gesture
+events](https://www.polymer-project.org/2.0/docs/devguide/gesture-events) such
+as `tap` and `track`, your element must also apply the
+[`GestureEventListeners`](https://github.com/Polymer/polymer/blob/master/lib/mixins/gesture-event-listeners.html)
+mixin, which is supplied with Polymer.
 
-    @Polymer.decorators.property({type: String})
-    myProperty: string = 'Hello';
+```ts
+class MyElement extends
+    Polymer.GestureEventListeners(
+    Polymer.DeclarativeEventListeners(
+    Polymer.Element)) {
+
+  @listen('tap', 'red-button')
+  private onTapRedButton(ev: Event) {
+    this.launchMissile();
   }
-  ```
+}
+```
 
-- Optional: [configure Metadata Reflection](#metadata-reflection-api) to define
-  properties more concisely.
 
 ## Metadata Reflection API
 
@@ -57,160 +246,54 @@ yet a formal ECMAScript
 proposal](https://github.com/rbuckton/reflect-metadata/issues/9), but a
 polyfill is available, and TypeScript has experimental support.
 
+Without Metadata Reflection, the Polymer property type must be passed
+explicitly to the decorator factory, because type information is not otherwise
+available at runtime:
+
 ```ts
-// Without Metadata Reflection, the type must be passed explicitly to the
-// decorator factory, because type information is not available at runtime.
 @property({type: String})
 myProperty: string;
+```
 
-// With Metadata Reflection, the TypeScript type annotation is sufficient,
-// because the compiler will emit type information automatically.
+With Metadata Reflection, the TypeScript type annotation alone is sufficient,
+because the compiler will emit type information that the decorator can use to
+automatically set the Polymer property type:
+
+```ts
 @property()
 myProperty: string;
 ```
 
 To enable Metadata Reflection:
 
-- Enable the
-  [`emitDecoratorMetadata`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
-  TypeScript compiler setting. Use the `--emitDecoratorMetadata` flag, or update your
-  `tsconfig.json` to include:
-  ```js
-  {
-    "compilerOptions": {
-      "emitDecoratorMetadata": true
-    }
-  }
-  ```
+1. Enable the
+   [`emitDecoratorMetadata`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
+   TypeScript compiler setting. Use the `--emitDecoratorMetadata` flag, or
+   update your `tsconfig.json` to include:
 
-- Install the Metadata Reflection API runtime polyfill from
-  [rbuckton/reflect-metadata](https://github.com/rbuckton/reflect-metadata):
-  ```sh
-  bower install --save rbuckton/reflect-metadata
-  ```
+   ```js
+   {
+     "compilerOptions": {
+       "emitDecoratorMetadata": true
+     }
+   }
+   ```
 
-- Load the polyfill at the top-level of your application, and in your tests:
-  ```html
-  <script src="/bower_components/reflect-metadata/Reflect.js"></script>
-  ```
+2. Install the Metadata Reflection API runtime polyfill from
+   [rbuckton/reflect-metadata](https://github.com/rbuckton/reflect-metadata):
 
-  ## Event Listeners
-  
-To enable the `@listen` decorator:
-- Load the supplied DeclarativeEventListeners mixin in your element:
-  ```html
-  <link rel="import" href="bower_components/polymer-decorators/mixins/declarative-event-listeners.html">
-  ```
-  
- - Apply the DeclarativeEventListeners mixin to your element class:
-  ```js
-  class YourElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
-  ```
-  
- - (Optional) To use [Polymer gesture listeners](https://www.polymer-project.org/2.0/docs/devguide/gesture-events) apply the GestureEventListeners mixin to your element class and import the mixin:
-  ```html
-  <link rel="import" href="bower_components/polymer/lib/mixins/gesture-event-listeners.html">
-  ```
-  ```js
-  class YourElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
-  ```
+   ```sh
+   bower install --save rbuckton/reflect-metadata
+   ```
+
+3. Load the polyfill at the top-level of your application, and in your tests:
+
+   ```html
+   <script src="/bower_components/reflect-metadata/Reflect.js"></script>
+   ```
 
 
-## Example
-
-```typescript
-import {customElement, property, query, queryAll, observe, listen} from '../polymer-decorators/typescript/decorators.js';
-
-// This sets the static `is` property and registers the element
-@customElement('test-element')
-class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
-
-  // @property replaces the static `property` getter.
-  // The type is read from the type annotation, `notify` is the same as in
-  // plain Polymer
-  @property({notify: true})
-  foo: number = 42;
-
-  // @property replaces the static `property` getter.
-  // The type is read from the type annotation, `reflectToAttribute` is the same as in
-  // plain Polymer
-  @property({reflectToAttribute: true})
-  reflectFoo: string = 'opened';
-
-  // @property replaces the static `property` getter.
-  // The type is read from the type annotation, `readOnly` is the same as in
-  // plain Polymer.  Read only properties must use a private generated
-  // setter of the convention _setProperty(value). ex. _setReadOnlyBar(42)
-  @property({readOnly: true})
-  readOnlyBar: number;
-
-  // This property doesn't fire bar-changed events
-  @property()
-  bar: string = 'yes';
-
-  // @observe does not support simple observers,
-  // you can already do that via a normal property
-  @property({ observer: TestElement.prototype.onBazChanged })
-  baz: string = 'test';
-
-  private onBazChanged(newValue: string, oldValue: string) {
-  }
-
-  // @computed replaces the getter with a computed property
-  @computed('foo')
-  get computedExample() {
-    return this.foo * 2;
-  }
-
-  // @computed also takes multiple parameters
-  @computed('foo', 'bar')
-  get computedExampleTwo() {
-    return `${this.bar}: ${this.foo}`;
-  }
-
-  // @query replaces the property with a getter that querySelectors() in
-  // the shadow root. Use this for type-safe access to internal nodes.
-  @query('h1')
-  header: HTMLHeadingElement;
-
-  @queryAll('input')
-  allInputs: HTMLInputElement[];
-
-  // This method will be called when `foo` changes
-  @observe('foo')
-  private _fooChanged(newValue: number) {
-    console.log(`foo is now: ${newValue}`);
-  }
-
-  // @observe can take an array of properties
-  @observe(['foo', 'bar'])
-  private _fooBarChanged(newFoo: number, newBar: string) {
-    console.log(`foo is now: ${newFoo}, bar is now ${newBar}`);
-  }
-  
-  // @listen registers event listeners declaratively. 
-  //
-  // To use this decorator, your element class must extend from the supplied Polymer.DeclarativeEventListeners mixin.
-  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.Element)
-  //
-  // The @listen decorator can also declaratively register gesture events. To accomplish this, 
-  // you must extend from both Polymer.GestureEventListeners and Polymer.DeclarativeEventListeners. 
-  //
-  // Ex. class TestElement extends Polymer.DeclarativeEventListeners(Polymer.GestureEventListeners(Polymer.Element))
-  //
-  // listen(eventName: string, target: string|EventTarget)
-  // @param eventName A string representing the event type to listen for
-  // @param target A single element by id or EventTarget to target
-  //
-  @listen('tap', 'submitButton')
-  private onSubmit(e: Event) {
-    console.log('Button clicked!');
-  }
-
-}
-```
-
-## <strike>Polymer 1.0</strike>
+## Polymer 1.0
 
 This library is not compatible with Polymer 1.0 or earlier, because it depends
 on the ES6 class-based component definition style introduced in Polymer 2.0.
