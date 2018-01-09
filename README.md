@@ -33,11 +33,12 @@ TypeScript decorators for Polymer 2.0.
    <link rel="import" href="/bower_components/polymer-decorators/polymer-decorators.html">
    ```
 
-3. Include the decorator type declarations in one of the source files in your
-   TypeScript project (be sure to update the with the correct path). You can
-   also add it as a source in your `tsconfig.json`.
+3. Include type declarations for Polymer (available as of version 2.4) and the
+   Polymer decorators in one your TypeScript source files. You can also add
+   them as sources in your `tsconfig.json` with `include` or `files`.
 
    ```ts
+   /// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
    /// <reference path="../bower_components/polymer-decorators/global.d.ts" />
    ```
 
@@ -59,6 +60,15 @@ TypeScript decorators for Polymer 2.0.
 
 
 ## Decorator reference
+
+The decorator functions are defined on the `Polymer.decorators` global
+namespace object. You can refer to them directly (e.g.
+`@Polymer.decorators.customElement()`), or you may prefer to assign them to
+shorter variables:
+
+```ts
+const {customElement, property} = Polymer.decorators;
+```
 
 ### `@customElement`
 
@@ -119,11 +129,11 @@ get fooBar() {
 
 To define a computed property with more complex dependency expressions for
 which you may want to receive change values as arguments (e.g. sub-properties,
-splices, wildcards, etc.), define a standard property and set its `computed`
-option.
+splices, wildcards, etc.), or to set additional property options, define a
+standard property and set its `computed` option.
 
 ```ts
-@property({computed: 'computeBaz(foo.*)'})
+@property({computed: 'computeBaz(foo.*)', reflectToAttribute: true})
 baz: string;
 
 private computeBaz(fooChangeRecord: object) {
