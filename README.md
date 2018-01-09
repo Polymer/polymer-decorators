@@ -8,13 +8,13 @@ TypeScript decorators for Polymer 2.0.
 
 - [Installation](#installation)
 - [Decorator reference](#decorator-reference)
-   - [@customElement](#customelement)
-   - [@property](#property)
-   - [@computed](#computed)
-   - [@observe](#observe)
-   - [@query](#query)
-   - [@queryAll](#queryall)
-   - [@listen](#listen)
+   - [@customElement](#customelementtagname-string)
+   - [@property](#propertyoptions-propertyobjects)
+   - [@computed](#computedtargets-string)
+   - [@observe](#observetargets-stringstring)
+   - [@query](#queryselector-string)
+   - [@queryAll](#queryallselector-string)
+   - [@listen](#listeneventname-string-target-stringeventtarget)
 - [Metadata Reflection API](#metadata-reflection-api)
 - [Polymer 1.0](#polymer-10)
 
@@ -70,7 +70,7 @@ shorter variables:
 const {customElement, property} = Polymer.decorators;
 ```
 
-### `@customElement`
+### `@customElement(tagname?: string)`
 
 Define a custom element.
 
@@ -85,7 +85,7 @@ class MyElement extends Polymer.Element {
 }
 ```
 
-### `@property`
+### `@property(options?: PropertyObjects)`
 Define a Polymer property.
 
 `options` is a [Polymer property
@@ -100,7 +100,7 @@ can be omitted.
 foo: string = 'hello';
 ```
 
-### `@computed`
+### `@computed(...targets: string[])`
 
 Define a [computed
 property](https://www.polymer-project.org/2.0/docs/devguide/observers#computed-properties).
@@ -108,6 +108,10 @@ property](https://www.polymer-project.org/2.0/docs/devguide/observers#computed-p
 This decorator must be applied to a
 [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get),
 and it must not have an associated setter.
+
+Be sure to only read properties that you have declared as dependencies in the
+computed property definition, otherwise the computed property will not update
+as expected.
 
 ```ts
 @computed('foo', 'bar')
@@ -141,7 +145,7 @@ private computeBaz(fooChangeRecord: object) {
 }
 ```
 
-### `@observe`
+### `@observe(targets: string|string[])`
 
 Define a [complex property
 observer](https://www.polymer-project.org/2.0/docs/devguide/observers#complex-observers).
@@ -182,29 +186,31 @@ private bazChanged(oldValue: string, newValue: string) {
 }
 ```
 
-### `@query`
+### `@query(selector: string)`
 
-Define a getter that calls
+Replace this property with a getter that calls
 [`querySelector`](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector)
-on the shadow root with the given `selector`.
+on the shadow root with the given `selector`. Use this to get a typed handle to
+a node in your template.
 
 ```ts
 @query('my-widget')
 widget: MyWidgetElement;
 ```
 
-### `@queryAll`
+### `@queryAll(selector: string)`
 
-Define a getter that calls
+Replace this property with a getter that calls
 [`querySelectorAll`](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll)
-on the shadow root with the given `selector`.
+on the shadow root with the given `selector`. Use this to get a typed handle to
+a set of nodes in your template.
 
 ```ts
 @queryAll('my-widget')
 widgets: NodeListOf<MyWidgetElement>
 ```
 
-### `@listen`
+### `@listen(eventName: string, target: string|EventTarget)`
 
 Add an event listener for `eventName` on `target`. `target` can be an object
 reference, or the string id of an element in the shadow root.
@@ -223,7 +229,7 @@ mixin, which is supplied with this package.
 class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   @listen('scroll', document)
-  private onDocumentScroll(ev: Event) {
+  protected onDocumentScroll(event: Event) {
     this.scratchChalkboard();
   }
 }
@@ -242,7 +248,7 @@ class MyElement extends
     Polymer.Element)) {
 
   @listen('tap', 'red-button')
-  private onTapRedButton(ev: Event) {
+  protected onTapRedButton(event: Event) {
     this.launchMissile();
   }
 }
