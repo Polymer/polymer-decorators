@@ -76,7 +76,7 @@ class TestElement extends Polymer.Element {
     this._setReadOnlyString('initial value')
   }
 
-  @observe(['aNum', 'aString'])
+  @observe('aNum', 'aString')
   private _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
   }
