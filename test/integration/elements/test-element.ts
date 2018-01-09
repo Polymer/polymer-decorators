@@ -31,24 +31,28 @@ class TestElement extends Polymer.Element {
 
   @property({readOnly: true})
   readOnlyString: string;
-  
-  @property({computed:'computeString(reflectedString)'})
+
+  @property({computed: 'computeString(reflectedString)'})
   computedString: string;
 
-  @property({observer:'observeString'})
+  @property({observer: 'observeString'})
   observedString: string;
-  
+
   @property()
   dependencyOne: string = '';
 
   @property()
   dependencyTwo: string = '';
 
-  @computed('dependencyOne')
-  get computedOne() { return this.dependencyOne; }
+  @computed('dependencyOn')
+  get computedOne() {
+    return this.dependencyOne;
+  }
 
   @computed('dependencyOne', 'dependencyTwo')
-  get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
+  get computedTwo() {
+    return this.dependencyOne + this.dependencyTwo;
+  }
 
   // stand-in for set function dynamically created by Polymer on read only
   // properties
@@ -57,7 +61,7 @@ class TestElement extends Polymer.Element {
   lastNumChange: number;
 
   lastChange: string;
-  
+
   lastMultiChange: any[];
 
   @query('#num')
@@ -80,12 +84,12 @@ class TestElement extends Polymer.Element {
   private _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
   }
-  
-  private computeString(s:string) {
-      return "computed " + s;
+
+  private computeString(s: string) {
+    return 'computed ' + s;
   }
-  
-  private observeString(s:string) {
-      this.lastChange = s;
+
+  private observeString(s: string) {
+    this.lastChange = s;
   }
 }

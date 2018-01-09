@@ -208,7 +208,7 @@ To use `@listen`, your element must apply the
 mixin, which is supplied with this package.
 
 ```ts
-class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element)) {
+class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   @listen('scroll', document)
   private onDocumentScroll(ev: Event) {
