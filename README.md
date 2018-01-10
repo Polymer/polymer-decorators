@@ -350,15 +350,13 @@ Polymer API, like this:
 /// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
 
 class MyElement extends Polymer.Element {
-  static is = 'my-element'
+  static is = 'my-element';
 
-  static get properties() {
-    return {
-      myProperty: {
-        type: String
-      }
-    };
-  }
+  static properties = {
+    myProperty: {
+      type: String
+    }
+  };
 
   myProperty: string = 'foo';
 }
