@@ -341,7 +341,7 @@ To enable Metadata Reflection:
 ### Do I need this library to use Polymer and TypeScript?
 No, you can also use Polymer and TypeScript without additional client
 libraries. As of Polymer 2.4, TypeScript type declarations are available in the
-[`types/`](https://github.com/Polymer/polymer/tree/master/types) directory.The
+[`types/`](https://github.com/Polymer/polymer/tree/master/types) directory. The
 advantage of using these decorators are additional type safety and convenience.
 For simple elements and applications, it may be preferable to use the vanilla
 Polymer API, like this:
@@ -367,7 +367,7 @@ customElements.define(MyElement.is, MyElement);
 ```
 
 ### What are the performance costs?
-The additional JavaScript served for this library is aproximately 8KB (4KB
+The additional JavaScript served for this library is aproximately 8 KB (4 KB
 gzipped). Benchmarks are not currently available, but we expect minor
 performance costs. The library generally works by building standard Polymer
 property definitions at element definition time, so performance costs should be
