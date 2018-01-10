@@ -90,19 +90,16 @@ export function property(options?: PropertyOptions) {
 
 /**
  * A TypeScript property decorator factory that causes the decorated method to
- * be called when a property changes. `targets` is either a single property
- * name, or a list of property names.
+ * be called when a property changes.
  *
  * This function must be invoked to return a decorator.
  */
-export function observe(targets: string|string[]) {
+export function observe(...targets: string[]) {
   return (proto: any, propName: string): any => {
-    const targetString =
-        typeof targets === 'string' ? targets : targets.join(',');
     if (!proto.constructor.hasOwnProperty('observers')) {
       proto.constructor.observers = [];
     }
-    proto.constructor.observers.push(`${propName}(${targetString})`);
+    proto.constructor.observers.push(`${propName}(${targets.join(',')})`);
   }
 }
 

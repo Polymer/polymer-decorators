@@ -25,7 +25,7 @@ class MyElement extends Polymer.Element {
    - [@customElement](#customelementtagname-string)
    - [@property](#propertyoptions-propertyobjects)
    - [@computed](#computedtargets-string)
-   - [@observe](#observetargets-stringstring)
+   - [@observe](#observetargets-string)
    - [@query](#queryselector-string)
    - [@queryAll](#queryallselector-string)
    - [@listen](#listeneventname-string-target-stringeventtarget)
@@ -166,7 +166,7 @@ private computeBaz(fooChangeRecord: object) {
 }
 ```
 
-### `@observe(targets: string|string[])`
+### `@observe(...targets: string[])`
 
 Define a [complex property
 observer](https://www.polymer-project.org/2.0/docs/devguide/observers#complex-observers).
@@ -176,12 +176,7 @@ observer dependency syntaxes are supported (property names, sub-properties,
 splices, wildcards, etc.).
 
 ```ts
-@observe('foo')
-private fooChanged(newFoo: string) {
-  console.log(`foo is now: ${newFoo}`);
-}
-
-@observe(['foo', 'bar'])
+@observe('foo', 'bar')
 private fooBarChanged(newFoo: string, newBar: string) {
   console.log(`foo is now: ${newFoo}, bar is now: ${newBar}`);
 }
