@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [1.0.0] - 2018-01-10
 - Generated typings for the `DeclarativeEventListeners` mixin are now available at `mixins/declarative-event-listeners.d.ts`.
 - [BREAKING] The `@observe` decorator now takes its dependencies as a rest parameter instead of an array (e.g. `@observer('foo', 'bar')` instead of `@observer(['foo', 'bar'])`.
 - [BREAKING] Decorators are now located at `polymer-decorators.js` instead of `global.js` (same for corresponding `.d.ts` file).
