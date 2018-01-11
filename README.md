@@ -96,6 +96,10 @@ Define a custom element.
 `is` class property is used. Also sets the `is` property on the class if not
 already set.
 
+This decorator automatically calls
+[`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
+with your class, so you should not include your own call to that function.
+
 ```ts
 @customElement('my-element')
 class MyElement extends Polymer.Element {
