@@ -19,10 +19,10 @@ suite('TypeScript Decorators', function() {
   setup(function() {
     testElement = fixture('test-element-fixture') as TestElement;
     gestureListenerTestElement =
-        fixture('gesture-listener-test-element-fixture') as
+        fixture('gesture-listener-test-element-fixture') as any as
         GestureListenerTestElement;
     declarativeListenerTestElement =
-        fixture('declarative-listener-test-element-fixture') as
+        fixture('declarative-listener-test-element-fixture') as any as
         DeclarativeListenerTestElement;
   });
 
@@ -37,7 +37,8 @@ suite('TypeScript Decorators', function() {
     });
 
     test('defines an element with a mixin behavior', function() {
-      const el = fixture('mixin-behaviors-test-element-fixture') as MixinBehaviorsTestElement;
+      const el = fixture('mixin-behaviors-test-element-fixture') as any as
+          MixinBehaviorsTestElement;
       chai.assert.instanceOf(el, MixinBehaviorsTestElement);
       chai.assert.equal(el.elementProperty, 'elementPropertyValue');
       chai.assert.equal((el as any).behaviorProperty, 'behaviorPropertyValue');
@@ -89,15 +90,15 @@ suite('TypeScript Decorators', function() {
       const propValue = testElement.readOnlyString;
       chai.assert.equal(propValue, 'initial value');
     });
-    
+
     test('computed property should return computed value', function() {
-      testElement.computedString = "new value";
+      testElement.computedString = 'new value';
       const propValue = testElement.computedString;
       chai.assert.equal(propValue, 'computed yahoo');
     });
-    
+
     test('observer property function should be invoked', function() {
-      testElement.observedString = "new value";
+      testElement.observedString = 'new value';
       const propValue = testElement.lastChange;
       chai.assert.equal(propValue, 'new value');
     });
@@ -118,7 +119,6 @@ suite('TypeScript Decorators', function() {
   });
 
   suite('@computed', function() {
-
     test('defines a computed property', function() {
       testElement.dependencyOne = 'foo';
 
@@ -140,7 +140,6 @@ suite('TypeScript Decorators', function() {
       chai.assert.equal(compDiv.textContent, 'foobar');
       chai.assert.equal(testElement.computedTwo, 'foobar');
     });
-
   });
 
   suite('@query', function() {

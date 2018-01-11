@@ -12,7 +12,7 @@
     "*.ts",
     "elements/**/*.ts",
     "bower_components/polymer/types/polymer.d.ts",
-    "bower_components/polymer-decorators/global.d.ts",
+    "bower_components/polymer-decorators/polymer-decorators.d.ts",
     "bower_components/polymer-decorators/mixins/declarative-event-listeners.d.ts"
   ]
 }
