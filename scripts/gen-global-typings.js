@@ -1,6 +1,6 @@
-// This script generates global.d.ts, a transformation of the type declarations
-// of the decorators module into the Polymer.decorators global namespace, which
-// corresponds to what our rollup configuration does.
+// This script generates polymer-decorators.d.ts, a transformation of the type
+// declarations of the decorators module into the Polymer.decorators global
+// namespace, which corresponds to what our rollup configuration does.
 //
 // This script should typically be run with `npm run build`.
 
@@ -22,4 +22,4 @@ ${
   }
 }
 `
-fs.writeFileSync('global.d.ts', output);
+fs.writeFileSync('polymer-decorators.d.ts', output);

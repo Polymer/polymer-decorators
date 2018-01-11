@@ -1,7 +1,7 @@
 export default {
   input: 'lib/decorators.js',
   output: {
-    file: 'global.js',
+    file: 'polymer-decorators.js',
     format: 'iife',
     name: 'Polymer.decorators',
   }

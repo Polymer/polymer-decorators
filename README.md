@@ -57,7 +57,7 @@ class MyElement extends Polymer.Element {
 
    ```ts
    /// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
-   /// <reference path="./bower_components/polymer-decorators/global.d.ts" />
+   /// <reference path="./bower_components/polymer-decorators/polymer-decorators.d.ts" />
    ```
 
 4. Enable the
