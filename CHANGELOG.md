@@ -1,6 +1,9 @@
 # Change Log
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [1.0.1] - 2018-01-26
+- Fix malformed warning about missing type.
 
 ## [1.0.0] - 2018-01-10
 - Generated typings for the `DeclarativeEventListeners` mixin are now available at `mixins/declarative-event-listeners.d.ts`.
