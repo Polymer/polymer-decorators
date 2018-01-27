@@ -9,10 +9,10 @@
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
+    "@types/sinon": "^2.3.5",
     "bower": "^1.8.2",
     "filesystem-bower-resolver": "^1.2.0",
     "typescript": "^2.5.2",
-    "web-component-tester": "^6.2.0",
-    "@types/sinon": "^2.3.5"
+    "web-component-tester": "^6.5.0"
   }
 }

@@ -46,7 +46,7 @@ function createProperty(proto, name, options) {
         type = Reflect.getMetadata('design:type', proto, name);
     }
     else {
-        console.error('A type could not be found for ${propName}. ' +
+        console.error(`A type could not be found for ${name}. ` +
             'Set a type or configure Metadata Reflection API support.');
     }
     if (!proto.constructor.hasOwnProperty('properties')) {

@@ -1,4 +1,5 @@
 language: node_js
+sudo: required
 node_js:
   - "node"
 addons:
@@ -6,4 +7,4 @@ addons:
   firefox: latest
 script:
 - npm run test:setup
-- cd test/integration && xvfb-run $(npm bin)/wct
+- cd test/integration && $(npm bin)/wct

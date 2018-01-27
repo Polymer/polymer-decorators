@@ -2,5 +2,18 @@
   "suites": [
     "decorators.html",
     "mixins.html"
-  ]
+  ],
+  "plugins": {
+    "local": {
+      "browserOptions": {
+        "chrome": [
+          "headless",
+          "disable-gpu"
+        ],
+        "firefox": [
+          "-headless"
+        ]
+      }
+    }
+  }
 }
