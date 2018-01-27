@@ -2,6 +2,9 @@
 
 <!-- ## [Unreleased] -->
 
+## [1.0.2] - 2018-01-26
+- Fix missing generated files from `1.0.1` release.
+
 ## [1.0.1] - 2018-01-26
 - Fix malformed warning about missing type.
 
