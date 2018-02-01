@@ -145,6 +145,11 @@ get fooBar() {
 }
 ```
 
+⚠️ **NOTE**: Since TypeScript 2.7, any use of `@computed` with >1 dependencies will
+not compile unless the generic type parameter is specified explicitly (either
+with the element class as shown below, or simply with `any`). See
+[#48](https://github.com/Polymer/polymer-decorators/issues/48) for details.
+
 For optional additional type saftey, pass your custom element class as a
 generic parameter. This allows TypeScript to check that all of your
 dependencies are valid properties.
