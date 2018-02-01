@@ -47,7 +47,7 @@ class TestElement extends Polymer.Element {
   @computed('dependencyOne')
   get computedOne() { return this.dependencyOne; }
 
-  @computed('dependencyOne', 'dependencyTwo')
+  @computed<TestElement>('dependencyOne', 'dependencyTwo')
   get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
 
   // stand-in for set function dynamically created by Polymer on read only
