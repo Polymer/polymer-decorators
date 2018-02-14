@@ -1,7 +1,9 @@
 # Change Log
 
-## [Unreleased] 
-- Allow multiple decorators to be combined
+<!-- ## [Unreleased] -->
+
+## [1.1.0] - 2018-02-14
+- Allow `@property` to be used together with `@computed` so that its `type` can be set.
 - Fix bug where `@observe` could not be used with `Polymer.mixinBehaviors`.
 
 ## [1.0.2] - 2018-01-26
