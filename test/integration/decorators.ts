@@ -58,8 +58,6 @@ suite('TypeScript Decorators', function() {
         notify: false,
         reflectToAttribute: false,
         readOnly: false,
-        computed: '',
-        observer: '',
         type: String
       });
     });

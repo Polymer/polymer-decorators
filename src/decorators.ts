@@ -52,16 +52,33 @@ function createProperty(
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
-  const finalOpts: PropertyOptions = proto.constructor.properties[name] || {};
+  const defaultOpts: PropertyOptions = {
+    notify: false,
+    reflectToAttribute: false,
+    readOnly: false
+  };
+  const finalOpts: PropertyOptions =
+      proto.constructor.properties[name] || defaultOpts;
 
   if (options) {
-    finalOpts.notify = options.notify || finalOpts.notify || false;
-    finalOpts.reflectToAttribute =
-      options.reflectToAttribute || finalOpts.reflectToAttribute ||false;
-    finalOpts.readOnly = options.readOnly || finalOpts.readOnly || false;
-    finalOpts.computed = options.computed || finalOpts.computed || '';
-    finalOpts.observer = options.observer || finalOpts.observer || '';
-    finalOpts.type = options.type || finalOpts.type;
+    if (options.notify !== undefined) {
+      finalOpts.notify = options.notify;
+    }
+    if (options.reflectToAttribute !== undefined) {
+      finalOpts.reflectToAttribute = options.reflectToAttribute;
+    }
+    if (options.readOnly !== undefined) {
+      finalOpts.readOnly = options.readOnly;
+    }
+    if (options.computed !== undefined) {
+      finalOpts.computed = options.computed;
+    }
+    if (options.observer !== undefined) {
+      finalOpts.observer = options.observer;
+    }
+    if (options.type !== undefined) {
+      finalOpts.type = options.type;
+    }
   }
 
   if (!finalOpts.type) {
