@@ -54,7 +54,7 @@ suite('TypeScript Decorators', function() {
     });
 
     test('merges multiple definitions', function() {
-      chai.assert.deepEqual((testElement as any).properties, {
+      chai.assert.deepEqual((testElement as any).properties.computedWithOptions, {
         notify: false,
         reflectToAttribute: false,
         readOnly: false,
