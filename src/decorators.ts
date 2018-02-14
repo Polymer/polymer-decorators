@@ -52,12 +52,8 @@ function createProperty(
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
-  let finalOpts: PropertyOptions =
-      proto.constructor.properties[name] || {};
-
-  if (options) {
-    finalOpts = {...finalOpts, ...options};
-  }
+  const finalOpts: PropertyOptions =
+      {...proto.constructor.properties[name], ...options};
 
   if (!finalOpts.type) {
     if ((window as any).Reflect &&
