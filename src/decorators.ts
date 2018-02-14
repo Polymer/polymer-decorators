@@ -64,16 +64,17 @@ function createProperty(
     finalOpts.type = options.type || finalOpts.type;
   }
 
-  if (!finalOpts.type &&
-      (window as any).Reflect &&
-      Reflect.hasMetadata &&
-      Reflect.getMetadata &&
-      Reflect.hasMetadata('design:type', proto, name)) {
-    finalOpts.type = Reflect.getMetadata('design:type', proto, name);
-  } else {
-    console.error(
-        `A type could not be found for ${name}. ` +
-        'Set a type or configure Metadata Reflection API support.');
+  if (!finalOpts.type) {
+    if ((window as any).Reflect &&
+        Reflect.hasMetadata &&
+        Reflect.getMetadata &&
+        Reflect.hasMetadata('design:type', proto, name)) {
+      finalOpts.type = Reflect.getMetadata('design:type', proto, name);
+    } else {
+      console.error(
+          `A type could not be found for ${name}. ` +
+          'Set a type or configure Metadata Reflection API support.');
+    }
   }
 
   proto.constructor.properties[name] = finalOpts;
