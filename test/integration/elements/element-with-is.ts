@@ -11,5 +11,7 @@
 
 @Polymer.decorators.customElement()
 class ElementWithIs extends Polymer.Element {
-  public static get is() { return 'element-with-is'; }
+  public static get is() {
+    return 'element-with-is';
+  }
 }
