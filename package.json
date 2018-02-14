@@ -10,7 +10,8 @@
     "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js && gen-typescript-declarations --outDir=.",
     "prepack": "npm run build",
     "test:setup": "npm run build && cd test/integration && npm install --no-package-lock && npm run build",
-    "test": "npm run test:setup && cd test/integration && npm test"
+    "test": "npm run test:setup && cd test/integration && npm test",
+    "test:fast": "tsc && rollup -c && node scripts/gen-global-typings.js && cp polymer-decorators.js test/integration/bower_components/polymer-decorators/ && cd test/integration && $(npm bin)/tsc && $(npm bin)/wct -l chrome"
   },
   "repository": {
     "type": "git",
