@@ -52,13 +52,13 @@ function createProperty(
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
-  const finalOpts: PropertyOptions =
-      {...proto.constructor.properties[name], ...options};
+  const finalOpts: PropertyOptions = {
+    ...proto.constructor.properties[name] as PropertyOptions | undefined,
+    ...options
+  };
 
   if (!finalOpts.type) {
-    if ((window as any).Reflect &&
-        Reflect.hasMetadata &&
-        Reflect.getMetadata &&
+    if ((window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
         Reflect.hasMetadata('design:type', proto, name)) {
       finalOpts.type = Reflect.getMetadata('design:type', proto, name);
     } else {
