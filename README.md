@@ -175,6 +175,16 @@ private computeBaz(fooChangeRecord: object) {
 }
 ```
 
+Also note that you may combine `@property` and `@computed` for additional
+configuration. This is especially useful to apply a `type` without needing
+the metadata API.
+
+```ts
+@property({type: String})
+@computed<MyElement>('foo', 'bar')
+get fooBar() {
+```
+
 ### `@observe(...targets: string[])`
 
 Define a [complex property
