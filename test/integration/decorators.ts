@@ -54,11 +54,12 @@ suite('TypeScript Decorators', function() {
     });
 
     test('merges multiple definitions', function() {
-      chai.assert.deepEqual((TestElement as any).properties.computedWithOptions, {
-        computed: '__computecomputedWithOptions(dependencyOne)',
-        readOnly: true,
-        type: String
-      });
+      chai.assert.deepEqual(
+          (TestElement as any).properties.computedWithOptions, {
+            computed: '__computecomputedWithOptions(dependencyOne)',
+            readOnly: true,
+            type: String
+          });
     });
 
     test('notify property should fire events', function() {

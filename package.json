@@ -6,7 +6,7 @@
   "types": "lib/decorators.d.ts",
   "scripts": {
     "clean": "rm -rf lib polymer-decorators.{js,d.ts} mixins/*.d.ts test/integration/{node_modules,bower_components,bower_cache}",
-    "format": "find src -name '*.ts' | xargs clang-format --style=file -i",
+    "format": "find src test \\( -name node_modules -o -name bower_components -o -name bower_cache \\) -prune -o -name '*.ts' -print | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js && gen-typescript-declarations --outDir=.",
     "prepack": "npm run build",
     "test:setup": "npm run build && cd test/integration && npm install --no-package-lock && npm run build",
