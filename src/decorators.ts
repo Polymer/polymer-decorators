@@ -48,31 +48,26 @@ export interface PropertyOptions {
 
 function createProperty(
     proto: any, name: string, options?: PropertyOptions): void {
-  const notify = options && options.notify || false;
-  const reflectToAttribute = options && options.reflectToAttribute || false;
-  const readOnly = options && options.readOnly || false;
-  const computed = options && options.computed || '';
-  const observer = options && options.observer || '';
-
-  let type;
-  if (options && options.hasOwnProperty('type')) {
-    type = options.type;
-  } else if (
-      (window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-      Reflect.hasMetadata('design:type', proto, name)) {
-    type = Reflect.getMetadata('design:type', proto, name);
-  } else {
-    console.error(
-        `A type could not be found for ${name}. ` +
-        'Set a type or configure Metadata Reflection API support.');
-  }
-
   if (!proto.constructor.hasOwnProperty('properties')) {
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
-  const finalOpts: PropertyOptions =
-      {type, notify, reflectToAttribute, readOnly, computed, observer};
+  const finalOpts: PropertyOptions = {
+    ...proto.constructor.properties[name] as PropertyOptions | undefined,
+    ...options
+  };
+
+  if (!finalOpts.type) {
+    if ((window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
+        Reflect.hasMetadata('design:type', proto, name)) {
+      finalOpts.type = Reflect.getMetadata('design:type', proto, name);
+    } else {
+      console.error(
+          `A type could not be found for ${name}. ` +
+          'Set a type or configure Metadata Reflection API support.');
+    }
+  }
+
   proto.constructor.properties[name] = finalOpts;
 }
 

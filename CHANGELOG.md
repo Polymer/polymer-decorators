@@ -1,6 +1,7 @@
 # Change Log
 
-<!-- ## [Unreleased] -->
+## [Unreleased] 
+- Allow multiple decorators to be combined
 
 ## [1.0.2] - 2018-01-26
 - Fix missing generated files from `1.0.1` release.
