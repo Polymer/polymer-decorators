@@ -23,4 +23,8 @@ class MixinBehaviorsTestElement extends Polymer.mixinBehaviors
 ([TestBehavior], Polymer.Element) {
   @Polymer.decorators.property()
   elementProperty: string = 'elementPropertyValue';
+
+  @Polymer.decorators.observe('elementProperty')
+  observerProperty() {
+  }
 }
