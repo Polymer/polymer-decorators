@@ -52,33 +52,11 @@ function createProperty(
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
-  const defaultOpts: PropertyOptions = {
-    notify: false,
-    reflectToAttribute: false,
-    readOnly: false
-  };
-  const finalOpts: PropertyOptions =
-      proto.constructor.properties[name] || defaultOpts;
+  let finalOpts: PropertyOptions =
+      proto.constructor.properties[name] || {};
 
   if (options) {
-    if (options.notify !== undefined) {
-      finalOpts.notify = options.notify;
-    }
-    if (options.reflectToAttribute !== undefined) {
-      finalOpts.reflectToAttribute = options.reflectToAttribute;
-    }
-    if (options.readOnly !== undefined) {
-      finalOpts.readOnly = options.readOnly;
-    }
-    if (options.computed !== undefined) {
-      finalOpts.computed = options.computed;
-    }
-    if (options.observer !== undefined) {
-      finalOpts.observer = options.observer;
-    }
-    if (options.type !== undefined) {
-      finalOpts.type = options.type;
-    }
+    finalOpts = {...finalOpts, ...options};
   }
 
   if (!finalOpts.type) {
