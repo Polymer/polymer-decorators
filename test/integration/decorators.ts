@@ -53,6 +53,17 @@ suite('TypeScript Decorators', function() {
       chai.assert.equal(numText, '999');
     });
 
+    test('merges multiple definitions', function() {
+      chai.assert.deepEqual((testElement as any).properties, {
+        notify: false,
+        reflectToAttribute: false,
+        readOnly: false,
+        computed: '',
+        observer: '',
+        type: String
+      });
+    });
+
     test('notify property should fire events', function() {
       let fired = false;
       const fn = function() {

@@ -48,31 +48,34 @@ export interface PropertyOptions {
 
 function createProperty(
     proto: any, name: string, options?: PropertyOptions): void {
-  const notify = options && options.notify || false;
-  const reflectToAttribute = options && options.reflectToAttribute || false;
-  const readOnly = options && options.readOnly || false;
-  const computed = options && options.computed || '';
-  const observer = options && options.observer || '';
+  if (!proto.constructor.hasOwnProperty('properties')) {
+    Object.defineProperty(proto.constructor, 'properties', {value: {}});
+  }
 
-  let type;
-  if (options && options.hasOwnProperty('type')) {
-    type = options.type;
-  } else if (
-      (window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
+  const finalOpts: PropertyOptions = proto.constructor.properties[name] || {};
+
+  if (options) {
+    finalOpts.notify = options.notify || finalOpts.notify || false;
+    finalOpts.reflectToAttribute =
+      options.reflectToAttribute || finalOpts.reflectToAttribute ||false;
+    finalOpts.readOnly = options.readOnly || finalOpts.readOnly || false;
+    finalOpts.computed = options.computed || finalOpts.computed || '';
+    finalOpts.observer = options.observer || finalOpts.observer || '';
+    finalOpts.type = options.type || finalOpts.type;
+  }
+
+  if (!finalOpts.type &&
+      (window as any).Reflect &&
+      Reflect.hasMetadata &&
+      Reflect.getMetadata &&
       Reflect.hasMetadata('design:type', proto, name)) {
-    type = Reflect.getMetadata('design:type', proto, name);
+    finalOpts.type = Reflect.getMetadata('design:type', proto, name);
   } else {
     console.error(
         `A type could not be found for ${name}. ` +
         'Set a type or configure Metadata Reflection API support.');
   }
 
-  if (!proto.constructor.hasOwnProperty('properties')) {
-    Object.defineProperty(proto.constructor, 'properties', {value: {}});
-  }
-
-  const finalOpts: PropertyOptions =
-      {type, notify, reflectToAttribute, readOnly, computed, observer};
   proto.constructor.properties[name] = finalOpts;
 }
 

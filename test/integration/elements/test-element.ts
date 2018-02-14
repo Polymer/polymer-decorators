@@ -50,6 +50,10 @@ class TestElement extends Polymer.Element {
   @computed<TestElement>('dependencyOne', 'dependencyTwo')
   get computedTwo() { return this.dependencyOne + this.dependencyTwo; }
 
+  @computed('dependencyOne')
+  @property({type: String})
+  get computedWithOptions() { return this.dependencyOne; }
+
   // stand-in for set function dynamically created by Polymer on read only
   // properties
   _setReadOnlyString: (value: string) => void;
