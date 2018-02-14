@@ -180,8 +180,8 @@ configuration. This is especially useful to apply a `type` without needing
 the metadata API.
 
 ```ts
-@property({type: String})
 @computed<MyElement>('foo', 'bar')
+@property({type: String})
 get fooBar() {
 ```
 
