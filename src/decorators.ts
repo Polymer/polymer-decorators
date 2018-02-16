@@ -9,7 +9,23 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference types="reflect-metadata" />
+// Maybe the Metadata Reflection API is available. Inline some types here
+// because we don't want this package to depend on the polyfill just to get the
+// typings (https://github.com/rbuckton/reflect-metadata), plus we want them
+// typed as possibly undefined.
+declare global {
+  interface Window {
+    Reflect?: {
+      hasMetadata?: (metadataKey: any,
+                     target: Object,
+                     targetKey: string|symbol) => boolean;
+
+      getMetadata?: (metadataKey: any,
+                     target: Object,
+                     targetKey: string|symbol) => any;
+    };
+  }
+}
 
 /**
  * A TypeScript class decorator factory that defines a custom element with name
@@ -58,9 +74,10 @@ function createProperty(
   };
 
   if (!finalOpts.type) {
-    if ((window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-        Reflect.hasMetadata('design:type', proto, name)) {
-      finalOpts.type = Reflect.getMetadata('design:type', proto, name);
+    if (window.Reflect && window.Reflect.hasMetadata &&
+        window.Reflect.getMetadata &&
+        window.Reflect.hasMetadata('design:type', proto, name)) {
+      finalOpts.type = window.Reflect.getMetadata('design:type', proto, name);
     } else {
       console.error(
           `A type could not be found for ${name}. ` +
