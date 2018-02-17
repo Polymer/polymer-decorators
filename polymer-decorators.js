@@ -12,7 +12,6 @@ this.Polymer.decorators = (function (exports) {
  * Google as part of the polymer project is also subject to an additional IP
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
-/// <reference types="reflect-metadata" />
 /**
  * A TypeScript class decorator factory that defines a custom element with name
  * `tagname` and the decorated class. If `tagname` is not provided, the static
@@ -37,9 +36,10 @@ function createProperty(proto, name, options) {
     }
     const finalOpts = Object.assign({}, proto.constructor.properties[name], options);
     if (!finalOpts.type) {
-        if (window.Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-            Reflect.hasMetadata('design:type', proto, name)) {
-            finalOpts.type = Reflect.getMetadata('design:type', proto, name);
+        const reflect = window.Reflect;
+        if (reflect.hasMetadata && reflect.getMetadata &&
+            reflect.hasMetadata('design:type', proto, name)) {
+            finalOpts.type = reflect.getMetadata('design:type', proto, name);
         }
         else {
             console.error(`A type could not be found for ${name}. ` +

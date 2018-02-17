@@ -9,8 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference types="reflect-metadata" />
-
 /**
  * A TypeScript class decorator factory that defines a custom element with name
  * `tagname` and the decorated class. If `tagname` is not provided, the static
@@ -58,9 +56,10 @@ function createProperty(
   };
 
   if (!finalOpts.type) {
-    if ((window as any).Reflect && Reflect.hasMetadata && Reflect.getMetadata &&
-        Reflect.hasMetadata('design:type', proto, name)) {
-      finalOpts.type = Reflect.getMetadata('design:type', proto, name);
+    const reflect = (window as any).Reflect;
+    if (reflect.hasMetadata && reflect.getMetadata &&
+        reflect.hasMetadata('design:type', proto, name)) {
+      finalOpts.type = reflect.getMetadata('design:type', proto, name);
     } else {
       console.error(
           `A type could not be found for ${name}. ` +
