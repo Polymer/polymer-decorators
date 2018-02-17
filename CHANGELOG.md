@@ -1,6 +1,8 @@
 # Change Log
 
 <!-- ## [Unreleased] -->
+
+## [1.1.1] - 2018-02-16
 - Remove npm dependency on `reflect-metadata` package.
 
 ## [1.1.0] - 2018-02-14

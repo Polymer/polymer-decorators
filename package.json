@@ -1,6 +1,6 @@
 {
   "name": "@polymer/decorators",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TypeScript decorators for Polymer 2.0",
   "main": "lib/decorators.js",
   "types": "lib/decorators.d.ts",
