@@ -1,6 +1,7 @@
 # Change Log
 
 <!-- ## [Unreleased] -->
+- Remove npm dependency on `reflect-metadata` package.
 
 ## [1.1.0] - 2018-02-14
 - Allow `@property` to be used together with `@computed` so that its `type` can be set.

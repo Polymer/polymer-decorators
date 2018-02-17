@@ -23,9 +23,7 @@
     "url": "https://github.com/Polymer/polymer-decorators/issues"
   },
   "homepage": "https://github.com/Polymer/polymer-decorators#readme",
-  "dependencies": {
-    "reflect-metadata": "^0.1.10"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@polymer/gen-typescript-declarations": "^1.1.3",
     "clang-format": "^1.0.55",
