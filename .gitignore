@@ -1,7 +1,4 @@
 bower_components/
 lib/
 node_modules/
-polymer-decorators.js
-polymer-decorators.d.ts
 polymer-decorators*.tgz
-mixins/*.d.ts
