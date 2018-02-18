@@ -92,9 +92,11 @@ const {customElement, property} = Polymer.decorators;
 
 Define a custom element.
 
-`tagname` is the name to register this element with. If omitted, the static
-`is` class property is used. Also sets the `is` property on the class if not
-already set.
+If `tagname` is provided, it will be used as the custom element name, and will
+be assigned to the class static `is` property. If `tagname` is omitted, the
+static `is` property of the class will be used instead. If neither exist, or if
+both exist but have different values (except in the case that the `is` property
+is not an own-property of the class), an exception is thrown.
 
 This decorator automatically calls
 [`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
