@@ -5,6 +5,10 @@ node_js:
 addons:
   chrome: stable
   firefox: latest
+before_script:
+  - npm run format
+  - npm run build
+  - git diff --exit-code
 script:
-- npm run test:setup
-- cd test/integration && $(npm bin)/wct
+  - npm run test:setup
+  - cd test/integration && $(npm bin)/wct
