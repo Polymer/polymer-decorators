@@ -43,6 +43,17 @@ suite('TypeScript Decorators', function() {
       chai.assert.equal(el.elementProperty, 'elementPropertyValue');
       chai.assert.equal((el as any).behaviorProperty, 'behaviorPropertyValue');
     });
+
+    test('throws when element names do not match', function() {
+      chai.assert.throws(() => {
+        @customElement('test-name-1')
+        class TestElement extends Polymer.Element {
+          static is = 'test-name-2';
+        }
+      });
+      chai.assert.isUndefined(customElements.get('test-name-1'));
+      chai.assert.isUndefined(customElements.get('test-name-2'));
+    });
   });
 
   suite('@property', function() {

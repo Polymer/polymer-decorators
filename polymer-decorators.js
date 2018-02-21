@@ -15,21 +15,33 @@ this.Polymer.decorators = (function (exports) {
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 /**
- * A TypeScript class decorator factory that defines a custom element with name
- * `tagname` and the decorated class. If `tagname` is not provided, the static
- * `is` property of the class is used.
+ * A TypeScript class decorator factory that registers the class as a custom
+ * element.
+ *
+ * If `tagname` is provided, it will be used as the custom element name, and
+ * will be assigned to the class static `is` property. If `tagname` is omitted,
+ * the static `is` property of the class will be used instead. If neither exist,
+ * or if both exist but have different values (except in the case that the `is`
+ * property is not an own-property of the class), an exception is thrown.
  */
 function customElement(tagname) {
-    // TODO Investigate narrowing down the type of clazz.
-    return (clazz) => {
-        // TODO(justinfagnani): we could also use the kebab-cased class name
-        if (clazz.is) {
-            tagname = clazz.is;
+    return (class_) => {
+        if (tagname) {
+            // Only check that tag names match when `is` is our own property. It might
+            // be inherited from a superclass, in which case it's ok if they're
+            // different, and we'll override it with our own property below.
+            if (class_.hasOwnProperty('is')) {
+                if (tagname !== class_.is) {
+                    throw new Error(`custom element tag names do not match: ` +
+                        `(${tagname} !== ${class_.is})`);
+                }
+            }
+            else {
+                Object.defineProperty(class_, 'is', { value: tagname });
+            }
         }
-        else {
-            clazz.is = tagname;
-        }
-        window.customElements.define(tagname, clazz);
+        // Throws if tag name is missing or invalid.
+        window.customElements.define(class_.is, class_);
     };
 }
 function createProperty(proto, name, options) {

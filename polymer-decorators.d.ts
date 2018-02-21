@@ -14,11 +14,18 @@ declare namespace Polymer {
      * rights grant found at http://polymer.github.io/PATENTS.txt
      */
     /**
-     * A TypeScript class decorator factory that defines a custom element with name
-     * `tagname` and the decorated class. If `tagname` is not provided, the static
-     * `is` property of the class is used.
+     * A TypeScript class decorator factory that registers the class as a custom
+     * element.
+     *
+     * If `tagname` is provided, it will be used as the custom element name, and
+     * will be assigned to the class static `is` property. If `tagname` is omitted,
+     * the static `is` property of the class will be used instead. If neither exist,
+     * or if both exist but have different values (except in the case that the `is`
+     * property is not an own-property of the class), an exception is thrown.
      */
-    function customElement(tagname?: string): (clazz: any) => void;
+    function customElement(tagname?: string): (class_: Function & {
+        is?: string | undefined;
+    }) => void;
     /**
      * Options for the @property decorator.
      * See https://www.polymer-project.org/2.0/docs/devguide/properties.
