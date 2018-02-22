@@ -157,11 +157,13 @@ function _query(queryFn) {
  */
 const listen = (eventName, target) => (proto, methodName) => {
     if (!proto.constructor._addDeclarativeEventListener) {
-        console.error(`Cannot add listener for ${eventName} because ` +
+        throw new Error(`Cannot add listener for ${eventName} because ` +
             `DeclarativeEventListeners mixin was not applied to element.`);
-        return;
     }
-    proto.constructor._addDeclarativeEventListener(target, eventName, proto[methodName]);
+    proto.constructor._addDeclarativeEventListener(target, eventName, 
+    // This cast to any is safe because proto[methodName] is, by
+    // definition, the method that we are currently decorating.
+    proto[methodName]);
 };
 
 exports.customElement = customElement;

@@ -9,6 +9,9 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+// Note that we can't be much more precise here (e.g. must construct something
+// that extends HTMLElement) because decorator applications in TypeScript
+// currently seem to upcast the constructor simply to Function.
 export interface ElementConstructor extends Function {
   is?: string;
   properties?: {[prop: string]: PropertyOptions};
@@ -216,11 +219,14 @@ function _query(
 export const listen = (eventName: string, target: string|EventTarget) =>
     (proto: ElementPrototype, methodName: string) => {
       if (!proto.constructor._addDeclarativeEventListener) {
-        console.error(
+        throw new Error(
             `Cannot add listener for ${eventName} because ` +
             `DeclarativeEventListeners mixin was not applied to element.`);
-        return;
       }
       proto.constructor._addDeclarativeEventListener(
-          target, eventName, (proto as any)[methodName]);
+          target,
+          eventName,
+          // This cast to any is safe because proto[methodName] is, by
+          // definition, the method that we are currently decorating.
+          (proto as any)[methodName]);
     };
