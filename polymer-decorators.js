@@ -51,7 +51,7 @@ function createProperty(proto, name, options) {
     const finalOpts = Object.assign({}, proto.constructor.properties[name], options);
     if (!finalOpts.type) {
         const reflect = window.Reflect;
-        if (reflect.hasMetadata && reflect.getMetadata &&
+        if (reflect && reflect.hasMetadata && reflect.getMetadata &&
             reflect.hasMetadata('design:type', proto, name)) {
             finalOpts.type = reflect.getMetadata('design:type', proto, name);
         }
@@ -156,6 +156,11 @@ function _query(queryFn) {
  * @param target A single element by id or EventTarget to target
  */
 const listen = (eventName, target) => (proto, methodName) => {
+    if (!proto.constructor._addDeclarativeEventListener) {
+        console.error(`Cannot add listener for ${eventName} because ` +
+            `DeclarativeEventListeners mixin was not applied to element.`);
+        return;
+    }
     proto.constructor._addDeclarativeEventListener(target, eventName, proto[methodName]);
 };
 

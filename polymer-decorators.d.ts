@@ -13,6 +13,17 @@ declare namespace Polymer {
      * Google as part of the polymer project is also subject to an additional IP
      * rights grant found at http://polymer.github.io/PATENTS.txt
      */
+    interface ElementConstructor extends Function {
+        is?: string;
+        properties?: {
+            [prop: string]: PropertyOptions;
+        };
+        observers?: string[];
+        _addDeclarativeEventListener?: (target: string | EventTarget, eventName: string, handler: (ev: Event) => void) => void;
+    }
+    interface ElementPrototype {
+        constructor: ElementConstructor;
+    }
     /**
      * A TypeScript class decorator factory that registers the class as a custom
      * element.
@@ -23,9 +34,7 @@ declare namespace Polymer {
      * or if both exist but have different values (except in the case that the `is`
      * property is not an own-property of the class), an exception is thrown.
      */
-    function customElement(tagname?: string): (class_: Function & {
-        is?: string | undefined;
-    }) => void;
+    function customElement(tagname?: string): (class_: ElementConstructor) => void;
     /**
      * Options for the @property decorator.
      * See https://www.polymer-project.org/2.0/docs/devguide/properties.
@@ -39,7 +48,7 @@ declare namespace Polymer {
         reflectToAttribute?: boolean;
         readOnly?: boolean;
         computed?: string;
-        observer?: string | ((val: any, old: any) => void);
+        observer?: string | ((val: {}, old: {}) => void);
     }
     /**
      * A TypeScript property decorator factory that defines this as a Polymer
@@ -47,14 +56,14 @@ declare namespace Polymer {
      *
      * This function must be invoked to return a decorator.
      */
-    function property(options?: PropertyOptions): (proto: any, propName: string) => any;
+    function property(options?: PropertyOptions): (proto: ElementPrototype, propName: string) => void;
     /**
      * A TypeScript property decorator factory that causes the decorated method to
      * be called when a property changes.
      *
      * This function must be invoked to return a decorator.
      */
-    function observe(...targets: string[]): (proto: any, propName: string) => any;
+    function observe(...targets: string[]): (proto: ElementPrototype, propName: string) => void;
     /**
      * A TypeScript accessor decorator factory that causes the decorated getter to
      * be called when a set of dependencies change. The arguments of this decorator
@@ -64,7 +73,7 @@ declare namespace Polymer {
      *
      * This function must be invoked to return a decorator.
      */
-    function computed<T = any>(...targets: (keyof T)[]): (proto: any, propName: string, descriptor: PropertyDescriptor) => void;
+    function computed<T = any>(...targets: (keyof T)[]): (proto: ElementPrototype, propName: string, descriptor: PropertyDescriptor) => void;
     /**
      * A TypeScript property decorator factory that converts a class property into
      * a getter that executes a querySelector on the element's shadow root.
@@ -74,7 +83,7 @@ declare namespace Polymer {
      *
      * This function must be invoked to return a decorator.
      */
-    const query: (selector: string) => (proto: any, propName: string) => any;
+    const query: (selector: string) => (proto: ElementPrototype, propName: string) => void;
     /**
      * A TypeScript property decorator factory that converts a class property into
      * a getter that executes a querySelectorAll on the element's shadow root.
@@ -85,7 +94,7 @@ declare namespace Polymer {
      *
      * This function must be invoked to return a decorator.
      */
-    const queryAll: (selector: string) => (proto: any, propName: string) => any;
+    const queryAll: (selector: string) => (proto: ElementPrototype, propName: string) => void;
     /**
      * A TypeScript property decorator factory that causes the decorated method to
      * be called when a imperative event is fired on the targeted element. `target`
@@ -99,7 +108,7 @@ declare namespace Polymer {
      * @param eventName A string representing the event type to listen for
      * @param target A single element by id or EventTarget to target
      */
-    const listen: (eventName: string, target: string | EventTarget) => (proto: any, methodName: string) => void;
+    const listen: (eventName: string, target: string | EventTarget) => (proto: ElementPrototype, methodName: string) => void;
     
   }
 }

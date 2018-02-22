@@ -2,6 +2,7 @@
 
 <!-- ## [Unreleased] -->
 - An exception is now thrown if both the `tagname` parameter to `@customElement` is provided, and the static `is` class property is set (except in the case that the `is` property is not an own-property of the class). Previously the `is` property would always silently win over the `tagname` when both were set.
+- Decorators now have more constrained type signatures.
 
 ## [1.1.1] - 2018-02-16
 - Remove npm dependency on `reflect-metadata` package.
