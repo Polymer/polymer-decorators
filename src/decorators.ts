@@ -9,6 +9,21 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+// Note that we can't be much more precise here (e.g. must construct something
+// that extends HTMLElement) because decorator applications in TypeScript
+// currently seem to upcast the constructor simply to Function.
+export interface ElementConstructor extends Function {
+  is?: string;
+  properties?: {[prop: string]: PropertyOptions};
+  observers?: string[];
+  _addDeclarativeEventListener?:
+      (target: string|EventTarget,
+       eventName: string,
+       handler: (ev: Event) => void) => void;
+}
+
+export interface ElementPrototype { constructor: ElementConstructor; }
+
 /**
  * A TypeScript class decorator factory that registers the class as a custom
  * element.
@@ -20,7 +35,7 @@
  * property is not an own-property of the class), an exception is thrown.
  */
 export function customElement(tagname?: string) {
-  return (class_: Function&{is?: string}) => {
+  return (class_: ElementConstructor) => {
     if (tagname) {
       // Only check that tag names match when `is` is our own property. It might
       // be inherited from a superclass, in which case it's ok if they're
@@ -54,25 +69,33 @@ export interface PropertyOptions {
   reflectToAttribute?: boolean;
   readOnly?: boolean;
   computed?: string;
-  observer?: string|((val: any, old: any) => void);
+  observer?: string|((val: {}, old: {}) => void);
 }
 
 function createProperty(
-    proto: any, name: string, options?: PropertyOptions): void {
+    proto: ElementPrototype, name: string, options?: PropertyOptions): void {
   if (!proto.constructor.hasOwnProperty('properties')) {
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
 
   const finalOpts: PropertyOptions = {
-    ...proto.constructor.properties[name] as PropertyOptions | undefined,
-    ...options
+    ...proto.constructor.properties![name],
+    ...options,
   };
 
+  interface Reflect {
+    hasMetadata?:
+        (metadataKey: string, proto: object, targetKey: string) => boolean;
+    getMetadata?: (metadataKey: string, proto: object, targetKey: string) =>
+        Object | undefined;
+  }
+
   if (!finalOpts.type) {
-    const reflect = (window as any).Reflect;
-    if (reflect.hasMetadata && reflect.getMetadata &&
+    const reflect = (window as {Reflect?: Reflect}).Reflect;
+    if (reflect && reflect.hasMetadata && reflect.getMetadata &&
         reflect.hasMetadata('design:type', proto, name)) {
-      finalOpts.type = reflect.getMetadata('design:type', proto, name);
+      finalOpts.type = reflect.getMetadata('design:type', proto, name) as
+          PropertyOptions['type'];
     } else {
       console.error(
           `A type could not be found for ${name}. ` +
@@ -80,7 +103,7 @@ function createProperty(
     }
   }
 
-  proto.constructor.properties[name] = finalOpts;
+  proto.constructor.properties![name] = finalOpts;
 }
 
 /**
@@ -90,7 +113,7 @@ function createProperty(
  * This function must be invoked to return a decorator.
  */
 export function property(options?: PropertyOptions) {
-  return (proto: any, propName: string): any => {
+  return (proto: ElementPrototype, propName: string) => {
     createProperty(proto, propName, options);
   }
 }
@@ -102,11 +125,11 @@ export function property(options?: PropertyOptions) {
  * This function must be invoked to return a decorator.
  */
 export function observe(...targets: string[]) {
-  return (proto: any, propName: string): any => {
+  return (proto: ElementPrototype, propName: string) => {
     if (!proto.constructor.hasOwnProperty('observers')) {
       Object.defineProperty(proto.constructor, 'observers', {value: []});
     }
-    proto.constructor.observers.push(`${propName}(${targets.join(',')})`);
+    proto.constructor.observers!.push(`${propName}(${targets.join(',')})`);
   }
 }
 
@@ -120,7 +143,7 @@ export function observe(...targets: string[]) {
  * This function must be invoked to return a decorator.
  */
 export function computed<T = any>(...targets: (keyof T)[]) {
-  return (proto: any,
+  return (proto: ElementPrototype,
           propName: string,
           descriptor: PropertyDescriptor): void => {
     const fnName = `__compute${propName}`;
@@ -169,7 +192,7 @@ export const queryAll = _query(
 function _query(
     queryFn: (target: NodeSelector, selector: string) =>
         Element | NodeList | null) {
-  return (selector: string) => (proto: any, propName: string): any => {
+  return (selector: string) => (proto: ElementPrototype, propName: string) => {
     Object.defineProperty(proto, propName, {
       get(this: HTMLElement) {
         return queryFn(this.shadowRoot!, selector);
@@ -194,7 +217,16 @@ function _query(
  * @param target A single element by id or EventTarget to target
  */
 export const listen = (eventName: string, target: string|EventTarget) =>
-    (proto: any, methodName: string) => {
+    (proto: ElementPrototype, methodName: string) => {
+      if (!proto.constructor._addDeclarativeEventListener) {
+        throw new Error(
+            `Cannot add listener for ${eventName} because ` +
+            `DeclarativeEventListeners mixin was not applied to element.`);
+      }
       proto.constructor._addDeclarativeEventListener(
-          target, eventName, proto[methodName]);
+          target,
+          eventName,
+          // This cast to any is safe because proto[methodName] is, by
+          // definition, the method that we are currently decorating.
+          (proto as any)[methodName]);
     };
