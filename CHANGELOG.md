@@ -1,6 +1,8 @@
 # Change Log
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [1.2.0] - 2018-02-21
 - An exception is now thrown if both the `tagname` parameter to `@customElement` is provided, and the static `is` class property is set (except in the case that the `is` property is not an own-property of the class). Previously the `is` property would always silently win over the `tagname` when both were set.
 - An exception is now thrown if the `@listen` decorator is applied to an element that does not have the `DeclarativeEventListeners` mixin applied.
 - Decorators now have more constrained type signatures.
