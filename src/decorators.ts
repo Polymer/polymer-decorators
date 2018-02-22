@@ -11,7 +11,8 @@
 
 export interface ElementConstructor extends Function {
   is?: string;
-  properties?: {[prop: string]: PropertyOptions}, observers?: string[];
+  properties?: {[prop: string]: PropertyOptions};
+  observers?: string[];
   _addDeclarativeEventListener?:
       (target: string|EventTarget,
        eventName: string,
@@ -75,8 +76,8 @@ function createProperty(
   }
 
   const finalOpts: PropertyOptions = {
-    ...proto.constructor.properties![name] as PropertyOptions | undefined,
-    ...options
+    ...proto.constructor.properties![name],
+    ...options,
   };
 
   interface Reflect {
