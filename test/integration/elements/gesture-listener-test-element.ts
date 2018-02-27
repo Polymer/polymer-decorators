@@ -25,22 +25,22 @@ class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
   windowClickCounter: number = 0;
 
   @listen('tap', 'tapRegion')
-  private elementTapEventHandler(e: Event) {
+  elementTapEventHandler(e: Event) {
     this.elementClickCounter++;
   }
 
   @listen('tap', document)
-  private documentTapEventHandler(e: Event) {
+  documentTapEventHandler(e: Event) {
     this.documentClickCounter++;
   }
 
   @listen('tap', window)
-  private windowTapEventHandler(e: Event) {
+  windowTapEventHandler(e: Event) {
     this.windowClickCounter++;
   }
 
   @listen('element-event', 'tapRegion')
-  private elementEventHandler(e: Event) {
+  elementEventHandler(e: Event) {
     this.nonGestureElementClickCounter++;
   }
 }

@@ -3,6 +3,7 @@
 
 declare namespace Polymer {
   namespace decorators {
+    /// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
     /**
      * @license
      * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
@@ -21,7 +22,7 @@ declare namespace Polymer {
         observers?: string[];
         _addDeclarativeEventListener?: (target: string | EventTarget, eventName: string, handler: (ev: Event) => void) => void;
     }
-    interface ElementPrototype {
+    interface ElementPrototype extends Polymer.Element {
         constructor: ElementConstructor;
     }
     /**
@@ -34,7 +35,7 @@ declare namespace Polymer {
      * or if both exist but have different values (except in the case that the `is`
      * property is not an own-property of the class), an exception is thrown.
      */
-    function customElement(tagname?: string): (class_: ElementConstructor) => void;
+    function customElement(tagname?: string): (class_: (new () => Polymer.Element) & ElementConstructor) => void;
     /**
      * Options for the @property decorator.
      * See https://www.polymer-project.org/2.0/docs/devguide/properties.
@@ -73,12 +74,14 @@ declare namespace Polymer {
      *
      * This function must be invoked to return a decorator.
      */
-    function computed<T = any>(...targets: (keyof T)[]): (proto: ElementPrototype, propName: string, descriptor: PropertyDescriptor) => void;
+    function computed<P extends string, El extends ElementPrototype & {
+        [K in P]: {} | null | undefined;
+    }>(firstTarget: P, ...moreTargets: P[]): (proto: El, propName: string, descriptor: PropertyDescriptor) => void;
     /**
      * A TypeScript property decorator factory that converts a class property into
      * a getter that executes a querySelector on the element's shadow root.
      *
-     * By annotating the property with the correct type, element's can have
+     * By annotating the property with the correct type, elements can have
      * type-checked access to internal elements.
      *
      * This function must be invoked to return a decorator.
@@ -88,13 +91,16 @@ declare namespace Polymer {
      * A TypeScript property decorator factory that converts a class property into
      * a getter that executes a querySelectorAll on the element's shadow root.
      *
-     * By annotating the property with the correct type, element's can have
+     * By annotating the property with the correct type, elements can have
      * type-checked access to internal elements. The type should be NodeList
      * with the correct type argument.
      *
      * This function must be invoked to return a decorator.
      */
     const queryAll: (selector: string) => (proto: ElementPrototype, propName: string) => void;
+    type HasEventListener<P extends string> = {
+        [K in P]: (e: Event) => void;
+    };
     /**
      * A TypeScript property decorator factory that causes the decorated method to
      * be called when a imperative event is fired on the targeted element. `target`
@@ -108,7 +114,7 @@ declare namespace Polymer {
      * @param eventName A string representing the event type to listen for
      * @param target A single element by id or EventTarget to target
      */
-    const listen: (eventName: string, target: string | EventTarget) => (proto: ElementPrototype, methodName: string) => void;
+    function listen(eventName: string, target: string | EventTarget): <P extends string, El extends ElementPrototype & HasEventListener<P>>(proto: El, methodName: P) => void;
     
   }
 }

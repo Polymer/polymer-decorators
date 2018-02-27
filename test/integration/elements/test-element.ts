@@ -49,7 +49,7 @@ class TestElement extends Polymer.Element {
     return this.dependencyOne;
   }
 
-  @computed<TestElement>('dependencyOne', 'dependencyTwo')
+  @computed('dependencyOne', 'dependencyTwo')
   get computedTwo() {
     return this.dependencyOne + this.dependencyTwo;
   }

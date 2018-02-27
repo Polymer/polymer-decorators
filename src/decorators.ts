@@ -9,9 +9,8 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-// Note that we can't be much more precise here (e.g. must construct something
-// that extends HTMLElement) because decorator applications in TypeScript
-// currently seem to upcast the constructor simply to Function.
+/// <reference path="../polymer/types/polymer-element.d.ts" />
+
 export interface ElementConstructor extends Function {
   is?: string;
   properties?: {[prop: string]: PropertyOptions};
@@ -22,7 +21,9 @@ export interface ElementConstructor extends Function {
        handler: (ev: Event) => void) => void;
 }
 
-export interface ElementPrototype { constructor: ElementConstructor; }
+export interface ElementPrototype extends Polymer.Element {
+  constructor: ElementConstructor;
+}
 
 /**
  * A TypeScript class decorator factory that registers the class as a custom
@@ -35,7 +36,7 @@ export interface ElementPrototype { constructor: ElementConstructor; }
  * property is not an own-property of the class), an exception is thrown.
  */
 export function customElement(tagname?: string) {
-  return (class_: ElementConstructor) => {
+  return (class_: {new(): Polymer.Element} & ElementConstructor) => {
     if (tagname) {
       // Only check that tag names match when `is` is our own property. It might
       // be inherited from a superclass, in which case it's ok if they're
@@ -52,7 +53,7 @@ export function customElement(tagname?: string) {
     }
     // Throws if tag name is missing or invalid.
     window.customElements.define(class_.is!, class_);
-  }
+  };
 }
 
 /**
@@ -72,6 +73,13 @@ export interface PropertyOptions {
   observer?: string|((val: {}, old: {}) => void);
 }
 
+interface Reflect {
+  hasMetadata?:
+      (metadataKey: string, proto: object, targetKey: string) => boolean;
+  getMetadata?: (metadataKey: string, proto: object, targetKey: string) =>
+      object | undefined;
+}
+
 function createProperty(
     proto: ElementPrototype, name: string, options?: PropertyOptions): void {
   if (!proto.constructor.hasOwnProperty('properties')) {
@@ -82,13 +90,6 @@ function createProperty(
     ...proto.constructor.properties![name],
     ...options,
   };
-
-  interface Reflect {
-    hasMetadata?:
-        (metadataKey: string, proto: object, targetKey: string) => boolean;
-    getMetadata?: (metadataKey: string, proto: object, targetKey: string) =>
-        Object | undefined;
-  }
 
   if (!finalOpts.type) {
     const reflect = (window as {Reflect?: Reflect}).Reflect;
@@ -115,7 +116,7 @@ function createProperty(
 export function property(options?: PropertyOptions) {
   return (proto: ElementPrototype, propName: string) => {
     createProperty(proto, propName, options);
-  }
+  };
 }
 
 /**
@@ -130,7 +131,7 @@ export function observe(...targets: string[]) {
       Object.defineProperty(proto.constructor, 'observers', {value: []});
     }
     proto.constructor.observers!.push(`${propName}(${targets.join(',')})`);
-  }
+  };
 }
 
 /**
@@ -142,8 +143,11 @@ export function observe(...targets: string[]) {
  *
  * This function must be invoked to return a decorator.
  */
-export function computed<T = any>(...targets: (keyof T)[]) {
-  return (proto: ElementPrototype,
+export function computed<
+    P extends string,
+    El extends ElementPrototype & {[K in P]: {}|null|undefined}>(
+        firstTarget: P, ...moreTargets: P[]) {
+  return (proto: El,
           propName: string,
           descriptor: PropertyDescriptor): void => {
     const fnName = `__compute${propName}`;
@@ -152,8 +156,9 @@ export function computed<T = any>(...targets: (keyof T)[]) {
 
     descriptor.get = undefined;
 
+    const targets = [firstTarget, ...moreTargets].join(',');
     createProperty(
-        proto, propName, {computed: `${fnName}(${targets.join(',')})`});
+        proto, propName, {computed: `${fnName}(${targets})`});
   };
 }
 
@@ -161,7 +166,7 @@ export function computed<T = any>(...targets: (keyof T)[]) {
  * A TypeScript property decorator factory that converts a class property into
  * a getter that executes a querySelector on the element's shadow root.
  *
- * By annotating the property with the correct type, element's can have
+ * By annotating the property with the correct type, elements can have
  * type-checked access to internal elements.
  *
  * This function must be invoked to return a decorator.
@@ -173,7 +178,7 @@ export const query = _query(
  * A TypeScript property decorator factory that converts a class property into
  * a getter that executes a querySelectorAll on the element's shadow root.
  *
- * By annotating the property with the correct type, element's can have
+ * By annotating the property with the correct type, elements can have
  * type-checked access to internal elements. The type should be NodeList
  * with the correct type argument.
  *
@@ -203,6 +208,8 @@ function _query(
   };
 }
 
+export type HasEventListener<P extends string> = {[K in P]: (e: Event) => void};
+
 /**
  * A TypeScript property decorator factory that causes the decorated method to
  * be called when a imperative event is fired on the targeted element. `target`
@@ -216,17 +223,17 @@ function _query(
  * @param eventName A string representing the event type to listen for
  * @param target A single element by id or EventTarget to target
  */
-export const listen = (eventName: string, target: string|EventTarget) =>
-    (proto: ElementPrototype, methodName: string) => {
-      if (!proto.constructor._addDeclarativeEventListener) {
-        throw new Error(
-            `Cannot add listener for ${eventName} because ` +
-            `DeclarativeEventListeners mixin was not applied to element.`);
-      }
-      proto.constructor._addDeclarativeEventListener(
-          target,
-          eventName,
-          // This cast to any is safe because proto[methodName] is, by
-          // definition, the method that we are currently decorating.
-          (proto as any)[methodName]);
-    };
+export function listen(eventName: string, target: string|EventTarget) {
+  return <P extends string, El extends ElementPrototype & HasEventListener<P>>(
+      proto: El, methodName: P) => {
+    if (!proto.constructor._addDeclarativeEventListener) {
+      throw new Error(
+          `Cannot add listener for ${eventName} because ` +
+          `DeclarativeEventListeners mixin was not applied to element.`);
+    }
+    proto.constructor._addDeclarativeEventListener(
+        target,
+        eventName,
+        (proto as HasEventListener<P>)[methodName]);
+  };
+}

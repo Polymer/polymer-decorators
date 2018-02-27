@@ -14,6 +14,7 @@ this.Polymer.decorators = (function (exports) {
  * Google as part of the polymer project is also subject to an additional IP
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
+/// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
 /**
  * A TypeScript class decorator factory that registers the class as a custom
  * element.
@@ -96,19 +97,20 @@ function observe(...targets) {
  *
  * This function must be invoked to return a decorator.
  */
-function computed(...targets) {
+function computed(firstTarget, ...moreTargets) {
     return (proto, propName, descriptor) => {
         const fnName = `__compute${propName}`;
         Object.defineProperty(proto, fnName, { value: descriptor.get });
         descriptor.get = undefined;
-        createProperty(proto, propName, { computed: `${fnName}(${targets.join(',')})` });
+        const targets = [firstTarget, ...moreTargets].join(',');
+        createProperty(proto, propName, { computed: `${fnName}(${targets})` });
     };
 }
 /**
  * A TypeScript property decorator factory that converts a class property into
  * a getter that executes a querySelector on the element's shadow root.
  *
- * By annotating the property with the correct type, element's can have
+ * By annotating the property with the correct type, elements can have
  * type-checked access to internal elements.
  *
  * This function must be invoked to return a decorator.
@@ -118,7 +120,7 @@ const query = _query((target, selector) => target.querySelector(selector));
  * A TypeScript property decorator factory that converts a class property into
  * a getter that executes a querySelectorAll on the element's shadow root.
  *
- * By annotating the property with the correct type, element's can have
+ * By annotating the property with the correct type, elements can have
  * type-checked access to internal elements. The type should be NodeList
  * with the correct type argument.
  *
@@ -155,16 +157,15 @@ function _query(queryFn) {
  * @param eventName A string representing the event type to listen for
  * @param target A single element by id or EventTarget to target
  */
-const listen = (eventName, target) => (proto, methodName) => {
-    if (!proto.constructor._addDeclarativeEventListener) {
-        throw new Error(`Cannot add listener for ${eventName} because ` +
-            `DeclarativeEventListeners mixin was not applied to element.`);
-    }
-    proto.constructor._addDeclarativeEventListener(target, eventName, 
-    // This cast to any is safe because proto[methodName] is, by
-    // definition, the method that we are currently decorating.
-    proto[methodName]);
-};
+function listen(eventName, target) {
+    return (proto, methodName) => {
+        if (!proto.constructor._addDeclarativeEventListener) {
+            throw new Error(`Cannot add listener for ${eventName} because ` +
+                `DeclarativeEventListeners mixin was not applied to element.`);
+        }
+        proto.constructor._addDeclarativeEventListener(target, eventName, proto[methodName]);
+    };
+}
 
 exports.customElement = customElement;
 exports.property = property;

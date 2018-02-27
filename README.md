@@ -147,29 +147,13 @@ get fooBar() {
 }
 ```
 
-> ⚠️ **NOTE**: Since TypeScript 2.7, any use of `@computed` with >1 dependencies
-> will not compile unless the generic type parameter is specified explicitly
-> (either with the element class as shown below, or simply with `any`). See
-> [#48](https://github.com/Polymer/polymer-decorators/issues/48) for details.
-
-For optional additional type saftey, pass your custom element class as a
-generic parameter. This allows TypeScript to check that all of your
-dependencies are valid properties.
-
-```ts
-@computed<MyElement>('foo', 'bar')
-get fooBar() {
-  return this.foo + this.bar;
-}
-```
-
 To set the type of a computed property when the Metadata Reflection API is not
 available, apply an additional `@property` decorator. Note that the `@property`
 decorator should be applied first, but since decorators are executed bottom up,
 it should be written second:
 
 ```ts
-@computed<MyElement>('foo', 'bar')
+@computed('foo', 'bar')
 @property({type: String})
 get fooBar() {
 ```
