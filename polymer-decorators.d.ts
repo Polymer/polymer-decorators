@@ -3,7 +3,6 @@
 
 declare namespace Polymer {
   namespace decorators {
-    /// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
     /**
      * @license
      * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.

@@ -14,7 +14,6 @@ this.Polymer.decorators = (function (exports) {
  * Google as part of the polymer project is also subject to an additional IP
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
-/// <reference path="../bower_components/polymer/types/polymer-element.d.ts" />
 /**
  * A TypeScript class decorator factory that registers the class as a custom
  * element.

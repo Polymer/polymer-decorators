@@ -9,8 +9,6 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-/// <reference path="../polymer/types/polymer-element.d.ts" />
-
 export interface ElementConstructor extends Function {
   is?: string;
   properties?: {[prop: string]: PropertyOptions};
@@ -36,7 +34,7 @@ export interface ElementPrototype extends Polymer.Element {
  * property is not an own-property of the class), an exception is thrown.
  */
 export function customElement(tagname?: string) {
-  return (class_: {new(): Polymer.Element} & ElementConstructor) => {
+  return (class_: {new (): Polymer.Element}&ElementConstructor) => {
     if (tagname) {
       // Only check that tag names match when `is` is our own property. It might
       // be inherited from a superclass, in which case it's ok if they're
@@ -143,10 +141,9 @@ export function observe(...targets: string[]) {
  *
  * This function must be invoked to return a decorator.
  */
-export function computed<
-    P extends string,
-    El extends ElementPrototype & {[K in P]: {}|null|undefined}>(
-        firstTarget: P, ...moreTargets: P[]) {
+export function computed<P extends string, El extends ElementPrototype&
+                         {[K in P]: {} | null | undefined}>(
+    firstTarget: P, ...moreTargets: P[]) {
   return (proto: El,
           propName: string,
           descriptor: PropertyDescriptor): void => {
@@ -157,8 +154,7 @@ export function computed<
     descriptor.get = undefined;
 
     const targets = [firstTarget, ...moreTargets].join(',');
-    createProperty(
-        proto, propName, {computed: `${fnName}(${targets})`});
+    createProperty(proto, propName, {computed: `${fnName}(${targets})`});
   };
 }
 
@@ -208,7 +204,9 @@ function _query(
   };
 }
 
-export type HasEventListener<P extends string> = {[K in P]: (e: Event) => void};
+export type HasEventListener<P extends string> = {
+  [K in P]: (e: Event) => void
+};
 
 /**
  * A TypeScript property decorator factory that causes the decorated method to
@@ -224,16 +222,14 @@ export type HasEventListener<P extends string> = {[K in P]: (e: Event) => void};
  * @param target A single element by id or EventTarget to target
  */
 export function listen(eventName: string, target: string|EventTarget) {
-  return <P extends string, El extends ElementPrototype & HasEventListener<P>>(
-      proto: El, methodName: P) => {
+  return <P extends string, El extends ElementPrototype&HasEventListener<P>>(
+             proto: El, methodName: P) => {
     if (!proto.constructor._addDeclarativeEventListener) {
       throw new Error(
           `Cannot add listener for ${eventName} because ` +
           `DeclarativeEventListeners mixin was not applied to element.`);
     }
     proto.constructor._addDeclarativeEventListener(
-        target,
-        eventName,
-        (proto as HasEventListener<P>)[methodName]);
+        target, eventName, (proto as HasEventListener<P>)[methodName]);
   };
 }
