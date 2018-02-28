@@ -8,7 +8,11 @@ addons:
 before_script:
   - npm run format
   - npm run build
-  - git diff --exit-code
+  - >-
+    git diff --exit-code || (echo -e
+    '\n\033[31mERROR:\033[0m Generated files are stale.
+    Please run "npm install && npm run build" and commit the changes.'
+    && false)
 script:
   - npm run test:setup
   - cd test/integration && $(npm bin)/wct
