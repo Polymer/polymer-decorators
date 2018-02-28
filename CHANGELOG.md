@@ -8,11 +8,11 @@
   Previously this check only applied when the class was explicitly passed as a
   generic parameter. Users must no longer pass the class as a generic parameter.
 - [BREAKING] It is now a compilation to apply the `@customElement` decorator to
-  a class which does not extend `Polymer.Element`. Polymer >= 2.4 is now a Bower
-  dependency of this package.
+  a class which does not extend `Polymer.Element`. Polymer >= 2.4 (which
+  provides this type) is now a Bower dependency of this package.
 - [BREAKING] It is now a compilation error to apply the `@listen` decorator to a
   method that is not compatible with the signature `(e: EventTarget) => void`,
-  or that is `private`.
+  or that has `private` or `protected` visibility.
 - [BREAKING] It is now a compilation error to pass zero targets to the
   `@computed` decorator factory.
 
