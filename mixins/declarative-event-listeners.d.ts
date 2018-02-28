@@ -8,6 +8,9 @@
  *   mixins/declarative-event-listeners.html
  */
 
+/// <reference path="../../polymer/types/lib/utils/boot.d.ts" />
+/// <reference path="../../polymer/types/lib/utils/mixin.d.ts" />
+
 declare namespace Polymer {
 
 

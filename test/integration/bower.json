@@ -1,7 +1,7 @@
 {
   "name": "polymer-decorators-integration-test",
   "dependencies": {
-    "polymer": "#d7ea2464cd7e798c1bc4ebf25e12d17c43a6f8b4",
+    "polymer": "^2.4",
     "webcomponentsjs": "^1.0.12",
     "polymer-decorators": "../../",
     "reflect-metadata": "rbuckton/reflect-metadata#^0.1.10"

@@ -22,17 +22,17 @@ class DeclarativeListenerTestElement extends Polymer.DeclarativeEventListeners
   windowClickCounter: number = 0;
 
   @listen('element-event', 'tapRegion')
-  private elementEventHandler(e: Event) {
+  elementEventHandler(e: Event) {
     this.elementClickCounter++;
   }
 
   @listen('document-event', document)
-  private documentEventHandler(e: Event) {
+  documentEventHandler(e: Event) {
     this.documentClickCounter++;
   }
 
   @listen('window-event', window)
-  private windowEventHandler(e: Event) {
+  windowEventHandler(e: Event) {
     this.windowClickCounter++;
   }
 }

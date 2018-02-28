@@ -6,6 +6,7 @@
   "main": "lib/decorators.js",
   "types": "lib/decorators.d.ts",
   "scripts": {
+    "postinstall": "bower install",
     "clean": "rimraf lib/ polymer-decorators.{js,d.ts} mixins/*.d.ts test/integration/{node_modules,bower_components,bower_cache}",
     "format": "find src test \\( -name node_modules -o -name bower_components -o -name bower_cache \\) -prune -o -name '*.ts' -print | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js && gen-typescript-declarations --outDir=.",
@@ -27,6 +28,7 @@
   "dependencies": {},
   "devDependencies": {
     "@polymer/gen-typescript-declarations": "^1.1.3",
+    "bower": "^1.8.2",
     "clang-format": "^1.0.55",
     "rimraf": "^2.6.2",
     "rollup": "^0.55.0",

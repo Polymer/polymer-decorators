@@ -15,5 +15,8 @@
     "test",
     "tests",
     "polymer-decorators*.tgz"
-  ]
+  ],
+  "dependencies": {
+    "Polymer/polymer": "^2.4"
+  }
 }

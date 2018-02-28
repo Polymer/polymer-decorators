@@ -19,6 +19,7 @@
     "rootDir": "src"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "bower_components/polymer/types/polymer-element.d.ts"
   ]
 }
