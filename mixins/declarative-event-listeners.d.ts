@@ -30,6 +30,6 @@ declare namespace Polymer {
   }
 
   interface DeclarativeEventListeners {
-    ready(): any;
+    ready(): void;
   }
 }

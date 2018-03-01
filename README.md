@@ -147,17 +147,6 @@ get fooBar() {
 }
 ```
 
-To set the type of a computed property when the Metadata Reflection API is not
-available, apply an additional `@property` decorator. Note that the `@property`
-decorator should be applied first, but since decorators are executed bottom up,
-it should be written second:
-
-```ts
-@computed('foo', 'bar')
-@property({type: String})
-get fooBar() {
-```
-
 To define a computed property with more complex dependency expressions for
 which you may want to receive change values as arguments (e.g. sub-properties,
 splices, wildcards, etc.), or to set additional property options, define a
@@ -235,7 +224,8 @@ widgets: NodeListOf<MyWidgetElement>
 ### `@listen(eventName: string, target: string|EventTarget)`
 
 Add an event listener for `eventName` on `target`. `target` can be an object
-reference, or the string id of an element in the shadow root.
+reference, or the string id of an element in the shadow root. The method must
+match the signature `(e: Event) => void`, and must have `public` visibility.
 
 Note that a `target` referenced by id must be defined statically in the
 top-level element template (e.g. not in a `<dom-if>`), because the `$` id map
@@ -251,7 +241,7 @@ mixin, which is supplied with this package.
 class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 
   @listen('scroll', document)
-  protected onDocumentScroll(event: Event) {
+  onDocumentScroll(event: Event) {
     this.scratchChalkboard();
   }
 }
@@ -270,7 +260,7 @@ class MyElement extends
     Polymer.Element)) {
 
   @listen('tap', 'red-button')
-  protected onTapRedButton(event: Event) {
+  onTapRedButton(event: Event) {
     this.launchMissile();
   }
 }
