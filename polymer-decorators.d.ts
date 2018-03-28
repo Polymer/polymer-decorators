@@ -55,6 +55,8 @@ declare namespace Polymer {
      * property.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function property(options?: PropertyOptions): (proto: ElementPrototype, propName: string) => void;
     /**
@@ -62,6 +64,8 @@ declare namespace Polymer {
      * be called when a property changes.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function observe(...targets: string[]): (proto: ElementPrototype, propName: string) => void;
     /**
@@ -72,6 +76,8 @@ declare namespace Polymer {
      * The decorated getter should not have an associated setter.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function computed<P extends string, El extends ElementPrototype & {
         [K in P]: {} | null | undefined;
@@ -112,6 +118,8 @@ declare namespace Polymer {
      *
      * @param eventName A string representing the event type to listen for
      * @param target A single element by id or EventTarget to target
+     *
+     * @ExportDecoratedItems
      */
     function listen(eventName: string, target: string | EventTarget): <P extends string, El extends ElementPrototype & HasEventListener<P>>(proto: El, methodName: P) => void;
     
