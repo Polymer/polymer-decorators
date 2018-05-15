@@ -13,8 +13,7 @@
 class DeclarativeEventsMixinTestElement extends
     Polymer.DeclarativeEventListeners
 (Polymer.Element) {
-  @property()
-  tapWindowCounter: number = 0;
+  @property() tapWindowCounter: number = 0;
 
   constructor() {
     super();

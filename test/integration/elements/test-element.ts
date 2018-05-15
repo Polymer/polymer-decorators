@@ -14,35 +14,26 @@ const {customElement, property, query, queryAll, observe, computed, listen} =
 
 @customElement('test-element')
 class TestElement extends Polymer.Element {
-  @property({notify: true})
-  aNum: number = 42;
+  @property({notify: true}) aNum: number = 42;
 
-  @property()
-  doesntNotify: boolean = true;
+  @property() doesntNotify: boolean = true;
 
-  @property({notify: true})
-  aString: string = 'yes';
+  @property({notify: true}) aString: string = 'yes';
 
-  @property()
-  aBool: boolean = true;
+  @property() aBool: boolean = true;
 
-  @property({reflectToAttribute: true})
-  reflectedString: string = 'yahoo';
+  @property({reflectToAttribute: true}) reflectedString: string = 'yahoo';
 
-  @property({readOnly: true})
-  readOnlyString: string;
+  @property({readOnly: true}) readOnlyString: string;
 
   @property({computed: 'computeString(reflectedString)'})
   computedString: string;
 
-  @property({observer: 'observeString'})
-  observedString: string;
+  @property({observer: 'observeString'}) observedString: string;
 
-  @property()
-  dependencyOne: string = '';
+  @property() dependencyOne: string = '';
 
-  @property()
-  dependencyTwo: string = '';
+  @property() dependencyTwo: string = '';
 
   @computed('dependencyOne')
   get computedOne() {
@@ -54,7 +45,8 @@ class TestElement extends Polymer.Element {
     return this.dependencyOne + this.dependencyTwo;
   }
 
-  @property({type: String}) @computed('dependencyOne')
+  @property({type: String})
+  @computed('dependencyOne')
   get computedWithOptions() {
     return this.dependencyOne;
   }
@@ -69,11 +61,9 @@ class TestElement extends Polymer.Element {
 
   lastMultiChange: any[];
 
-  @query('#num')
-  numDiv: HTMLDivElement;
+  @query('#num') numDiv: HTMLDivElement;
 
-  @queryAll('div')
-  divs: HTMLInputElement[];
+  @queryAll('div') divs: HTMLInputElement[];
 
   @observe('aNum')
   private _aNumChanged(newNum: number) {
