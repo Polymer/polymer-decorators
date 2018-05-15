@@ -1,6 +1,10 @@
 # Change Log
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+- A warning is no longer emitted when a computed property does not have
+  a property `type` set.
+- The missing `type` warning is now a `console.warn` instead of a
+  `console.error`.
 
 ## [2.0.0] - 2018-02-28
 - [BREAKING] It is now always a compilation error to pass an argument to the
