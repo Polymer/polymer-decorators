@@ -1,6 +1,8 @@
 # Change Log
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [2.0.1] - 2018-05-16
 - A warning is no longer emitted when a computed property does not have
   a property `type` set.
 - The missing `type` warning is now a `console.warn` instead of a
