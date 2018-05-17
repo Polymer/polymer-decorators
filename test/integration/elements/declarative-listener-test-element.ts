@@ -12,14 +12,11 @@
 @customElement('declarative-listener-test-element')
 class DeclarativeListenerTestElement extends Polymer.DeclarativeEventListeners
 (Polymer.Element) {
-  @property()
-  elementClickCounter: number = 0;
+  @property() elementClickCounter: number = 0;
 
-  @property()
-  documentClickCounter: number = 0;
+  @property() documentClickCounter: number = 0;
 
-  @property()
-  windowClickCounter: number = 0;
+  @property() windowClickCounter: number = 0;
 
   @listen('element-event', 'tapRegion')
   elementEventHandler(e: Event) {

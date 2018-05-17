@@ -18,13 +18,15 @@ const TestBehavior = {
   }
 };
 
-@Polymer.decorators.customElement('mixin-behaviors-test-element')
-class MixinBehaviorsTestElement extends Polymer.mixinBehaviors
+@Polymer
+    .decorators.customElement(
+        'mixin-behaviors-test-element') class MixinBehaviorsTestElement extends
+    Polymer.mixinBehaviors
 ([TestBehavior], Polymer.Element) {
-  @Polymer.decorators.property()
-  elementProperty: string = 'elementPropertyValue';
+  @Polymer
+      .decorators.property() elementProperty: string = 'elementPropertyValue';
 
-  @Polymer.decorators.observe('elementProperty')
-  observerProperty() {
+  @Polymer
+      .decorators.observe('elementProperty') observerProperty() {
   }
 }

@@ -12,17 +12,13 @@
 @customElement('gesture-listener-test-element')
 class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
 (Polymer.GestureEventListeners(Polymer.Element)) {
-  @property()
-  elementClickCounter: number = 0;
+  @property() elementClickCounter: number = 0;
 
-  @property()
-  nonGestureElementClickCounter: number = 0;
+  @property() nonGestureElementClickCounter: number = 0;
 
-  @property()
-  documentClickCounter: number = 0;
+  @property() documentClickCounter: number = 0;
 
-  @property()
-  windowClickCounter: number = 0;
+  @property() windowClickCounter: number = 0;
 
   @listen('tap', 'tapRegion')
   elementTapEventHandler(e: Event) {
