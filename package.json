@@ -1,6 +1,6 @@
 {
   "name": "@polymer/decorators",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": true,
   "description": "TypeScript decorators for Polymer 2.0",
   "main": "lib/decorators.js",
@@ -31,7 +31,7 @@
     "bower": "^1.8.2",
     "clang-format": "^1.0.55",
     "rimraf": "^2.6.2",
-    "rollup": "^0.59.0",
-    "typescript": "^2.5.2"
+    "rollup": "^0.61.1",
+    "typescript": "^2.9.2"
   }
 }
