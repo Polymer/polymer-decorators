@@ -114,6 +114,8 @@ function createProperty(
  * property.
  *
  * This function must be invoked to return a decorator.
+ *
+ * @ExportDecoratedItems
  */
 export function property(options?: PropertyOptions) {
   return (proto: ElementPrototype, propName: string) => {
@@ -126,6 +128,8 @@ export function property(options?: PropertyOptions) {
  * be called when a property changes.
  *
  * This function must be invoked to return a decorator.
+ *
+ * @ExportDecoratedItems
  */
 export function observe(...targets: string[]) {
   return (proto: ElementPrototype, propName: string) => {
@@ -144,6 +148,8 @@ export function observe(...targets: string[]) {
  * The decorated getter should not have an associated setter.
  *
  * This function must be invoked to return a decorator.
+ *
+ * @ExportDecoratedItems
  */
 export function computed<P extends string, El extends ElementPrototype&
                          {[K in P]: {} | null | undefined}>(
@@ -224,6 +230,8 @@ export type HasEventListener<P extends string> = {
  *
  * @param eventName A string representing the event type to listen for
  * @param target A single element by id or EventTarget to target
+ *
+ * @ExportDecoratedItems
  */
 export function listen(eventName: string, target: string|EventTarget) {
   return <P extends string, El extends ElementPrototype&HasEventListener<P>>(

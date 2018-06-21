@@ -71,6 +71,8 @@ this.Polymer.decorators = (function (exports) {
      * property.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function property(options) {
         return (proto, propName) => {
@@ -82,6 +84,8 @@ this.Polymer.decorators = (function (exports) {
      * be called when a property changes.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function observe(...targets) {
         return (proto, propName) => {
@@ -99,6 +103,8 @@ this.Polymer.decorators = (function (exports) {
      * The decorated getter should not have an associated setter.
      *
      * This function must be invoked to return a decorator.
+     *
+     * @ExportDecoratedItems
      */
     function computed(firstTarget, ...moreTargets) {
         return (proto, propName, descriptor) => {
@@ -159,6 +165,8 @@ this.Polymer.decorators = (function (exports) {
      *
      * @param eventName A string representing the event type to listen for
      * @param target A single element by id or EventTarget to target
+     *
+     * @ExportDecoratedItems
      */
     function listen(eventName, target) {
         return (proto, methodName) => {

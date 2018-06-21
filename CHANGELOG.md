@@ -1,6 +1,7 @@
 # Change Log
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+- Add @ExportDecoratedItems annotations to decorators, for use by tsickle.
 
 ## [2.0.1] - 2018-05-16
 - A warning is no longer emitted when a computed property does not have
