@@ -9,6 +9,8 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
 export interface ElementConstructor extends Function {
   is?: string;
   properties?: {[prop: string]: PropertyOptions};
@@ -19,7 +21,7 @@ export interface ElementConstructor extends Function {
        handler: (ev: Event) => void) => void;
 }
 
-export interface ElementPrototype extends Polymer.Element {
+export interface ElementPrototype extends PolymerElement {
   constructor: ElementConstructor;
 }
 
@@ -34,7 +36,7 @@ export interface ElementPrototype extends Polymer.Element {
  * property is not an own-property of the class), an exception is thrown.
  */
 export function customElement(tagname?: string) {
-  return (class_: {new (): Polymer.Element}&ElementConstructor) => {
+  return (class_: {new (): PolymerElement}&ElementConstructor) => {
     if (tagname) {
       // Only check that tag names match when `is` is our own property. It might
       // be inherited from a superclass, in which case it's ok if they're
