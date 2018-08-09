@@ -8,7 +8,7 @@
     "format": "find src/ -name '*.ts' -print | xargs clang-format --style=file -i",
     "build": "npm run clean && tsc",
     "prepack": "npm run build",
-    "test": ""
+    "test": "npm run build && wct --npm --module_resolution=node"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,13 @@
     "@polymer/polymer": "^3.0.5"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
+    "@webcomponents/webcomponentsjs": "^2.0.4",
     "clang-format": "^1.2.4",
     "rimraf": "^2.6.2",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "wct-browser-legacy": "^1.0.1",
+    "web-component-tester": "^6.7.1"
   }
 }

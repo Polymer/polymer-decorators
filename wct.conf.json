@@ -1,7 +1,6 @@
 {
   "suites": [
-    "decorators.html",
-    "mixins.html"
+    "src/test/*.html"
   ],
   "plugins": {
     "local": {

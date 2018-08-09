@@ -9,11 +9,21 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-const {customElement, property, query, queryAll, observe, computed, listen} =
-    Polymer.decorators;
+import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {computed, customElement, observe, property, query, queryAll} from '../../decorators';
 
 @customElement('test-element')
-class TestElement extends Polymer.Element {
+export class TestElement extends PolymerElement {
+  static get template() {
+    return html`
+      <div id="num">{{aNum}}</div>
+      <div id="string">{{aString}}</div>
+      <div id="computed">{{computedOne}}</div>
+      <div id="computedTwo">{{computedTwo}}</div>
+    `;
+  }
+
   @property({notify: true}) aNum: number = 42;
 
   @property() doesntNotify: boolean = true;
@@ -24,12 +34,12 @@ class TestElement extends Polymer.Element {
 
   @property({reflectToAttribute: true}) reflectedString: string = 'yahoo';
 
-  @property({readOnly: true}) readOnlyString: string;
+  @property({readOnly: true}) readOnlyString: string = '';
 
   @property({computed: 'computeString(reflectedString)'})
-  computedString: string;
+  computedString!: string;
 
-  @property({observer: 'observeString'}) observedString: string;
+  @property({observer: 'observeString'}) observedString: string = '';
 
   @property() dependencyOne: string = '';
 
@@ -53,20 +63,20 @@ class TestElement extends Polymer.Element {
 
   // stand-in for set function dynamically created by Polymer on read only
   // properties
-  _setReadOnlyString: (value: string) => void;
+  _setReadOnlyString!: (value: string) => void;
 
-  lastNumChange: number;
+  lastNumChange: number|undefined;
 
-  lastChange: string;
+  lastChange: string|undefined;
 
-  lastMultiChange: any[];
+  lastMultiChange: any[] = [];
 
-  @query('#num') numDiv: HTMLDivElement;
+  @query('#num') numDiv!: HTMLDivElement;
 
-  @queryAll('div') divs: HTMLInputElement[];
+  @queryAll('div') divs!: HTMLInputElement[];
 
   @observe('aNum')
-  private _aNumChanged(newNum: number) {
+  protected _aNumChanged(newNum: number) {
     this.lastNumChange = newNum;
   }
 
@@ -76,15 +86,15 @@ class TestElement extends Polymer.Element {
   }
 
   @observe('aNum', 'aString')
-  private _numStringChanged(newNum: number, newString: string) {
+  protected _numStringChanged(newNum: number, newString: string) {
     this.lastMultiChange = [newNum, newString];
   }
 
-  private computeString(s: string) {
+  protected computeString(s: string) {
     return 'computed ' + s;
   }
 
-  private observeString(s: string) {
+  protected observeString(s: string) {
     this.lastChange = s;
   }
 }

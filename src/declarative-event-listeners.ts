@@ -14,19 +14,23 @@ import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 export interface SuperClassConstructor {
   // tslint:disable-next-line:no-any Required for constructor signature.
-  new(...args: any[]): PolymerElement&{constructor: SuperClassConstructor};
+  new(...args: any[]): PolymerElement;
+
   listeners?: Array<{
-    target: string | Node,
+    target: string | EventTarget,
     eventName: string,
     handler: (ev: Event) => void,
   }>;
 }
 
-export interface DeclarativeEventListeners {
-  _addDeclarativeEventListener(
-      target: string|Node,
-      eventName: string,
-      handler: (ev: Event) => void): void;
+export interface DeclarativeEventListenersConstructor {
+  // tslint:disable-next-line:no-any Required for constructor signature.
+  new(...args: any[]): {};
+
+  _addDeclarativeEventListener:
+      (target: string|EventTarget,
+       eventName: string,
+       handler: (ev: Event) => void) => void;
 }
 
 /**
@@ -38,25 +42,30 @@ export interface DeclarativeEventListeners {
  * support gesture events when this mixin is applied along with `TemplateStamp`.
  */
 export const DeclarativeEventListeners = dedupingMixin(
-    <T extends SuperClassConstructor>(superClass: T): T&
-    DeclarativeEventListeners => {
+    <T extends SuperClassConstructor>(base: T): T&
+    DeclarativeEventListenersConstructor => {
       /**
        * @property listeners {object} Stores the declared event listeners to be
        * subscribed to durning ready().
        */
-      return class extends superClass {
+      return class extends base {
         ready() {
           super.ready();
-          if (!this.constructor.hasOwnProperty('listeners')) {
-            this.constructor.listeners = [];
+          const c = this.constructor as SuperClassConstructor;
+          if (!c.hasOwnProperty('listeners')) {
+            c.listeners = [];
           }
 
-          this.constructor.listeners!.forEach((listener) => {
+          c.listeners!.forEach((listener) => {
             const targetElement = typeof listener.target === 'string' ?
                 this.$[listener.target] :
                 listener.target;
             this._addEventListenerToNode(
-                targetElement, listener.eventName, listener.handler.bind(this));
+                // TODO(aomarks) This TemplateStamp method should take
+                // EventTarget.
+                targetElement as Node,
+                listener.eventName,
+                listener.handler.bind(this));
           });
         }
 
@@ -68,7 +77,7 @@ export const DeclarativeEventListeners = dedupingMixin(
          * @param {function} handler Function which receives the notification.
          */
         static _addDeclarativeEventListener(
-            target: string|Node,
+            target: string|EventTarget,
             eventName: string,
             handler: (ev: Event) => void): void {
           if (!this.hasOwnProperty('listeners')) {

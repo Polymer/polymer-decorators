@@ -8,30 +8,23 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <html>
-
 <head>
   <meta charset="utf-8">
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="bower_components/reflect-metadata/Reflect.js"></script>
-  <script src="bower_components/web-component-tester/browser.js"></script>
-  <script src="bower_components/sinonjs/sinon.js"></script>
-
-  <link rel="import" href="./elements/test-element.html">
-  <link rel="import" href="./elements/mixins/declarative-events-mixin-test-element.html">
+  <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
 </head>
 
 <body>
-
   <test-fixture id="declarative-events-mixin-test-element-fixture">
     <template>
       <declarative-events-mixin-test-element></declarative-events-mixin-test-element>
     </template>
   </test-fixture>
 
-  <script src="mixins.js"></script>
-
+  <script type="module">
+    import '../../lib/test/elements/declarative-events-mixin-test-element.js';
+    import '../../lib/test/declarative-event-listeners-test.js';
+  </script>
 </body>
-
 </html>
