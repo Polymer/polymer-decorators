@@ -1,5 +1,5 @@
 src/
-test/
+lib/test/
 
 .clang-format
 tsconfig.json

@@ -1,19 +1,14 @@
 {
-  "name": "@polymer/decorators",
+  "name": "@polymer/polymer-decorators",
   "version": "2.1.0",
-  "private": true,
-  "description": "TypeScript decorators for Polymer 2.0",
+  "description": "TypeScript decorators for Polymer",
   "main": "lib/decorators.js",
-  "types": "lib/decorators.d.ts",
   "scripts": {
-    "postinstall": "bower install",
-    "clean": "rimraf lib/ polymer-decorators.{js,d.ts} mixins/*.d.ts test/integration/{node_modules,bower_components,bower_cache}",
-    "format": "find src test \\( -name node_modules -o -name bower_components -o -name bower_cache \\) -prune -o -name '*.ts' -print | xargs clang-format --style=file -i",
-    "build": "npm run clean && tsc && rollup -c && node scripts/gen-global-typings.js && gen-typescript-declarations --outDir=.",
+    "clean": "rimraf lib/",
+    "format": "find src/ -name '*.ts' -print | xargs clang-format --style=file -i",
+    "build": "npm run clean && tsc",
     "prepack": "npm run build",
-    "test:setup": "npm run build && cd test/integration && npm install && npm run build",
-    "test": "npm run test:setup && cd test/integration && npm test",
-    "test:fast": "tsc && rollup -c && node scripts/gen-global-typings.js && cp polymer-decorators.js test/integration/bower_components/polymer-decorators/ && cd test/integration && $(npm bin)/tsc && $(npm bin)/wct -l chrome"
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -25,13 +20,12 @@
     "url": "https://github.com/Polymer/polymer-decorators/issues"
   },
   "homepage": "https://github.com/Polymer/polymer-decorators#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@polymer/polymer": "^3.0.5"
+  },
   "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.1.3",
-    "bower": "^1.8.2",
-    "clang-format": "^1.0.55",
+    "clang-format": "^1.2.4",
     "rimraf": "^2.6.2",
-    "rollup": "^0.61.1",
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.1"
   }
 }
