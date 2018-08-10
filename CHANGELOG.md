@@ -1,6 +1,17 @@
 # Change Log
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+- Updated for Polymer 3.0.
+- Now distributed on NPM as
+  [`@polymer/polymer-decorators`](https://www.npmjs.com/packages/@polymer/polymer-decorators).
+  Bower is no longer supported.
+- [BREAKING] Dropped support for Polymer 2.0. See the
+  [`2.x`](https://github.com/Polymer/polymer-decorators/tree/2.x) branch for the
+  previous version, which can still be installed from Bower.
+- [BREAKING] Now distributed as ES modules, like Polymer itself. HTML imports
+  and the `Polymer.decorators` global are no longer available.
+- [BREAKING] Dropped support for the Metadata Reflection API. All properties
+  must now explicitly set a `type`.
 
 ## [2.1.0] - 2018-06-21
 - Add @ExportDecoratedItems annotations to decorators, for use by tsickle.
