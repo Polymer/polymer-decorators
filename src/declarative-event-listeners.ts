@@ -28,8 +28,7 @@ export interface DeclarativeEventListenersConstructor {
   new(...args: any[]): {};
 
   _addDeclarativeEventListener:
-      (target: string|EventTarget,
-       eventName: string,
+      (target: string|EventTarget, eventName: string,
        handler: (ev: Event) => void) => void;
 }
 
@@ -77,8 +76,7 @@ export const DeclarativeEventListeners = dedupingMixin(
          * @param {function} handler Function which receives the notification.
          */
         static _addDeclarativeEventListener(
-            target: string|EventTarget,
-            eventName: string,
+            target: string|EventTarget, eventName: string,
             handler: (ev: Event) => void): void {
           if (!this.hasOwnProperty('listeners')) {
             this.listeners = [];

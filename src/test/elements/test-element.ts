@@ -69,7 +69,7 @@ export class TestElement extends PolymerElement {
 
   lastChange: string|undefined;
 
-  lastMultiChange: any[] = [];
+  lastMultiChange: Array<number|string> = [];
 
   @query('#num') numDiv!: HTMLDivElement;
 
@@ -82,7 +82,7 @@ export class TestElement extends PolymerElement {
 
   ready() {
     super.ready();
-    this._setReadOnlyString('initial value')
+    this._setReadOnlyString('initial value');
   }
 
   @observe('aNum', 'aString')

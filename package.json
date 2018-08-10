@@ -6,9 +6,10 @@
   "scripts": {
     "clean": "rimraf lib/",
     "format": "find src/ -name '*.ts' -print | xargs clang-format --style=file -i",
+    "lint": "tslint --project . --format stylish",
     "build": "npm run clean && tsc",
     "prepack": "npm run build",
-    "test": "npm run build && wct --npm --module_resolution=node"
+    "test": "npm run build && npm run lint && wct --npm --module_resolution=node"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "@webcomponents/webcomponentsjs": "^2.0.4",
     "clang-format": "^1.2.4",
     "rimraf": "^2.6.2",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1",
     "wct-browser-legacy": "^1.0.1",
     "web-component-tester": "^6.7.1"

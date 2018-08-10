@@ -50,7 +50,7 @@ suite('TypeScript Decorators', function() {
           MixinBehaviorsTestElement;
       chai.assert.instanceOf(el, MixinBehaviorsTestElement);
       chai.assert.equal(el.elementProperty, 'elementPropertyValue');
-      chai.assert.equal((el as any).behaviorProperty, 'behaviorPropertyValue');
+      chai.assert.equal(el.behaviorProperty, 'behaviorPropertyValue');
     });
 
     test('throws when element names do not match', function() {
@@ -76,7 +76,9 @@ suite('TypeScript Decorators', function() {
 
     test('merges multiple definitions', function() {
       chai.assert.deepEqual(
-          (TestElement as any).properties.computedWithOptions, {
+          // tslint:disable-next-line:no-any The properties config is not typed.
+          (TestElement as any).properties.computedWithOptions,
+          {
             computed: '__computecomputedWithOptions(dependencyOne)',
             readOnly: true,
             type: String

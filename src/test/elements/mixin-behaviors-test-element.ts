@@ -31,3 +31,7 @@ export class MixinBehaviorsTestElement extends mixinBehaviors
   observerProperty() {
   }
 }
+
+export interface MixinBehaviorsTestElement {
+  behaviorProperty: string;
+}

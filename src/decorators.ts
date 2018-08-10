@@ -16,8 +16,7 @@ export interface ElementConstructor extends Function {
   properties?: {[prop: string]: PropertyOptions};
   observers?: string[];
   _addDeclarativeEventListener?:
-      (target: string|EventTarget,
-       eventName: string,
+      (target: string|EventTarget, eventName: string,
        handler: (ev: Event) => void) => void;
 }
 
