@@ -1,9 +1,13 @@
 {
+  "npm": true,
+  "moduleResolution": "node",
   "suites": [
     "src/test/*.html"
   ],
   "plugins": {
     "local": {
+      "disabled": true,
+      "browsers": ["all"],
       "browserOptions": {
         "chrome": [
           "headless",
@@ -13,6 +17,26 @@
           "-headless"
         ]
       }
+    },
+    "sauce": {
+      "disabled": true,
+      "browsers": [
+        {
+          "browserName": "internet explorer",
+          "platform": "Windows 8.1",
+          "version": "11"
+        },
+        {
+          "browserName": "microsoftedge",
+          "platform": "Windows 10",
+          "version": "latest"
+        },
+        {
+          "browserName": "safari",
+          "platform": "OS X 10.13",
+          "version": "latest"
+        }
+      ]
     }
   }
 }

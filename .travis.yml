@@ -1,7 +1,18 @@
 sudo: required
+dist: trusty
 language: node_js
-node_js: '10'
+node_js: node
+
 addons:
   chrome: stable
   firefox: latest
-script: npm test
+  sauce_connect: true
+
+env:
+  global:
+  - secure: cnQRow+5px7nnvk2Eeo0CUk8GrQL0S8/1nfrnUFz1oN8q6pR/jig2kqP7ahO/31IuskvndkxBUqHXk8nI/9LeHktBd6pI8o8a4Ay7+zZiuTEKzvO1vGVJ8ESv6WNm+e3ZEG3TGh576f5rlAdVWQ6LJguTF/QW3B7HWcO+cdx4z+thJv1Cc9D0wlSJnb3hknKmOuIgGj2eprv5oRXZGbj88kGaUrTLlcx0vh2+5V6JtoXUtdBC5Yq/X1l2YqFi9vCcE52bT9bkgqu6tSBV9pY2441wC+6n/PXU437MVV5xSzPWec7lXWyrE0XPkQssNS2qVioYA/dPoCc0UR//X/EwfvUXKluvYEk1gVAXNj8tCDq4N+blnqU23rf/58uwKrSEfa9cFz33lcOSVJlYoZsRcLzHhj2/bP08YJW9TjK8bWxl0yZa831AYFGkP/OT8wFymwd2EhVhKHxOBaEyGK15ECAMZozt8w/6qx8fGjIWEIWmU6EvDm/62lBZTWCt9nlfRlY3N0Xn6lajC57uJb7BnmvbS58vaAkylZA1pUMlrSg4Fhoj4O7xl+PhwYYBO79P7Do4pe7ZZ+Z6s0OXyooHs+Jxff17gYVzbCK91vF1GJg01NbGBcBN8MvubV+HAaRvnuI0ogPCU1FM/8DGJoWGp3lzCmOtJaIcr9TmIpYkx4=
+  - secure: MdmcEJr9yv7Vupyav1GcpBHmNLlPCRxnojm+83MXS039Lunc9r4CdxvDFfIOHgEUWUwBjBP01G5fM0y3RmVX0fzMHs44eK3rmEu4Q2uvod8GptDdhL6ucHsBv/R5gTNy72dMMRAfXAYGumqG7ZU/9DVMadBbPvNu/8tMboXEF0lyLWys1DelkdpFPj+cj9yNp2Xs+MoGtMkcTU/q8hqBdJoXN/5w9h4NyQqkvmSvLuuqEwI38+QF/nPtfL3wM2BrhjT01FFbFR5x2+ElGvw5iIf60QrMpNTlDLn2Ntjpd5MMwCgScN5SbtKLmYxAayVKtmTYL18u/O78PA0j3G/dHUcvfog/R65+Pvb5KpDUrhMHOD83ib67R0XCHPsABchpila0jp/HwPg9vhTuhiJlL9Xt18xUHaByRV39hiJC3TrstYnHxYtJ9GDAMNJsWhNNkK8qrDEYI6xrcKRkMVJDkvClI5rFQdIw+w1DLa+ebd5pu7BhUKMew8EcqKULTUyF15gcfWLNsFdTDgDSrDpcGAL7++Pxpq/bqH6FvhIqI9aChvpBkYzDzT4QBvVjAsWtam2QCgRc0/92H8NRz/Jq1n1KAyHY4irBaMWmxdPyT7qpwMmAoooDrW8FMlUCm3EDU8+ib3UfL+TETB2hTc/gXHHBnA6/qbN5gvgcIL1hiAE=
+
+script:
+  - npm test
+  - if [ $TRAVIS_SECURE_ENV_VARS == "true" ]; then npm run wct:sauce; fi
