@@ -1,20 +1,7 @@
-language: node_js
 sudo: required
-node_js:
-  - '9'
+language: node_js
+node_js: '10'
 addons:
   chrome: stable
   firefox: latest
-before_script:
-  - npm run format
-  - npm run build
-  # Don't fail just because the package lock has changed.
-  - git checkout package-lock.json
-  - >-
-    git diff --exit-code || (echo -e
-    '\n\033[31mERROR:\033[0m Generated files are stale.
-    Please run "npm install && npm run format && npm run build" and commit the changes.'
-    && false)
-script:
-  - npm run test:setup
-  - cd test/integration && $(npm bin)/wct
+script: npm test
