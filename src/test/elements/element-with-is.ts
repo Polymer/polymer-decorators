@@ -9,8 +9,11 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-@Polymer
-    .decorators.customElement() class ElementWithIs extends Polymer.Element {
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {customElement} from '../../decorators';
+
+@customElement()
+export class ElementWithIs extends PolymerElement {
   public static get is() {
     return 'element-with-is';
   }

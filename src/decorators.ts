@@ -9,17 +9,18 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
 export interface ElementConstructor extends Function {
   is?: string;
   properties?: {[prop: string]: PropertyOptions};
   observers?: string[];
   _addDeclarativeEventListener?:
-      (target: string|EventTarget,
-       eventName: string,
+      (target: string|EventTarget, eventName: string,
        handler: (ev: Event) => void) => void;
 }
 
-export interface ElementPrototype extends Polymer.Element {
+export interface ElementPrototype extends PolymerElement {
   constructor: ElementConstructor;
 }
 
@@ -34,7 +35,7 @@ export interface ElementPrototype extends Polymer.Element {
  * property is not an own-property of the class), an exception is thrown.
  */
 export function customElement(tagname?: string) {
-  return (class_: {new (): Polymer.Element}&ElementConstructor) => {
+  return (class_: {new (): PolymerElement}&ElementConstructor) => {
     if (tagname) {
       // Only check that tag names match when `is` is our own property. It might
       // be inherited from a superclass, in which case it's ok if they're
@@ -59,10 +60,7 @@ export function customElement(tagname?: string) {
  * See https://www.polymer-project.org/2.0/docs/devguide/properties.
  */
 export interface PropertyOptions {
-  /**
-   * This field can be omitted if the Metadata Reflection API is configured.
-   */
-  type?: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
+  type: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
       ArrayConstructor|ObjectConstructor;
   notify?: boolean;
   reflectToAttribute?: boolean;
@@ -71,42 +69,16 @@ export interface PropertyOptions {
   observer?: string|((val: {}, old: {}) => void);
 }
 
-interface Reflect {
-  hasMetadata?:
-      (metadataKey: string, proto: object, targetKey: string) => boolean;
-  getMetadata?: (metadataKey: string, proto: object, targetKey: string) =>
-      object | undefined;
-}
-
 function createProperty(
-    proto: ElementPrototype, name: string, options?: PropertyOptions): void {
+    proto: ElementPrototype, name: string, options?: Partial<PropertyOptions>):
+    void {
   if (!proto.constructor.hasOwnProperty('properties')) {
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
-
-  const finalOpts: PropertyOptions = {
+  proto.constructor.properties![name] = {
     ...proto.constructor.properties![name],
     ...options,
   };
-
-  if (!finalOpts.type) {
-    const isComputed = options && options.computed;
-    const reflect = (window as {Reflect?: Reflect}).Reflect;
-    if (reflect && reflect.hasMetadata && reflect.getMetadata &&
-        reflect.hasMetadata('design:type', proto, name)) {
-      finalOpts.type = reflect.getMetadata('design:type', proto, name) as
-          PropertyOptions['type'];
-    } else if (!isComputed) {
-      // No need to warn if a computed property doesn't have a type. The type is
-      // only used for attribute de-serialization, which never happens with
-      // computed properties, because they are read-only.
-      console.warn(
-          `A type could not be found for ${name}. ` +
-          'Set a type or configure Metadata Reflection API support.');
-    }
-  }
-
-  proto.constructor.properties![name] = finalOpts;
 }
 
 /**

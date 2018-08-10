@@ -9,8 +9,9 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-declare function fixture(id: string): HTMLElement;
+import {DeclarativeEventsMixinTestElement} from './elements/declarative-events-mixin-test-element';
 
+declare function fixture(id: string): HTMLElement;
 
 suite('Polymer Mixins', function() {
   let declarativeEventsTestElement: DeclarativeEventsMixinTestElement;
@@ -23,11 +24,7 @@ suite('Polymer Mixins', function() {
 
   suite('declarative events mixin', function() {
     test('listener registered on window', function() {
-      // Arrange
-      // Act
       window.dispatchEvent(new CustomEvent('tap', {bubbles: false}));
-
-      // Assert
       chai.assert.equal(declarativeEventsTestElement.tapWindowCounter, 1);
     });
   });

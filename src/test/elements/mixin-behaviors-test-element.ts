@@ -9,6 +9,10 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {customElement, observe, property} from '../../decorators';
+
 const TestBehavior = {
   properties: {
     behaviorProperty: {
@@ -18,15 +22,16 @@ const TestBehavior = {
   }
 };
 
-@Polymer
-    .decorators.customElement(
-        'mixin-behaviors-test-element') class MixinBehaviorsTestElement extends
-    Polymer.mixinBehaviors
-([TestBehavior], Polymer.Element) {
-  @Polymer
-      .decorators.property() elementProperty: string = 'elementPropertyValue';
+@customElement('mixin-behaviors-test-element')
+export class MixinBehaviorsTestElement extends mixinBehaviors
+([TestBehavior], PolymerElement) {
+  @property() elementProperty: string = 'elementPropertyValue';
 
-  @Polymer
-      .decorators.observe('elementProperty') observerProperty() {
+  @observe('elementProperty')
+  observerProperty() {
   }
+}
+
+export interface MixinBehaviorsTestElement {
+  behaviorProperty: string;
 }

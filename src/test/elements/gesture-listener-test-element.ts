@@ -9,9 +9,29 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {GestureEventListeners} from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {DeclarativeEventListeners} from '../../declarative-event-listeners';
+import {customElement, listen, property} from '../../decorators';
+
 @customElement('gesture-listener-test-element')
-class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
-(Polymer.GestureEventListeners(Polymer.Element)) {
+export class GestureListenerTestElement extends DeclarativeEventListeners
+(GestureEventListeners(PolymerElement)) {
+  static get template() {
+    return html`
+      <style>
+        .event-area {
+          height: 100px;
+          width: 100px;
+          border: 1px solid #000000;
+          margin: 32px;
+        }
+      </style>
+      <div class="event-area" id="tapRegion"></div>
+    `;
+  }
+
   @property() elementClickCounter: number = 0;
 
   @property() nonGestureElementClickCounter: number = 0;
@@ -21,22 +41,22 @@ class GestureListenerTestElement extends Polymer.DeclarativeEventListeners
   @property() windowClickCounter: number = 0;
 
   @listen('tap', 'tapRegion')
-  elementTapEventHandler(e: Event) {
+  elementTapEventHandler(_e: Event) {
     this.elementClickCounter++;
   }
 
   @listen('tap', document)
-  documentTapEventHandler(e: Event) {
+  documentTapEventHandler(_e: Event) {
     this.documentClickCounter++;
   }
 
   @listen('tap', window)
-  windowTapEventHandler(e: Event) {
+  windowTapEventHandler(_e: Event) {
     this.windowClickCounter++;
   }
 
   @listen('element-event', 'tapRegion')
-  elementEventHandler(e: Event) {
+  elementEventHandler(_e: Event) {
     this.nonGestureElementClickCounter++;
   }
 }

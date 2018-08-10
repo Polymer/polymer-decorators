@@ -9,6 +9,15 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {customElement} from '../decorators';
+import {DeclarativeListenerTestElement} from './elements/declarative-listener-test-element';
+import {ElementWithIs} from './elements/element-with-is';
+import {GestureListenerTestElement} from './elements/gesture-listener-test-element';
+import {MixinBehaviorsTestElement} from './elements/mixin-behaviors-test-element';
+import {TestElement} from './elements/test-element';
+
 declare function fixture(id: string): HTMLElement;
 
 suite('TypeScript Decorators', function() {
@@ -19,10 +28,10 @@ suite('TypeScript Decorators', function() {
   setup(function() {
     testElement = fixture('test-element-fixture') as TestElement;
     gestureListenerTestElement =
-        fixture('gesture-listener-test-element-fixture') as any as
+        fixture('gesture-listener-test-element-fixture') as
         GestureListenerTestElement;
     declarativeListenerTestElement =
-        fixture('declarative-listener-test-element-fixture') as any as
+        fixture('declarative-listener-test-element-fixture') as
         DeclarativeListenerTestElement;
   });
 
@@ -37,19 +46,20 @@ suite('TypeScript Decorators', function() {
     });
 
     test('defines an element with a mixin behavior', function() {
-      const el = fixture('mixin-behaviors-test-element-fixture') as any as
+      const el = fixture('mixin-behaviors-test-element-fixture') as
           MixinBehaviorsTestElement;
       chai.assert.instanceOf(el, MixinBehaviorsTestElement);
       chai.assert.equal(el.elementProperty, 'elementPropertyValue');
-      chai.assert.equal((el as any).behaviorProperty, 'behaviorPropertyValue');
+      chai.assert.equal(el.behaviorProperty, 'behaviorPropertyValue');
     });
 
     test('throws when element names do not match', function() {
       chai.assert.throws(() => {
         @customElement('test-name-1')
-        class TestElement extends Polymer.Element {
+        class TestElement extends PolymerElement {
           static is = 'test-name-2';
         }
+        return TestElement;
       });
       chai.assert.isUndefined(customElements.get('test-name-1'));
       chai.assert.isUndefined(customElements.get('test-name-2'));
@@ -59,14 +69,16 @@ suite('TypeScript Decorators', function() {
   suite('@property', function() {
     test('defines a property', function() {
       testElement.aNum = 999;
-      const numDiv = testElement.shadowRoot.querySelector('#num');
+      const numDiv = testElement.shadowRoot!.querySelector('#num')!;
       const numText = numDiv.textContent;
       chai.assert.equal(numText, '999');
     });
 
     test('merges multiple definitions', function() {
       chai.assert.deepEqual(
-          (TestElement as any).properties.computedWithOptions, {
+          // tslint:disable-next-line:no-any The properties config is not typed.
+          (TestElement as any).properties.computedWithOptions,
+          {
             computed: '__computecomputedWithOptions(dependencyOne)',
             readOnly: true,
             type: String
@@ -142,7 +154,7 @@ suite('TypeScript Decorators', function() {
     test('defines a computed property', function() {
       testElement.dependencyOne = 'foo';
 
-      const compDiv = testElement.shadowRoot.querySelector('#computed');
+      const compDiv = testElement.shadowRoot!.querySelector('#computed')!;
       chai.assert.equal(compDiv.textContent, 'foo');
       chai.assert.equal(testElement.computedOne, 'foo');
     });
@@ -150,7 +162,7 @@ suite('TypeScript Decorators', function() {
     test('defines a computed property with multiple arguments', function() {
       testElement.dependencyOne = 'foo';
 
-      const compDiv = testElement.shadowRoot.querySelector('#computedTwo');
+      const compDiv = testElement.shadowRoot!.querySelector('#computedTwo')!;
 
       chai.assert.equal(compDiv.textContent, 'foo');
       chai.assert.equal(testElement.computedTwo, 'foo');
@@ -179,93 +191,60 @@ suite('TypeScript Decorators', function() {
 
   suite('@listen - declarative listeners', function() {
     test('triggers declarative listener on a element', function() {
-      // Arrange
       const tapRegion =
-          declarativeListenerTestElement.shadowRoot.querySelector('#tapRegion');
+          declarativeListenerTestElement.shadowRoot!.querySelector(
+              '#tapRegion')!;
       chai.assert.equal(declarativeListenerTestElement.elementClickCounter, 0);
-
-      // Act
       tapRegion.dispatchEvent(
           new CustomEvent('element-event', {bubbles: false}));
-
-      // Assert
       chai.assert.equal(declarativeListenerTestElement.elementClickCounter, 1);
     });
 
     test('triggers declarative listener on a document', function() {
-      // Arrange
       chai.assert.equal(declarativeListenerTestElement.documentClickCounter, 0);
-
-      // Act
       document.dispatchEvent(
           new CustomEvent('document-event', {bubbles: false}));
-
-      // Assert
       chai.assert.equal(declarativeListenerTestElement.documentClickCounter, 1);
     });
 
     test('triggers declarative listener on a window', function() {
-      // Arrange
       chai.assert.equal(declarativeListenerTestElement.windowClickCounter, 0);
-
-      // Act
       window.dispatchEvent(new CustomEvent('window-event', {bubbles: false}));
-
-      // Assert
       chai.assert.equal(declarativeListenerTestElement.windowClickCounter, 1);
     });
   });
 
   suite('@listen - gesture listeners', function() {
     test('triggers gesture listener on a element', function() {
-      // Arrange
       const tapRegion =
-          gestureListenerTestElement.shadowRoot.querySelector('#tapRegion');
+          gestureListenerTestElement.shadowRoot!.querySelector('#tapRegion')!;
       chai.assert.equal(gestureListenerTestElement.elementClickCounter, 0);
-
-      // Act
       tapRegion.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-
-      // Assert
       chai.assert.equal(gestureListenerTestElement.elementClickCounter, 1);
     });
 
     test('triggers gesture listener on a document', function() {
-      // Arrange
       chai.assert.equal(gestureListenerTestElement.documentClickCounter, 0);
-
-      // Act
       document.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-
-      // Assert
       chai.assert.equal(gestureListenerTestElement.documentClickCounter, 1);
     });
 
     test('triggers gesture listener on a window', function() {
-      // Arrange
       chai.assert.equal(gestureListenerTestElement.windowClickCounter, 0);
-
-      // Act
       window.dispatchEvent(new CustomEvent('click', {bubbles: true}));
-
-      // Assert
       chai.assert.equal(gestureListenerTestElement.windowClickCounter, 1);
     });
 
     test(
         'triggers non-gesture event on a class extending gesture listeners',
         function() {
-          // Arrange
           const tapRegion =
-              gestureListenerTestElement.shadowRoot.querySelector('#tapRegion');
+              gestureListenerTestElement.shadowRoot!.querySelector(
+                  '#tapRegion')!;
           chai.assert.equal(
               gestureListenerTestElement.nonGestureElementClickCounter, 0);
-
-          // Act
           tapRegion.dispatchEvent(
               new CustomEvent('element-event', {bubbles: false}));
-
-          // Assert
           chai.assert.equal(
               gestureListenerTestElement.nonGestureElementClickCounter, 1);
         });

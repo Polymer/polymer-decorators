@@ -9,27 +9,44 @@
  * rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
+import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+
+import {DeclarativeEventListeners} from '../../declarative-event-listeners';
+import {customElement, listen, property} from '../../decorators';
+
 @customElement('declarative-listener-test-element')
-class DeclarativeListenerTestElement extends Polymer.DeclarativeEventListeners
-(Polymer.Element) {
+export class DeclarativeListenerTestElement extends DeclarativeEventListeners
+(PolymerElement) {
+  static get template() {
+    return html`
+      <style>
+        .event-area {
+          height: 100px;
+          width: 100px;
+          border: 1px solid #000000;
+          margin: 32px;
+        }
+      </style>
+      <div class="event-area" id="tapRegion"></div>
+    `;
+  }
+
   @property() elementClickCounter: number = 0;
-
   @property() documentClickCounter: number = 0;
-
   @property() windowClickCounter: number = 0;
 
   @listen('element-event', 'tapRegion')
-  elementEventHandler(e: Event) {
+  elementEventHandler(_e: Event) {
     this.elementClickCounter++;
   }
 
   @listen('document-event', document)
-  documentEventHandler(e: Event) {
+  documentEventHandler(_e: Event) {
     this.documentClickCounter++;
   }
 
   @listen('window-event', window)
-  windowEventHandler(e: Event) {
+  windowEventHandler(_e: Event) {
     this.windowClickCounter++;
   }
 }

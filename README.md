@@ -1,4 +1,5 @@
-[![Travis Build Status](https://travis-ci.org/Polymer/polymer-decorators.svg?branch=master)](https://travis-ci.org/Polymer/polymer-decorators)
+[![NPM version](http://img.shields.io/npm/v/@polymer/decorators.svg)](https://www.npmjs.com/package/@polymer/decorators)
+[![Travis Build Status](https://travis-ci.org/Polymer/polymer-decorators.svg?branch=master)](https://travis-ci.org/Polymer/polymer-decorators/branches)
 
 # polymer-decorators
 
@@ -10,10 +11,13 @@ components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) with
 way, like this:
 
 ```ts
-@customElement('my-element')
-class MyElement extends Polymer.Element {
+import {PolymerElement} from '@polymer/polymer';
+import {customElement, property} from '@polymer/decorators';
 
-  @property()
+@customElement('my-element')
+class MyElement extends PolymerElement {
+
+  @property({type: String})
   myProperty: string = 'foo';
 }
 ```
@@ -29,38 +33,28 @@ class MyElement extends Polymer.Element {
    - [@query](#queryselector-string)
    - [@queryAll](#queryallselector-string)
    - [@listen](#listeneventname-string-target-stringeventtarget)
-- [Metadata Reflection API](#metadata-reflection-api)
 - [FAQ](#faq)
    - [Do I need this library to use Polymer and Typescript?](#do-i-need-this-library-to-use-polymer-and-typescript)
    - [What are the performance costs?](#what-are-the-performance-costs)
-   - [Does it work with Polymer 3.0?](#does-it-work-with-polymer-30)
-   - [Does it work with Polymer 1.0 or 0.5?](#does-it-work-with-polymer-10-or-05)
+   - [Does it work with previous versions of Polymer?](#does-it-work-with-previous-versions-of-polymer)
+   - [What happened to Metadata Reflection support?](#what-happened-to-metadata-reflection-support)
 
 
 ## Installation
 
-1. Install the decorators with Bower (NPM support coming with Polymer 3.0):
+1. Install the decorators with NPM.
 
    ```sh
-   bower install --save Polymer/polymer-decorators
+   npm install --save @polymer/decorators
    ```
 
-2. Import the decorator library in your component definitions:
+2. Import decorators in your component definitions:
 
-   ```html
-   <link rel="import" href="/bower_components/polymer-decorators/polymer-decorators.html">
+   ```js
+   import {customElement, property} from '@polymer/decorators';
    ```
 
-3. Include type declarations for Polymer (available as of version 2.4) and the
-   Polymer decorators in one your TypeScript source files. You can also add
-   them as sources in your `tsconfig.json` with `include` or `files`.
-
-   ```ts
-   /// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
-   /// <reference path="./bower_components/polymer-decorators/polymer-decorators.d.ts" />
-   ```
-
-4. Enable the
+3. Enable the
    [`experimentalDecorators`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
    TypeScript compiler setting. Use the `--experimentalDecorators` flag, or
    update your `tsconfig.json` to include:
@@ -73,20 +67,7 @@ class MyElement extends Polymer.Element {
    }
    ```
 
-5. Optionally [configure Metadata Reflection](#metadata-reflection-api) to
-   define property types more concisely.
-
-
 ## Decorator reference
-
-These decorator factory functions are defined on the `Polymer.decorators`
-global namespace object. You can refer to them directly (e.g.
-`@Polymer.decorators.customElement()`), or you may prefer to assign them to
-shorter variables:
-
-```ts
-const {customElement, property} = Polymer.decorators;
-```
 
 ### `@customElement(tagname?: string)`
 
@@ -104,7 +85,7 @@ with your class, so you should not include your own call to that function.
 
 ```ts
 @customElement('my-element')
-class MyElement extends Polymer.Element {
+class MyElement extends PolymerElement {
   ...
 }
 ```
@@ -113,14 +94,10 @@ class MyElement extends Polymer.Element {
 Define a Polymer property.
 
 `options` is a [Polymer property
-options](https://www.polymer-project.org/2.0/docs/devguide/properties) object.
+options](https://www.polymer-project.org/3.0/docs/devguide/properties) object.
 All standard options are supported, except for `value`; use a property
-initializer instead.
-
-If the [Metadata Reflection API](#metadata-reflection-api) is configured, the
-`type` option (which determines how Polymer de-serializes Element attributes
-for this property) will be inferred from the TypeScript type and can be
-omitted.
+initializer instead. `type` is required, and must be one of the Polymer property
+constructor types (`String`, `Object`, etc.).
 
 ```ts
 @property({type: String, notify: true})
@@ -130,7 +107,7 @@ foo: string = 'hello';
 ### `@computed(...targets: string[])`
 
 Define a [computed
-property](https://www.polymer-project.org/2.0/docs/devguide/observers#computed-properties).
+property](https://www.polymer-project.org/3.0/docs/devguide/observers#computed-properties).
 
 This decorator must be applied to a
 [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get),
@@ -153,7 +130,7 @@ splices, wildcards, etc.), or to set additional property options, define a
 standard property and set its `computed` option.
 
 ```ts
-@property({computed: 'computeBaz(foo.*)', reflectToAttribute: true})
+@property({computed: 'computeBaz(foo.*)', reflectToAttribute: true, type: String})
 baz: string;
 
 private computeBaz(fooChangeRecord: object) {
@@ -164,7 +141,7 @@ private computeBaz(fooChangeRecord: object) {
 ### `@observe(...targets: string[])`
 
 Define a [complex property
-observer](https://www.polymer-project.org/2.0/docs/devguide/observers#complex-observers).
+observer](https://www.polymer-project.org/3.0/docs/devguide/observers#complex-observers).
 
 `targets` can be a single dependency expression, or an array of them. All
 observer dependency syntaxes are supported (property names, sub-properties,
@@ -183,13 +160,13 @@ private bazChanged(changeRecord: object) {
 ```
 
 To define a [simple property
-observer](https://www.polymer-project.org/2.0/docs/devguide/observers#simple-observers),
+observer](https://www.polymer-project.org/3.0/docs/devguide/observers#simple-observers),
 which receives both the old and new values, set the `observer` option on the
 property you want to observe to the observer name or (preferably) function
 reference.
 
 ```ts
-@property({observer: MyElement.prototype.bazChanged})
+@property({observer: MyElement.prototype.bazChanged, type: String})
 baz: string;
 
 private bazChanged(oldValue: string, newValue: string) {
@@ -232,14 +209,13 @@ top-level element template (e.g. not in a `<dom-if>`), because the `$` id map
 is used to find the target upon `ready()`.
 
 To use `@listen`, your element must apply the
-[`DeclarativeEventListeners`](https://github.com/Polymer/polymer-decorators/blob/master/mixins/declarative-event-listeners.html)
+[`DeclarativeEventListeners`](https://github.com/Polymer/polymer-decorators/blob/master/src/declarative-event-listeners.js)
 mixin, which is supplied with this package.
 
 ```ts
-/// <reference path="./bower_components/polymer-decorators/mixins/declarative-event-listeners.d.ts" />
+import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
 
-class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
-
+class MyElement extends DeclarativeEventListeners(PolymerElement) {
   @listen('scroll', document)
   onDocumentScroll(event: Event) {
     this.scratchChalkboard();
@@ -248,16 +224,19 @@ class MyElement extends Polymer.DeclarativeEventListeners(Polymer.Element) {
 ```
 
 Note that to listen for Polymer [gesture
-events](https://www.polymer-project.org/2.0/docs/devguide/gesture-events) such
+events](https://www.polymer-project.org/3.0/docs/devguide/gesture-events) such
 as `tap` and `track`, your element must also apply the
-[`GestureEventListeners`](https://github.com/Polymer/polymer/blob/master/lib/mixins/gesture-event-listeners.html)
+[`GestureEventListeners`](https://github.com/Polymer/polymer/blob/master/lib/mixins/gesture-event-listeners.js)
 mixin, which is supplied with Polymer.
 
 ```ts
+import {GestureEventListeners} from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
+
 class MyElement extends
-    Polymer.GestureEventListeners(
-    Polymer.DeclarativeEventListeners(
-    Polymer.Element)) {
+    GestureEventListeners(
+    DeclarativeEventListeners(
+    PolymerElement)) {
 
   @listen('tap', 'red-button')
   onTapRedButton(event: Event) {
@@ -266,109 +245,56 @@ class MyElement extends
 }
 ```
 
-
-## Metadata Reflection API
-
-To annotate your Polymer property types more concisely, you may configure
-experimental support for the [Metadata Reflection
-API](https://rbuckton.github.io/reflect-metadata/). Note that this API is [not
-yet a formal ECMAScript
-proposal](https://github.com/rbuckton/reflect-metadata/issues/9), but a
-polyfill is available, and TypeScript has experimental support.
-
-Also note that the Metadata Reflection polyfill is **47 KB** (7 KB gzipped), so
-be sure to consider strongly whether the cost of shipping this polyfill is
-worth the convenience for your project.
-
-Without Metadata Reflection, the Polymer property type must be passed
-explicitly to the decorator factory, because type information is not otherwise
-available at runtime:
-
-```ts
-@property({type: String})
-myProperty: string;
-```
-
-With Metadata Reflection, the TypeScript type annotation alone is sufficient,
-because the compiler will emit type information that the decorator can use to
-automatically set the Polymer property type:
-
-```ts
-@property()
-myProperty: string;
-```
-
-To enable Metadata Reflection:
-
-1. Enable the
-   [`emitDecoratorMetadata`](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
-   TypeScript compiler setting. Use the `--emitDecoratorMetadata` flag, or
-   update your `tsconfig.json` to include:
-
-   ```js
-   {
-     "compilerOptions": {
-       "emitDecoratorMetadata": true
-     }
-   }
-   ```
-
-2. Install the Metadata Reflection API runtime polyfill from
-   [rbuckton/reflect-metadata](https://github.com/rbuckton/reflect-metadata):
-
-   ```sh
-   bower install --save rbuckton/reflect-metadata
-   ```
-
-3. Load the polyfill at the top-level of your application, and in your tests:
-
-   ```html
-   <script src="/bower_components/reflect-metadata/Reflect.js"></script>
-   ```
-
-
 ## FAQ
 
 ### Do I need this library to use Polymer and TypeScript?
-No, you can also use Polymer and TypeScript without additional client
-libraries. As of Polymer 2.4, TypeScript type declarations are available in the
-[`types/`](https://github.com/Polymer/polymer/tree/master/types) directory. The
-advantage of using these decorators are additional type safety and convenience.
-For simple elements and applications, it may be preferable to use the vanilla
-Polymer API, like this:
+No, you can also use Polymer and TypeScript without any additional libraries.
+Polymer 3.0 ships with declarations to let you use the API with TypeScript
+directly.  The advantage of using these decorators are additional type safety
+and convenience. For simple elements and applications, it may be preferable to
+use the vanilla Polymer API, like this:
 
 ```ts
-/// <reference path="./bower_components/polymer/types/polymer-element.d.ts" />
+import {PolymerElement, html} from '@polymer/polymer';
 
-class MyElement extends Polymer.Element {
-  static is = 'my-element';
-
-  static properties = {
-    myProperty: {
-      type: String
-    }
+class MyElement extends PolymerElement {
+  static get properties() {
+    myProperty: String
   };
+
+  static get template() {
+    return html`<p>Hello World</p>`;
+  }
 
   myProperty: string = 'foo';
 }
 
-customElements.define(MyElement.is, MyElement);
+customElements.define('my-element', MyElement);
 ```
 
 ### What are the performance costs?
-The additional JavaScript served for this library is aproximately 8 KB (4 KB
-gzipped). Benchmarks are not currently available, but we expect minor
-performance costs. The library generally works by building standard Polymer
-property definitions at element definition time, so performance costs should be
-seen at application startup.
+The additional JavaScript served for this library is approximately 2KB gzipped
+(0.6KB minified + gzipped). Benchmarks are not currently available, but we
+expect minor performance costs. The library generally works by building standard
+Polymer property definitions at element definition time, so performance costs
+should be seen at application startup.
 
-### Does it work with Polymer 3.0?
-Not yet, but support is planned. See issue
-[#10](https://github.com/Polymer/polymer-decorators/issues/10).
+### Does it work with previous versions of Polymer?
+An earlier version of this library can be used with Polymer 2.0, and installed
+with Bower. See the
+[`2.x`](https://github.com/Polymer/polymer-decorators/tree/2.x) branch.
 
-### Does it work with Polymer 1.0 or 0.5?
-No, this library is not compatible with Polymer 1.0 or earlier, because it
-depends on the ES6 class-based component definition style introduced in Polymer
-2.0.  Community-maintained TypeScript decorator options for Polymer 1.0 include
+This library is not compatible with Polymer 1.0 or earlier, because it depends
+on the ES6 class-based component definition style introduced in Polymer 2.0.
+Community-maintained TypeScript decorator options for Polymer 1.0 include
 [nippur72/PolymerTS](https://github.com/nippur72/PolymerTS) and
 [Cu3PO42/polymer-decorators](https://github.com/Cu3PO42/polymer-decorators).
+
+### What happened to Metadata Reflection support?
+Support for the [Metadata Reflection
+API](https://rbuckton.github.io/reflect-metadata/) was removed in version
+`3.0.0`. This was done primarily because the type metadata emitted by TypeScript
+is often incorrect for our purpose (e.g. `string|undefined` produces `Object`
+instead of `String`), leading to unexpected bugs. Additionally, the required
+polyfill is fairly large (7KB gzipped), and standardization of the proposal does
+not currently appear to be progressing.
