@@ -255,12 +255,16 @@ and convenience. For simple elements and applications, it may be preferable to
 use the vanilla Polymer API, like this:
 
 ```ts
-import {PolymerElement} from '@polymer/polymer';
+import {PolymerElement, html} from '@polymer/polymer';
 
 class MyElement extends PolymerElement {
-  static properties = {
+  static get properties() {
     myProperty: String
   };
+
+  static get template() {
+    return html`<p>Hello World</p>`;
+  }
 
   myProperty: string = 'foo';
 }
@@ -269,11 +273,11 @@ customElements.define('my-element', MyElement);
 ```
 
 ### What are the performance costs?
-The additional JavaScript served for this library is approximately 2 KB gzipped.
-Benchmarks are not currently available, but we expect minor performance costs.
-The library generally works by building standard Polymer property definitions at
-element definition time, so performance costs should be seen at application
-startup.
+The additional JavaScript served for this library is approximately 2KB gzipped
+(0.6KB minified + gzipped). Benchmarks are not currently available, but we
+expect minor performance costs. The library generally works by building standard
+Polymer property definitions at element definition time, so performance costs
+should be seen at application startup.
 
 ### Does it work with previous versions of Polymer?
 An earlier version of this library can be used with Polymer 2.0, and installed
