@@ -269,11 +269,11 @@ customElements.define('my-element', MyElement);
 ```
 
 ### What are the performance costs?
-The additional JavaScript served for this library is approximately 6 KB (2 KB
-gzipped). Benchmarks are not currently available, but we expect minor
-performance costs. The library generally works by building standard Polymer
-property definitions at element definition time, so performance costs should be
-seen at application startup.
+The additional JavaScript served for this library is approximately 2 KB gzipped.
+Benchmarks are not currently available, but we expect minor performance costs.
+The library generally works by building standard Polymer property definitions at
+element definition time, so performance costs should be seen at application
+startup.
 
 ### Does it work with previous versions of Polymer?
 An earlier version of this library can be used with Polymer 2.0, and installed
@@ -292,5 +292,5 @@ API](https://rbuckton.github.io/reflect-metadata/) was removed in version
 `3.0.0`. This was done primarily because the type metadata emitted by TypeScript
 is often incorrect for our purpose (e.g. `string|undefined` produces `Object`
 instead of `String`), leading to unexpected bugs. Additionally, the required
-polyfill is large (47KB, 7KB gzipped), and standardization of the proposal does
+polyfill is fairly large (7KB gzipped), and standardization of the proposal does
 not currently appear to be progressing.
