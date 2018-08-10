@@ -61,9 +61,6 @@ export function customElement(tagname?: string) {
  * See https://www.polymer-project.org/2.0/docs/devguide/properties.
  */
 export interface PropertyOptions {
-  /**
-   * This field can be omitted if the Metadata Reflection API is configured.
-   */
   type?: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
       ArrayConstructor|ObjectConstructor;
   notify?: boolean;
@@ -73,42 +70,15 @@ export interface PropertyOptions {
   observer?: string|((val: {}, old: {}) => void);
 }
 
-interface Reflect {
-  hasMetadata?:
-      (metadataKey: string, proto: object, targetKey: string) => boolean;
-  getMetadata?: (metadataKey: string, proto: object, targetKey: string) =>
-      object | undefined;
-}
-
 function createProperty(
     proto: ElementPrototype, name: string, options?: PropertyOptions): void {
   if (!proto.constructor.hasOwnProperty('properties')) {
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }
-
-  const finalOpts: PropertyOptions = {
+  proto.constructor.properties![name] = {
     ...proto.constructor.properties![name],
     ...options,
   };
-
-  if (!finalOpts.type) {
-    const isComputed = options && options.computed;
-    const reflect = (window as {Reflect?: Reflect}).Reflect;
-    if (reflect && reflect.hasMetadata && reflect.getMetadata &&
-        reflect.hasMetadata('design:type', proto, name)) {
-      finalOpts.type = reflect.getMetadata('design:type', proto, name) as
-          PropertyOptions['type'];
-    } else if (!isComputed) {
-      // No need to warn if a computed property doesn't have a type. The type is
-      // only used for attribute de-serialization, which never happens with
-      // computed properties, because they are read-only.
-      console.warn(
-          `A type could not be found for ${name}. ` +
-          'Set a type or configure Metadata Reflection API support.');
-    }
-  }
-
-  proto.constructor.properties![name] = finalOpts;
 }
 
 /**
