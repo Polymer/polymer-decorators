@@ -1,4 +1,4 @@
-[![NPM version](http://img.shields.io/npm/v/@polymer/polymer-decorators.svg)](https://www.npmjs.com/package/@polymer/polymer-decorators)
+[![NPM version](http://img.shields.io/npm/v/@polymer/decorators.svg)](https://www.npmjs.com/package/@polymer/decorators)
 [![Travis Build Status](https://travis-ci.org/Polymer/polymer-decorators.svg?branch=master)](https://travis-ci.org/Polymer/polymer-decorators/branches)
 
 # polymer-decorators
@@ -12,7 +12,7 @@ way, like this:
 
 ```ts
 import {PolymerElement} from '@polymer/polymer';
-import {customElement, property} from '@polymer/polymer-decorators';
+import {customElement, property} from '@polymer/decorators';
 
 @customElement('my-element')
 class MyElement extends PolymerElement {
@@ -45,13 +45,13 @@ class MyElement extends PolymerElement {
 1. Install the decorators with NPM.
 
    ```sh
-   npm install --save @polymer/polymer-decorators
+   npm install --save @polymer/decorators
    ```
 
 2. Import decorators in your component definitions:
 
    ```js
-   import {customElement, property} from '@polymer/polymer-decorators';
+   import {customElement, property} from '@polymer/decorators';
    ```
 
 3. Enable the
@@ -213,7 +213,7 @@ To use `@listen`, your element must apply the
 mixin, which is supplied with this package.
 
 ```ts
-import {DeclarativeEventListeners} from '@polymer/polymer-decorators/lib/declarative-event-listeners.js';
+import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
 
 class MyElement extends DeclarativeEventListeners(PolymerElement) {
   @listen('scroll', document)
@@ -231,7 +231,7 @@ mixin, which is supplied with Polymer.
 
 ```ts
 import {GestureEventListeners} from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import {DeclarativeEventListeners} from '@polymer/polymer-decorators/lib/declarative-event-listeners.js';
+import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
 
 class MyElement extends
     GestureEventListeners(
