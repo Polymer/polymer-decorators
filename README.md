@@ -96,7 +96,8 @@ Define a Polymer property.
 `options` is a [Polymer property
 options](https://www.polymer-project.org/3.0/docs/devguide/properties) object.
 All standard options are supported, except for `value`; use a property
-initializer instead. `type` is required.
+initializer instead. `type` is required, and must be one of the Polymer property
+constructor types (`String`, `Object`, etc.).
 
 ```ts
 @property({type: String, notify: true})
