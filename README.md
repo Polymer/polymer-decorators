@@ -17,7 +17,7 @@ import {customElement, property} from '@polymer/polymer-decorators';
 @customElement('my-element')
 class MyElement extends PolymerElement {
 
-  @property()
+  @property({type: String})
   myProperty: string = 'foo';
 }
 ```
@@ -96,7 +96,7 @@ Define a Polymer property.
 `options` is a [Polymer property
 options](https://www.polymer-project.org/3.0/docs/devguide/properties) object.
 All standard options are supported, except for `value`; use a property
-initializer instead.
+initializer instead. `type` is required.
 
 ```ts
 @property({type: String, notify: true})
@@ -129,7 +129,7 @@ splices, wildcards, etc.), or to set additional property options, define a
 standard property and set its `computed` option.
 
 ```ts
-@property({computed: 'computeBaz(foo.*)', reflectToAttribute: true})
+@property({computed: 'computeBaz(foo.*)', reflectToAttribute: true, type: String})
 baz: string;
 
 private computeBaz(fooChangeRecord: object) {
@@ -165,7 +165,7 @@ property you want to observe to the observer name or (preferably) function
 reference.
 
 ```ts
-@property({observer: MyElement.prototype.bazChanged})
+@property({observer: MyElement.prototype.bazChanged, type: String})
 baz: string;
 
 private bazChanged(oldValue: string, newValue: string) {

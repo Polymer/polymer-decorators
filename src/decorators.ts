@@ -60,7 +60,7 @@ export function customElement(tagname?: string) {
  * See https://www.polymer-project.org/2.0/docs/devguide/properties.
  */
 export interface PropertyOptions {
-  type?: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
+  type: BooleanConstructor|DateConstructor|NumberConstructor|StringConstructor|
       ArrayConstructor|ObjectConstructor;
   notify?: boolean;
   reflectToAttribute?: boolean;
@@ -70,7 +70,8 @@ export interface PropertyOptions {
 }
 
 function createProperty(
-    proto: ElementPrototype, name: string, options?: PropertyOptions): void {
+    proto: ElementPrototype, name: string, options?: Partial<PropertyOptions>):
+    void {
   if (!proto.constructor.hasOwnProperty('properties')) {
     Object.defineProperty(proto.constructor, 'properties', {value: {}});
   }

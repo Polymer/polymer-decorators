@@ -24,22 +24,24 @@ export class TestElement extends PolymerElement {
     `;
   }
 
-  @property({notify: true}) aNum: number = 42;
+  @property({notify: true, type: Number}) aNum: number = 42;
 
   @property() doesntNotify: boolean = true;
 
-  @property({notify: true}) aString: string = 'yes';
+  @property({notify: true, type: String}) aString: string = 'yes';
 
   @property() aBool: boolean = true;
 
-  @property({reflectToAttribute: true}) reflectedString: string = 'yahoo';
+  @property({reflectToAttribute: true, type: String})
+  reflectedString: string = 'yahoo';
 
-  @property({readOnly: true}) readOnlyString: string = '';
+  @property({readOnly: true, type: String}) readOnlyString: string = '';
 
-  @property({computed: 'computeString(reflectedString)'})
+  @property({computed: 'computeString(reflectedString)', type: String})
   computedString!: string;
 
-  @property({observer: 'observeString'}) observedString: string = '';
+  @property({observer: 'observeString', type: String})
+  observedString: string = '';
 
   @property() dependencyOne: string = '';
 
