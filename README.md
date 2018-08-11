@@ -259,7 +259,9 @@ import {PolymerElement, html} from '@polymer/polymer';
 
 class MyElement extends PolymerElement {
   static get properties() {
-    myProperty: String
+    return {
+      myProperty: String
+    };
   };
 
   static get template() {
