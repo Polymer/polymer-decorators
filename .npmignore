@@ -1,8 +1,11 @@
 src/
 lib/test/
 
+.github/
 .clang-format
+.editorconfig
+.travis.yml
 tsconfig.json
-rollup.config.js
+tslint.json
+wct.conf.json
 polymer-decorators*.tgz
-bower.json
