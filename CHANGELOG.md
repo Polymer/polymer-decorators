@@ -1,6 +1,8 @@
 # Change Log
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [3.0.0] - 2018-08-10
 - Updated for Polymer 3.0.
 - Now distributed on NPM as
   [`@polymer/decorators`](https://www.npmjs.com/packages/@polymer/decorators).
