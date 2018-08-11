@@ -5,7 +5,7 @@
 ## [3.0.0] - 2018-08-10
 - Updated for Polymer 3.0.
 - Now distributed on NPM as
-  [`@polymer/decorators`](https://www.npmjs.com/packages/@polymer/decorators).
+  [`@polymer/decorators`](https://www.npmjs.com/package/@polymer/decorators).
   Bower is no longer supported.
 - [BREAKING] Dropped support for Polymer 2.0. See the
   [`2.x`](https://github.com/Polymer/polymer-decorators/tree/2.x) branch for the
