@@ -1,6 +1,8 @@
 # Change Log
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+- Add `@ExportDecoratedItems` annotation to `@query` and `@queryAll` (used by
+  tsickle).
 
 ## [3.0.0] - 2018-08-10
 - Updated for Polymer 3.0.
