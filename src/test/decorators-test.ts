@@ -46,7 +46,7 @@ suite('TypeScript Decorators', function() {
     });
 
     test('defines an element with a mixin behavior', function() {
-      const el = fixture('mixin-behaviors-test-element-fixture') as
+      const el = fixture('mixin-behaviors-test-element-fixture') as unknown as
           MixinBehaviorsTestElement;
       chai.assert.instanceOf(el, MixinBehaviorsTestElement);
       chai.assert.equal(el.elementProperty, 'elementPropertyValue');

@@ -22,16 +22,19 @@ const TestBehavior = {
   }
 };
 
+interface TestBehaviorInterface {
+  behaviorProperty: string;
+}
+
+const base = mixinBehaviors([TestBehavior], PolymerElement) as
+    // tslint:disable-next-line:no-any Required for constructor signature.
+    new (...args: any[]) => (PolymerElement & TestBehaviorInterface);
+
 @customElement('mixin-behaviors-test-element')
-export class MixinBehaviorsTestElement extends mixinBehaviors
-([TestBehavior], PolymerElement) {
+export class MixinBehaviorsTestElement extends base {
   @property() elementProperty: string = 'elementPropertyValue';
 
   @observe('elementProperty')
   observerProperty() {
   }
-}
-
-export interface MixinBehaviorsTestElement {
-  behaviorProperty: string;
 }
