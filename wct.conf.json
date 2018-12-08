@@ -22,6 +22,11 @@
       "disabled": true,
       "browsers": [
         {
+          "browserName": "firefox",
+          "platform": "Linux",
+          "version": "latest"
+        },
+        {
           "browserName": "internet explorer",
           "platform": "Windows 8.1",
           "version": "11"

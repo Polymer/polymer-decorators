@@ -5,7 +5,6 @@ node_js: node
 
 addons:
   chrome: stable
-  firefox: latest
   sauce_connect: true
 
 env:

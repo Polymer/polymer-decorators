@@ -147,10 +147,19 @@ export function computed<P extends string, El extends ElementPrototype&
  * By annotating the property with the correct type, elements can have
  * type-checked access to internal elements.
  *
- * This function must be invoked to return a decorator.
+ * @ExportDecoratedItems
  */
-export const query = _query(
-    (target: NodeSelector, selector: string) => target.querySelector(selector));
+export function query(selector: string) {
+  return (proto: ElementPrototype, propName: string) => {
+    Object.defineProperty(proto, propName, {
+      get(this: HTMLElement) {
+        return this.shadowRoot!.querySelector(selector);
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  };
+}
 
 /**
  * A TypeScript property decorator factory that converts a class property into
@@ -161,24 +170,14 @@ export const query = _query(
  * with the correct type argument.
  *
  * This function must be invoked to return a decorator.
- */
-export const queryAll = _query(
-    (target: NodeSelector, selector: string) =>
-        target.querySelectorAll(selector));
-
-/**
- * Creates a decorator function that accepts a selector, and replaces a
- * property with a getter than executes the selector with the given queryFn
  *
- * @param queryFn A function that executes a query with a selector
+ * @ExportDecoratedItems
  */
-function _query(
-    queryFn: (target: NodeSelector, selector: string) =>
-        Element | NodeList | null) {
-  return (selector: string) => (proto: ElementPrototype, propName: string) => {
+export function queryAll(selector: string) {
+  return (proto: ElementPrototype, propName: string) => {
     Object.defineProperty(proto, propName, {
       get(this: HTMLElement) {
-        return queryFn(this.shadowRoot!, selector);
+        return this.shadowRoot!.querySelectorAll(selector);
       },
       enumerable: true,
       configurable: true,
