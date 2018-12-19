@@ -209,7 +209,7 @@ top-level element template (e.g. not in a `<dom-if>`), because the `$` id map
 is used to find the target upon `ready()`.
 
 To use `@listen`, your element must apply the
-[`DeclarativeEventListeners`](https://github.com/Polymer/polymer-decorators/blob/master/src/declarative-event-listeners.js)
+[`DeclarativeEventListeners`](https://github.com/Polymer/polymer-decorators/blob/master/src/declarative-event-listeners.ts)
 mixin, which is supplied with this package.
 
 ```ts
