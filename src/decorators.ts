@@ -186,7 +186,7 @@ export function queryAll(selector: string) {
 }
 
 export type HasEventListener<P extends string> = {
-  [K in P]: (e: Event) => void
+  [K in P]: <E extends Event>(e: E) => void
 };
 
 /**
