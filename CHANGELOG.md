@@ -3,6 +3,10 @@
 ## [Unreleased]
 - Add `@ExportDecoratedItems` annotation to `@query` and `@queryAll` (used by
   tsickle).
+- The `@listen` decorator allows event handler functions that accept any
+  subtype of Event. So you can write an event listener that accepts e.g.
+  KeyboardEvent. Note that the relationship between the event name and
+  the event subtype is not checked.
 
 ## [3.0.0] - 2018-08-10
 - Updated for Polymer 3.0.
