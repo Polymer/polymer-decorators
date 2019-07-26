@@ -67,6 +67,8 @@ export interface PropertyOptions {
   readOnly?: boolean;
   computed?: string;
   observer?: string|((val: {}, old: {}) => void);
+  // for support polymer-redux in polymer
+  statePath?: string;
 }
 
 function createProperty(
