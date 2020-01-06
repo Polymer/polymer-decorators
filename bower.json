@@ -17,6 +17,6 @@
     "polymer-decorators*.tgz"
   ],
   "dependencies": {
-    "Polymer/polymer": "^2.4"
+    "polymer": "Polymer/polymer#^2.4"
   }
 }
