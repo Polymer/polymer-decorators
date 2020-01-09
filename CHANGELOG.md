@@ -21,6 +21,10 @@
 - [BREAKING] Dropped support for the Metadata Reflection API. All properties
   must now explicitly set a `type`.
 
+## [2.1.1] - 2020-01-09
+- Fix incorrectly formatted Polymer dependency that caused `ENOTFOUND` errors
+  (#85).
+
 ## [2.1.0] - 2018-06-21
 - Add @ExportDecoratedItems annotations to decorators, for use by tsickle.
 
