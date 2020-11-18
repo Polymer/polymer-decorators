@@ -169,7 +169,7 @@ reference.
 @property({observer: MyElement.prototype.bazChanged, type: String})
 baz: string;
 
-private bazChanged(oldValue: string, newValue: string) {
+private bazChanged(newValue: string, oldValue: string) {
   console.log(`baz was: ${oldValue}, and is now: ${newValue}`);
 }
 ```
