@@ -2,8 +2,11 @@
 
 > [!WARNING]
 > These decorators assume the TypeScript experimental decorator API. The TypeScript team [plans](https://github.com/microsoft/TypeScript/issues/45995#issuecomment-2291606365) to deprecate it in v6.0 of the TypeScript compiler, and remove it in v6.5. Based on their three-month release cadence, v6.5 will be released around the end of 2026.
+>
 > Existing deployments will work indefinitely, and code can still be built with older versions of the TypeScript compiler.
+>
 > Given the low usage of these decorators (~0.05% of Polymer's usage), we do not plan to update this library to use the standard decorators API. If this is a blocker for you, please let us know by opening an issue or reaching out on [the Lit Discord](https://lit.dev/discord/).
+>
 > For those codebases that use these decorators and plan to continue to update their TypeScript compiler in 2027 and beyond, we'd recommend removing the decorators from your TypeScript code and [writing it similarly to how you would write it in JavaScript](#do-i-need-this-library-to-use-polymer-and-typescript).
 
 # polymer-decorators
@@ -16,14 +19,13 @@ components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) with
 way, like this:
 
 ```ts
-import {PolymerElement} from '@polymer/polymer';
-import {customElement, property} from '@polymer/decorators';
+import { PolymerElement } from "@polymer/polymer";
+import { customElement, property } from "@polymer/decorators";
 
-@customElement('my-element')
+@customElement("my-element")
 class MyElement extends PolymerElement {
-
-  @property({type: String})
-  myProperty: string = 'foo';
+  @property({ type: String })
+  myProperty: string = "foo";
 }
 ```
 
@@ -31,19 +33,18 @@ class MyElement extends PolymerElement {
 
 - [Installation](#installation)
 - [Decorator reference](#decorator-reference)
-   - [@customElement](#customelementtagname-string)
-   - [@property](#propertyoptions-propertyobjects)
-   - [@computed](#computedtargets-string)
-   - [@observe](#observetargets-string)
-   - [@query](#queryselector-string)
-   - [@queryAll](#queryallselector-string)
-   - [@listen](#listeneventname-string-target-stringeventtarget)
+  - [@customElement](#customelementtagname-string)
+  - [@property](#propertyoptions-propertyobjects)
+  - [@computed](#computedtargets-string)
+  - [@observe](#observetargets-string)
+  - [@query](#queryselector-string)
+  - [@queryAll](#queryallselector-string)
+  - [@listen](#listeneventname-string-target-stringeventtarget)
 - [FAQ](#faq)
-   - [Do I need this library to use Polymer and Typescript?](#do-i-need-this-library-to-use-polymer-and-typescript)
-   - [What are the performance costs?](#what-are-the-performance-costs)
-   - [Does it work with previous versions of Polymer?](#does-it-work-with-previous-versions-of-polymer)
-   - [What happened to Metadata Reflection support?](#what-happened-to-metadata-reflection-support)
-
+  - [Do I need this library to use Polymer and Typescript?](#do-i-need-this-library-to-use-polymer-and-typescript)
+  - [What are the performance costs?](#what-are-the-performance-costs)
+  - [Does it work with previous versions of Polymer?](#does-it-work-with-previous-versions-of-polymer)
+  - [What happened to Metadata Reflection support?](#what-happened-to-metadata-reflection-support)
 
 ## Installation
 
@@ -56,7 +57,7 @@ class MyElement extends PolymerElement {
 2. Import decorators in your component definitions:
 
    ```js
-   import {customElement, property} from '@polymer/decorators';
+   import { customElement, property } from "@polymer/decorators";
    ```
 
 3. Enable the
@@ -96,6 +97,7 @@ class MyElement extends PolymerElement {
 ```
 
 ### `@property(options?: PropertyObjects)`
+
 Define a Polymer property.
 
 `options` is a [Polymer property
@@ -218,10 +220,10 @@ To use `@listen`, your element must apply the
 mixin, which is supplied with this package.
 
 ```ts
-import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
+import { DeclarativeEventListeners } from "@polymer/decorators/lib/declarative-event-listeners.js";
 
 class MyElement extends DeclarativeEventListeners(PolymerElement) {
-  @listen('scroll', document)
+  @listen("scroll", document)
   onDocumentScroll(event: Event) {
     this.scratchChalkboard();
   }
@@ -235,15 +237,13 @@ as `tap` and `track`, your element must also apply the
 mixin, which is supplied with Polymer.
 
 ```ts
-import {GestureEventListeners} from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import {DeclarativeEventListeners} from '@polymer/decorators/lib/declarative-event-listeners.js';
+import { GestureEventListeners } from "@polymer/polymer/lib/mixins/gesture-event-listeners.js";
+import { DeclarativeEventListeners } from "@polymer/decorators/lib/declarative-event-listeners.js";
 
-class MyElement extends
-    GestureEventListeners(
-    DeclarativeEventListeners(
-    PolymerElement)) {
-
-  @listen('tap', 'red-button')
+class MyElement extends GestureEventListeners(
+  DeclarativeEventListeners(PolymerElement)
+) {
+  @listen("tap", "red-button")
   onTapRedButton(event: Event) {
     this.launchMissile();
   }
@@ -253,33 +253,35 @@ class MyElement extends
 ## FAQ
 
 ### Do I need this library to use Polymer and TypeScript?
+
 No, you can also use Polymer and TypeScript without any additional libraries.
 Polymer 3.0 ships with declarations to let you use the API with TypeScript
-directly.  The advantage of using these decorators are additional type safety
+directly. The advantage of using these decorators are additional type safety
 and convenience. For simple elements and applications, it may be preferable to
 use the vanilla Polymer API, like this:
 
 ```ts
-import {PolymerElement, html} from '@polymer/polymer';
+import { PolymerElement, html } from "@polymer/polymer";
 
 class MyElement extends PolymerElement {
   static get properties() {
     return {
-      myProperty: String
+      myProperty: String,
     };
-  };
+  }
 
   static get template() {
     return html`<p>Hello World</p>`;
   }
 
-  myProperty: string = 'foo';
+  myProperty: string = "foo";
 }
 
-customElements.define('my-element', MyElement);
+customElements.define("my-element", MyElement);
 ```
 
 ### What are the performance costs?
+
 The additional JavaScript served for this library is approximately 2KB gzipped
 (0.6KB minified + gzipped). Benchmarks are not currently available, but we
 expect minor performance costs. The library generally works by building standard
@@ -287,6 +289,7 @@ Polymer property definitions at element definition time, so performance costs
 should be seen at application startup.
 
 ### Does it work with previous versions of Polymer?
+
 An earlier version of this library can be used with Polymer 2.0, and installed
 with Bower. See the
 [`2.x`](https://github.com/Polymer/polymer-decorators/tree/2.x) branch.
@@ -298,6 +301,7 @@ Community-maintained TypeScript decorator options for Polymer 1.0 include
 [Cu3PO42/polymer-decorators](https://github.com/Cu3PO42/polymer-decorators).
 
 ### What happened to Metadata Reflection support?
+
 Support for the [Metadata Reflection
 API](https://rbuckton.github.io/reflect-metadata/) was removed in version
 `3.0.0`. This was done primarily because the type metadata emitted by TypeScript
