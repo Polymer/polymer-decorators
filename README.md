@@ -1,5 +1,13 @@
 [![NPM version](http://img.shields.io/npm/v/@polymer/decorators.svg)](https://www.npmjs.com/package/@polymer/decorators)
-[![Travis Build Status](https://travis-ci.org/Polymer/polymer-decorators.svg?branch=master)](https://travis-ci.org/Polymer/polymer-decorators/branches)
+
+> [!WARNING]
+> These decorators assume the TypeScript experimental decorator API. The TypeScript team [plans](https://github.com/microsoft/TypeScript/issues/45995#issuecomment-2291606365) to deprecate it in v6.0 of the TypeScript compiler, and remove it in v6.5. Based on their three-month release cadence, v6.5 will be released around the end of 2026.
+>
+> Existing deployments will work indefinitely, and code can still be built with older versions of the TypeScript compiler.
+>
+> Given the low usage of these decorators (~0.5% of Polymer's usage), we do not plan to update this library to use the standard decorators API. If this is a blocker for you, please let us know by opening an issue or reaching out on [the Lit Discord](https://lit.dev/discord/).
+>
+> For those codebases that use these decorators and plan to continue to update their TypeScript compiler in 2027 and beyond, we'd recommend removing the decorators from your TypeScript code and [writing it similarly to how you would write it in JavaScript](#do-i-need-this-library-to-use-polymer-and-typescript).
 
 # polymer-decorators
 
